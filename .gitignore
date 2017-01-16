@@ -14,8 +14,12 @@
 
 .idea
 *.iml
+*.ipr
+*.iws
 
 .gradle/
 /build/
 */build/
 /classes/
+
+npm-debug.log
