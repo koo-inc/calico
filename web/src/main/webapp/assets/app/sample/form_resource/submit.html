@@ -1,0 +1,38 @@
+<tabs></tabs>
+
+<div panel>
+  <controller-src></controller-src>
+
+  <form name="f" novalidate>
+
+    TEXT：<input type="text" name="val1"
+      ng-model="obj.val1"
+      ng-required="true"
+      clc-with-errors>
+
+    <h3>基本 (バリデーションエラーがない場合のみ実行、auto-disabledされる)</h3>
+    <script sample="submit1" type="text/ng-template">
+      <button clc-submit="alert()"
+        class="btn btn-primary">submi1</button>
+    </script>
+
+    <h3>auto-disabledしない</h3>
+    <script sample="submit2" type="text/ng-template">
+      <button clc-submit="alert()" auto-disabled="false"
+        class="btn btn-primary">submi2</button>
+    </script>
+
+    <h3>時間指定でdisabled解除</h3>
+    <script sample="submit3" type="text/ng-template">
+      <button clc-submit="none()" auto-disabled="{duration: 3}"
+        class="btn btn-primary">submi3</button>
+    </script>
+
+    <h3>全てのAJAXリクエストが完了したらdisabled解除</h3>
+    <script sample="submit4" type="text/ng-template">
+      <button clc-submit="sleep5Api()" auto-disabled="{underPending: true}"
+        class="btn btn-primary">submi4</button>
+    </script>
+
+  </form>
+</div>

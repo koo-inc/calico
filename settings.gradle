@@ -1,0 +1,10 @@
+rootProject.name = 'calico-sample'
+include ':calico'
+include ':service'
+include ':web'
+include ':cli'
+
+project(':calico').projectDir = "$rootDir/calico" as File
+project(':service').projectDir = "$rootDir/service" as File
+project(':web').projectDir = "$rootDir/web" as File
+project(':cli').projectDir = "$rootDir/cli" as File

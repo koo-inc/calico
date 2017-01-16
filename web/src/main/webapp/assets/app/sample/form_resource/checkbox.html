@@ -1,0 +1,68 @@
+<tabs></tabs>
+
+<div panel>
+  <controller-src></controller-src>
+
+  <form name="f" novalidate class="ng-submitted">
+
+    <h3>基本</h3>
+    <script sample="checkbox1" type="text/ng-template">
+      <span clc-checkbox name="val1"
+        ng-model="obj.val1"
+        label="チェック"></span>
+    </script>
+    <pre class="inspect">{{obj.val1}}</pre>
+
+    <h3>ng-true-value指定</h3>
+    <script sample="checkbox2" type="text/ng-template">
+      <span clc-checkbox name="val2"
+        ng-model="obj.val2"
+        label="チェック"
+        ng-true-value="'ON'"></span>
+    </script>
+    <pre class="inspect">{{obj.val2}}</pre>
+
+    <h3>ng-true-value, ng-false-value指定</h3>
+    <script sample="checkbox3" type="text/ng-template">
+      <span clc-checkbox name="val3"
+        ng-model="obj.val3"
+        label="チェック"
+        ng-true-value="'ON'"
+        ng-false-value="'OFF'"></span>
+    </script>
+    <pre class="inspect">{{obj.val3}}</pre>
+
+    <h3>必須チェック</h3>
+    <script sample="checkbox5" type="text/ng-template">
+      <span clc-checkbox name="val5"
+        ng-model="obj.val5"
+        label="チェック"
+        ng-true-value="true"
+        ng-required="true"
+        clc-with-errors></span>
+    </script>
+    <pre class="inspect">{{obj.val5}}</pre>
+
+    <h3>onchange</h3>
+    <script sample="checkbox4" type="text/ng-template">
+      <span clc-checkbox name="val4"
+        ng-model="obj.val4"
+        label="チェック"
+        ng-change="onchange($event)"></span>
+    </script>
+    <pre class="inspect">{{obj.val4}}</pre>
+
+    <h3>disabled</h3>
+    <script sample="checkbox6" type="text/ng-template">
+      <span clc-checkbox name="disabled"
+        ng-model="obj.disabled"
+        label="Disabled"></span>
+      <span clc-checkbox name="val6"
+        ng-model="obj.val6"
+        label="チェック"
+        ng-disabled="obj.disabled"></span>
+    </script>
+    <pre class="inspect">{{obj.val6}}</pre>
+
+  </form>
+</div>

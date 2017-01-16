@@ -1,0 +1,15 @@
+.clc-animation-spin {
+  @include animation(spin .7s infinite linear);
+
+  &.glyphicon-refresh {
+    @include transform-origin(47%);
+  }
+}
+@include keyframes(spin) {
+  from {
+    @include transform(rotate(0deg));
+  }
+  to {
+    @include transform(rotate(360deg));
+  }
+}

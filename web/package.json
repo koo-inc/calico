@@ -1,0 +1,15 @@
+{
+  "description": "build tool for calicoframework",
+  "repository": "git@github.com:koo-inc/calico-sample.git",
+  "readme": "../README.md",
+  "license": "MIT",
+  "scripts": {
+    "compass:build": "gulp compass",
+    "compass:watch": "gulp compassWatch"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-sass": "^2.0.3",
+    "gulp-sourcemaps": "^1.5.2"
+  }
+}

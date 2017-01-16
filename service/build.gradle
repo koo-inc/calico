@@ -1,0 +1,21 @@
+description = 'service'
+dependencies {
+  compile project(':calico')
+  compile group: 'org.seasar.doma', name: 'doma', version:'2.4.0'
+  compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version:'2.12'
+  testCompile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
+}
+
+jar {
+  new File("${project.buildDir}/tmp/jar/env/").mkdirs()
+
+  def prop = new Properties()
+  prop.setProperty("deployedAt", System.currentTimeMillis().toString())
+  def propFile = new File("${project.buildDir}/tmp/jar/env/.autogen.properties")
+  propFile.createNewFile()
+  prop.store(propFile.newWriter(), null)
+
+  from "${project.buildDir}/tmp/jar/"
+}
+
+apply from: "eclipse.gradle"

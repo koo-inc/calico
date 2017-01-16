@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="calicosample.core.batch">
+  <Properties>
+    <Property name="summary">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+    <Property name="shortSummary">%logger{1.} (%d{HH:mm:ss.SSS}): %msg%n</Property>
+  </Properties>
+  <Appenders>
+    <Console name="console" target="SYSTEM_ERR">
+      <PatternLayout pattern="${summary}"/>
+    </Console>
+    <File name="file" fileName="/var/tmp/app.log" bufferedIO="true">
+      <PatternLayout pattern="${summary}"/>
+    </File>
+    <BatchLog name="batchLog">
+      <PatternLayout pattern="${shortSummary}"/>
+    </BatchLog>
+  </Appenders>
+  <Loggers>
+    <Logger name="calicosample" level="debug" additivity="false">
+      <AppenderRef ref="console"/>
+      <AppenderRef ref="batchLog"/>
+    </Logger>
+
+    <Root level="info">
+      <AppenderRef ref="console"/>
+      <AppenderRef ref="batchLog"/>
+    </Root>
+  </Loggers>
+</Configuration>

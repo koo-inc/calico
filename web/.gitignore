@@ -1,0 +1,8 @@
+/bin/
+/.sass-cache/
+/node_modules/
+/src/main/webapp/assets/**/*.map
+/src/main/webapp/assets/app/vendor-fonts/
+
+/src/main/webapp/assets/**/*.css
+!/src/main/webapp/assets/vendor/**/*.css
