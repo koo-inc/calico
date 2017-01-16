@@ -1,0 +1,71 @@
+@charset "utf-8";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/alerts";
+
+/* -:alert
+======================================================================================*/
+
+.alert-hogehoge {
+  @include alert-variant(black, red, blue)
+}
+
+.alert {
+  margin-top: 3px;
+  margin-bottom: 15px;
+}
+
+.alert-sm {
+  padding: 8px;
+}
+
+.alert-danger {
+  background-color: #fff2f2;
+}
+
+.alert-info {
+  background-color: #ecf8fd;
+}
+
+.alert-warning {
+  background-color: #fffae2;
+}
+
+.alert-warning .text{
+  color: #000;
+}
+
+.alert.top, .alert.top-left, .alert.top-right {
+  min-width: 450px;
+}
+
+.alert.top .close,
+.alert.top-left .close,
+.alert.top-bottom .close,
+.alert.top-right .close {
+padding-right: 0;
+}
+
+.alert-success.top,
+.alert-success.top-left,
+.alert-success.top-bottom,
+.alert-success.top-right {
+  background-color: rgba(214, 236, 206, 0.8);
+  border-radius: 0 !important;
+  padding: 20px;
+}
+
+.alert-success.top strong:before,
+.alert-success.top-right strong:before,
+.alert-success.bottom strong:before,
+.alert-success.top-left strong:before {
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: "Glyphicons Halflings";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  position: relative;
+  top: 1px;
+  padding-right: 3px;
+  margin-right: 5px;
+  content: "\e013";
+}

@@ -1,0 +1,28 @@
+<header>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" routerLink="/">Home</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li>
+            <app-header-menubar [model]="items"></app-header-menubar>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <p class="navbar-text">
+              <span class="glyphicon glyphicon-user"></span>
+            </p>
+          </li>
+          <li>
+            <a (click)="logout()">
+              <span class="glyphicon glyphicon-log-out"></span> logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>

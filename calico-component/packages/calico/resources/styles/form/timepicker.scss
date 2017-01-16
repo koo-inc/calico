@@ -1,0 +1,14 @@
+c-timepicker {
+  input[type="text"] {
+    padding-left: 28px;
+    width: 100px;
+    background-image: url('#{$calico-images-path}/icon_clock.png');
+    background-repeat: no-repeat;
+    background-position: 5px center;
+  }
+
+  .invalid input[type="text"] {
+    background-color: #fdd;
+    border: solid 1px red;
+  }
+}

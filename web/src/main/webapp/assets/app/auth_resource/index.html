@@ -1,0 +1,33 @@
+<div ng-controller="LoginCtrl">
+  <form name="f" novalidate>
+    <div panel="ログイン">
+      <table info-table>
+        <colgroup cols="[15,null]"></colgroup>
+        <tbody>
+          <tr>
+            <th>ログインID</th>
+            <td>
+              <input type="text" name="loginId"
+                ng-model="form.loginId"
+                ng-required="true"
+                clc-with-errors>
+            </td>
+          </tr>
+          <tr>
+            <th>パスワード</th>
+            <td>
+              <input type="password" name="password"
+                ng-model="form.password"
+                ng-required="true"
+                clc-with-errors>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="control">
+        <button clc-submit="login()"
+          btn="primary">ログイン</button>
+      </div>
+    </div>
+  </form>
+</div>

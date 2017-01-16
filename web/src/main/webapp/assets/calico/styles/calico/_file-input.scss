@@ -1,0 +1,12 @@
+.clc-file {
+  text-align: center;
+  display: inline-block;
+
+  &>* {
+    display: inline-block;
+    width: 100%;
+  }
+  .well-sm {
+    line-height: 2em;
+  }
+}

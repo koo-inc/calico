@@ -1,0 +1,34 @@
+<header>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <span class="navbar-brand">Home</span>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="container-fluid">
+  <form *ngIf="loginForm" [formGroup]="loginForm" novalidate (ngSubmit)="login()">
+    <div c-panel="ログイン">
+      <table c-info-table>
+        <tbody>
+          <tr>
+            <th>ログインID</th>
+            <td>
+              <c-textfield formControlName="loginId"></c-textfield>
+            </td>
+          </tr>
+          <tr>
+            <th>パスワード</th>
+            <td>
+              <c-password formControlName="password"></c-password>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="control">
+        <button type="submit" c-btn="primary">ログイン</button>
+      </div>
+    </div>
+  </form>
+</div>

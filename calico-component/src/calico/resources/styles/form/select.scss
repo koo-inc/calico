@@ -1,0 +1,32 @@
+select.c-select {
+  text-align: left;
+  height: 28px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  margin: 2px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  border-bottom-width: 3px;
+  font-size: 12px;
+  line-height: 1.5;
+  background-color: #fff;
+  background-image: none;
+  color: #333;
+  -moz-user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: normal;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  &:hover, &:focus {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+    color: #333;
+  }
+
+  &.invalid {
+    background-color: #fdd;
+    border: solid 1px red;
+  }
+}

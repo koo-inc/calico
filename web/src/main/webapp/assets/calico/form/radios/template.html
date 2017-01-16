@@ -1,0 +1,6 @@
+<button type="button" class="btn btn-default btn-radio"
+  ng-repeat="option in nullLabel != null && options != null ? [null].concat(options) : options"
+  ng-class="{active: isActive(option)}"
+  ng-click="onClick(option, $event)"
+  ng-disabled="ngDisabled"
+  >{{getLabel(option)}}</button>

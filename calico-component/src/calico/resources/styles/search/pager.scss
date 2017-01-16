@@ -1,0 +1,35 @@
+.c-pager {
+  display: inline-block;
+
+  .record-count {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 32px;
+
+    & > span {
+      font-size: 140%;
+      color: #337ab7;
+      padding: 0 4px;
+    }
+  }
+
+  c-select {
+    vertical-align: top;
+  }
+
+  .pagination {
+    margin: 0;
+
+    & > li > a, & > li > span {
+      cursor: pointer;
+    }
+
+    & > li.ellipsis a {
+      color: #999;
+      background-color: #fff;
+      border-color: #ddd;
+      cursor: default;
+      padding: 5px 7px;
+    }
+  }
+}

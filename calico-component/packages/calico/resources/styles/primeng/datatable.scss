@@ -1,0 +1,16 @@
+.ui-datatable .ui-datatable-thead > tr > th {
+  text-align: left;
+  font-weight: bold;
+  background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+}
+body .ui-datatable .ui-datatable-data tr.ui-datatable-even {
+  background-color: #fff;
+}
+body .ui-datatable .ui-datatable-data tr.ui-datatable-odd {
+  background-color: #f7f7f7;
+}
+body .ui-datatable thead th.ui-state-active {
+  background-color: inherit;
+  border-color: #c7c7c7;
+  color: inherit;
+}

@@ -1,0 +1,67 @@
+<tabs></tabs>
+
+<div panel>
+  <controller-src></controller-src>
+
+  <form name="f" novalidate class="ng-submitted">
+
+    <h3>基本</h3>
+    <script sample="radios1" type="text/ng-template">
+      <span clc-radios name="val1"
+        ng-model="obj.val1"
+        options="options1"></span>
+    </script>
+    <pre class="inspect">{{obj.val1}}</pre>
+
+    <h3>value-prop, label-prop指定</h3>
+    <script sample="radios2" type="text/ng-template">
+      <span clc-radios name="val2"
+        ng-model="obj.val2"
+        options="options1"
+        value-prop="en" label-prop="cry"></span>
+    </script>
+    <pre class="inspect">{{obj.val2}}</pre>
+
+    <h3>必須チェック</h3>
+    <script sample="radios3" type="text/ng-template">
+      <span clc-radios name="val3"
+        ng-model="obj.val3"
+        options="sexes"
+        ng-required="true"
+        clc-with-errors></span>
+    </script>
+    <pre class="inspect">{{obj.val3}}</pre>
+
+    <h3>null選択肢</h3>
+    <script sample="radios4" type="text/ng-template">
+      <span clc-radios name="val4"
+        ng-model="obj.val4"
+        options="options2"
+        ng-required="true"
+        clc-with-errors></span>
+    </script>
+    <pre class="inspect">{{obj.val4}}</pre>
+
+    <h3>onchange</h3>
+    <script sample="radios5" type="text/ng-template">
+      <span clc-radios name="val5"
+        ng-model="obj.val5"
+        options="options2"
+        ng-change="onchange($event)"></span>
+    </script>
+    <pre class="inspect">{{obj.val5}}</pre>
+
+    <h3>disabled</h3>
+    <script sample="radios6" type="text/ng-template">
+      <span clc-checkbox name="disabled"
+        ng-model="obj.disabled"
+        label="Disabled"></span>
+      <span clc-radios name="val6"
+        ng-model="obj.val6"
+        options="options1"
+        ng-disabled="obj.disabled"></span>
+    </script>
+    <pre class="inspect">{{obj.val6}}</pre>
+
+  </form>
+</div>

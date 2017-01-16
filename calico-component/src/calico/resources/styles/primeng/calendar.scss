@@ -1,0 +1,25 @@
+.ui-datepicker-title {
+  &:before {
+    content: '/';
+  }
+}
+.ui-datepicker-year {
+  float: left;
+  width: 50% !important;
+}
+.ui-datepicker-month {
+  float: right;
+  width: 35% !important;
+}
+.ui-datepicker-calendar tbody tr td:nth-child(6) a {
+  color: #2b96ca;;
+  &.ui-state-active {
+    color: white;
+  }
+}
+.ui-datepicker-calendar tbody tr td:nth-child(7) a {
+  color: #e04a47;
+  &.ui-state-active {
+    color: white;
+  }
+}

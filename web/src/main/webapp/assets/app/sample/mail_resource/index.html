@@ -1,0 +1,68 @@
+<div panel="メール送信">
+  <form ng-if="form" name="f" novalidate>
+    <table info-table>
+      <colgroup cols="[20,null]"></colgroup>
+      <tr>
+        <th>TO ADDRESS <span req-mark></span></th>
+        <td>
+          <input type="text" name="toAddress" class="long"
+            ng-model="form.toAddress"
+            ng-required="true"
+            clc-with-errors></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th>FROM ADDRESS <span req-mark></span></th>
+        <td>
+          <input type="text" name="fromAddress" class="long"
+            ng-model="form.fromAddress"
+            ng-required="true"
+            clc-with-errors></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th>FROM NAME</th>
+        <td>
+          <input type="text" name="fromName" class="long"
+            ng-model="form.fromName">
+        </td>
+      </tr>
+      <tr>
+        <th>REPLY TO</th>
+        <td>
+          <input type="text" name="replyTo" class="long"
+            ng-model="form.replyTo">
+        </td>
+      </tr>
+      <tr>
+        <th>SUBJECT <span req-mark></span></th>
+        <td>
+          <input type="text" name="subject" class="long"
+            ng-model="form.subject"
+            ng-required="true"
+            clc-with-errors></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th>BODY <span req-mark></span></th>
+        <td>
+          <textarea name="body" rows="10" class="full"
+            ng-model="form.body"
+            ng-required="true"
+            clc-with-errors></textarea>
+        </td>
+      </tr>
+      <tr>
+        <th>ATTACHMENT</th>
+        <td>
+          <span clc-file name="attachment"
+            ng-model="form.attachment"></span>
+        </td>
+      </tr>
+    </table>
+    <div class="control">
+      <button clc-submit="send()" auto-disabled="{underPending: true}" confirm="'メールを送信します。\nよろしいですか？'"
+        btn="primary" glyphicon="save">送信</button>
+    </div>
+  </form>
+</div>

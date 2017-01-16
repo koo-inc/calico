@@ -1,0 +1,22 @@
+<div c-panel="ユーザ一覧" *ngIf="records">
+  <div>
+    <a c-btn="primary" c-glyphicon="plus" [routerLink]="['../edit']">新規登録</a>
+  </div>
+  <table c-list-table>
+    <colgroup [c-cols]="[null]"></colgroup>
+    <thead>
+      <tr>
+        <th>
+          ログインID
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of records" (click)="onSelect(record)">
+        <td>
+          {{record.loginId}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

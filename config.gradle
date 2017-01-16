@@ -1,0 +1,35 @@
+import java.util.function.BinaryOperator
+
+def loadConfig(path) {
+  def file = file(path)
+  if (!file.directory) {
+    return new ConfigObject()
+  }
+
+  def configs = []
+  file
+    .listFiles(new FileFilter() {
+      boolean accept(File f) { return !f.directory }
+    })
+    .sort { it.name }
+    .each {
+      configs.add(new ConfigSlurper().parse(it.toURI().toURL()));
+    }
+
+  return configs.stream().reduce(new BinaryOperator() {
+    @Override
+    Object apply( o1, Object o2) {
+      return o1.merge(o2)
+    }
+  }).get()
+}
+
+task expandConfig(type: Copy) {
+  def configParams = loadConfig('config/')
+  configParams.merge(loadConfig("${System.properties['user.home']}/.calico/${project.name}/"))
+  configParams.putAll(project: project, generated: new Date())
+
+  from 'config/template'
+  into project.rootDir
+  expand(configParams)
+}

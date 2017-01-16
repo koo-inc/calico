@@ -1,0 +1,79 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+}
+
+plugins {
+  id "com.moowork.node" version "1.1.1"
+  id 'java'
+  id 'war'
+  id 'eclipse'
+}
+
+war.archiveName "calico-sample.war"
+
+description = 'web'
+
+
+configurations {
+  all*.exclude module: 'servlet-api'
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven { url supportRepo }
+}
+dependencies {
+  compile project(':calico-servlet')
+  compile project(':service')
+  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.14.8'
+}
+
+eclipse {
+  wtp {
+    facet {
+      facet name: 'java', version: '1.8'
+      facet name: 'jst.jaxrs', version: '2.0'
+      facet name: 'wst.jsdt.web', version: '1.0'
+      file {
+        whenMerged { config ->
+          config.facets.each {
+            if (it.name == 'jst.web') it.version = '3.0'
+          }
+          config.facets.unique()
+        }
+      }
+    }
+  }
+}
+
+node {
+  version = '7.5.0'
+  npmVersion = '4.1.2'
+  download = true
+}
+
+clean {
+  dependsOn npm_cache_clean
+  delete 'dist'
+}
+
+task ngBuild(type: NpmTask, dependsOn: 'npmInstall') {
+  args = ['run', 'ng', 'build', '--prod']
+  inputs.dir 'src'
+  outputs.dir 'dist'
+}
+
+task ngServer(type: NpmTask, dependsOn: 'npmInstall') {
+  args = ['run', 'proxy']
+}
+
+war {
+  dependsOn << ngBuild
+  from 'dist'
+  into 'assets'
+}

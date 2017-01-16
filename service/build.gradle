@@ -1,0 +1,39 @@
+plugins {
+  id 'java'
+  id 'idea'
+}
+
+apply from: "eclipse.gradle"
+apply from: "migration.gradle"
+
+description = 'service'
+
+// for Doma
+idea.module {
+  compileJava.dependsOn processResources
+  processResources.destinationDir = compileJava.destinationDir
+}
+configurations {
+  processResources.destinationDir = compileJava.destinationDir
+  compileJava.dependsOn processResources
+  compileJava.options.compilerArgs = []
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven { url supportRepo }
+}
+
+dependencies {
+  compile project(':calico-core')
+  compile project(':calico-jackson')
+  compile project(':calico-fmmail')
+  compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.1.4'
+  compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
+  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.14.8'
+  testCompile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
+}
+
+assemble.dependsOn << rootProject.expandConfig
+

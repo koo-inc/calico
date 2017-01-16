@@ -1,0 +1,2 @@
+rootPackage="calicosample"
+envName="development"

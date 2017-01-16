@@ -1,0 +1,70 @@
+@charset "utf-8";
+
+/* -:sidebar-student
+======================================================================================*/
+
+.sidebar-student {
+  position: fixed;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #e6e6e4;
+  border-right: 1px solid #dadada;
+  width: 280px;
+  margin-top: 0;
+}
+.sidebar-student select{
+  margin-bottom: 4px;
+}
+.sidebar-student .result {
+  margin: 20px 0;
+}
+.sidebar-student .control {
+  border-top: 1px solid #c0c0c0;
+  margin: 5px 0;
+  padding-top: 10px;
+}
+
+/* sidebar-student開閉設定 */
+body.sidebar-open .main {
+  margin-left: 280px;
+}
+
+.sidebar-student,.main {
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.sidebar-close .sidebar-student {
+  width: 40px;
+  overflow: hidden;
+}
+
+.sidebar-close .main {
+  margin-left: 40px;
+}
+
+.sidebar-close .sidebar-student .container,
+.sidebar-close .sidebar-student .page-header .text{
+  display: none;
+}
+
+.sidebar-none .sidebar-student {
+  display: none;
+  -webkit-transition: none;
+  -moz-transition: none;
+  transition: none;
+}
+
+.sidebar-none .main {
+  margin-left: 0;
+  -webkit-transition: none;
+  -moz-transition: none;
+  transition: none;
+}
+
