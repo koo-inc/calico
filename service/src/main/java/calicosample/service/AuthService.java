@@ -1,15 +1,14 @@
 package calicosample.service;
 
 import java.util.Optional;
-import javax.inject.Inject;
-import javax.validation.Valid;
 
-import jp.co.freemind.calico.context.Context;
+import javax.inject.Inject;
+
 import calicosample.core.auth.CalicoSampleAuthInfo;
 import calicosample.dao.UserInfoDao;
-import calicosample.dto.form.auth.LoginForm;
 import calicosample.entity.UserInfo;
 import jp.co.freemind.calico.auth.AuthToken;
+import jp.co.freemind.calico.context.Context;
 import jp.co.freemind.calico.service.Service;
 import jp.co.freemind.calico.service.exception.ServiceException;
 
@@ -18,8 +17,8 @@ public class AuthService extends Service {
   @Inject
   Context<CalicoSampleAuthInfo> context;
 
-  public CalicoSampleAuthInfo login(@Valid LoginForm form) {
-    Optional<UserInfo> userInfo = userInfoDao.findForLogin(form.getLoginId(), form.getPassword());
+  public CalicoSampleAuthInfo login(String loginId, String password) {
+    Optional<UserInfo> userInfo = userInfoDao.findForLogin(loginId, password);
     CalicoSampleAuthInfo authInfo = CalicoSampleAuthInfo.of(userInfo.orElseThrow(() ->
       new ServiceException("loginId", "IDまたはパスワードが間違っています。")));
     Context.Builder<CalicoSampleAuthInfo> builder = Context.builder();
