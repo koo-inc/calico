@@ -59,10 +59,6 @@ public class ServiceModule extends AbstractModule {
       .filter(c -> !Modifier.isAbstract(c.getModifiers()))
       .forEach(c -> bind(c));
 
-    ClassFinder.findClasses(Env.getRootPackage() + ".endpoint").stream()
-      .filter(c -> !Modifier.isAbstract(c.getModifiers()))
-      .forEach(c -> bind(c));
-
     bindInterceptor(
       Matchers.inSubpackage(Env.getRootPackage() + ".endpoint").and(Matchers.subclassesOf(Endpoint.class)),
       new AbstractMatcher<Method>() {

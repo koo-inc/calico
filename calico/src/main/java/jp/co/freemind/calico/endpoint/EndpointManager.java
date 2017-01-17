@@ -1,5 +1,8 @@
 package jp.co.freemind.calico.endpoint;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +14,7 @@ import jp.co.freemind.calico.util.ClassFinder;
 
 public class EndpointManager {
   private Map<String, Class<? extends Endpoint>> classMap = new HashMap<>();
+  private Map<String, Type> inputTypeMap = new HashMap<>();
 
   @SuppressWarnings("unchecked")
   public EndpointManager(){
@@ -27,14 +31,25 @@ public class EndpointManager {
       });
   }
 
-  public Endpoint getEndpoint(String path){
-    return InjectUtil.getInstance(getEndpointClass(path));
-  }
-
   private Class<? extends Endpoint> getEndpointClass(String path){
     if(!classMap.containsKey(path)){
       throw new UnknownEndpointException(path);
     }
     return classMap.get(path);
+  }
+
+  public Endpoint getEndpoint(String path){
+    return InjectUtil.getInstance(getEndpointClass(path));
+  }
+
+  public Type getInputType(String path){
+    if(!inputTypeMap.containsKey(path)){
+      Method executeMethod = Arrays.stream(getEndpointClass(path).getMethods())
+        .filter(m ->  m.getName().equals("execute"))
+        .filter(m -> !(m.getParameterTypes()[0] == Object.class && m.getReturnType() == Object.class)) //内部的に (Object) -> Object なexecuteが生成される場合がある
+        .findFirst().orElseGet(null);
+      inputTypeMap.put(path, executeMethod.getParameters()[0].getParameterizedType());
+    }
+    return inputTypeMap.get(path);
   }
 }
