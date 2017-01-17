@@ -6,8 +6,6 @@ import javax.validation.Valid;
 
 import jp.co.freemind.calico.context.Context;
 import calicosample.core.auth.CalicoSampleAuthInfo;
-import calicosample.core.transaction.NoTransaction;
-import calicosample.core.transaction.Read;
 import calicosample.dao.UserInfoDao;
 import calicosample.dto.form.auth.LoginForm;
 import calicosample.entity.UserInfo;
@@ -20,7 +18,6 @@ public class AuthService extends Service {
   @Inject
   Context<CalicoSampleAuthInfo> context;
 
-  @Read
   public CalicoSampleAuthInfo login(@Valid LoginForm form) {
     Optional<UserInfo> userInfo = userInfoDao.findForLogin(form.getLoginId(), form.getPassword());
     CalicoSampleAuthInfo authInfo = CalicoSampleAuthInfo.of(userInfo.orElseThrow(() ->
@@ -34,7 +31,6 @@ public class AuthService extends Service {
     return authInfo;
   }
 
-  @NoTransaction
   public void logout() {
     Context.Builder<CalicoSampleAuthInfo> builder = Context.builder();
     context.switchTo(builder

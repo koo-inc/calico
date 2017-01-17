@@ -3,16 +3,11 @@ package calicosample.service.system;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.stream.Stream;
+
 import javax.inject.Named;
 import javax.sql.DataSource;
 
-import com.google.common.base.CaseFormat;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import jp.co.freemind.calico.context.Context;
 import calicosample.core.auth.CalicoSampleAuthInfo;
-import calicosample.core.transaction.NoTransaction;
 import calicosample.dao.log.LoggingDao;
 import calicosample.dto.form.system.JsLogForm;
 import calicosample.entity.log.AccessEndLog;
@@ -22,9 +17,14 @@ import calicosample.entity.log.BatchStartLog;
 import calicosample.entity.log.ErrorLog;
 import calicosample.entity.log.JsLog;
 import calicosample.entity.log.LogEntity;
+import com.google.common.base.CaseFormat;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import jp.co.freemind.calico.config.env.Env;
 import jp.co.freemind.calico.config.env.EnvPath;
 import jp.co.freemind.calico.config.env.PartialEnv;
+import jp.co.freemind.calico.context.Context;
 import jp.co.freemind.calico.dto.DTOUtil;
 import jp.co.freemind.calico.mail.Mail;
 import jp.co.freemind.calico.mail.Mailer;
@@ -47,7 +47,6 @@ public class LoggingService extends Service {
 
   private static final ErrorMailEnv errorMailEnv = Env.loadPartial(ErrorMailEnv.class);
 
-  @NoTransaction
   public int insert(JsLogForm form) {
     if (!isLoggable()) return 0;
     Context context = contextProvider.get();
@@ -62,44 +61,37 @@ public class LoggingService extends Service {
     return dao.insert(log);
   }
 
-  @NoTransaction
   public int insert(AccessStartLog log) {
     if (!isLoggable()) return 0;
     return dao.insert(log);
   }
 
-  @NoTransaction
   public int insert(JsLog log) {
     if (!isLoggable()) return 0;
     return dao.insert(log);
   }
 
-  @NoTransaction
   public int insert(ErrorLog log) {
     if(errorMailEnv.active()) mailer.getPostMan().deliver(buildErrorMail(log));
     if (!isLoggable()) return 0;
     return dao.insert(log);
   }
 
-  @NoTransaction
   public int insert(BatchStartLog log) {
     if (!isLoggable()) return 0;
     return dao.insert(log);
   }
 
-  @NoTransaction
   public int insert(BatchEndLog log) {
     if (!isLoggable()) return 0;
     return dao.insert(log);
   }
 
-  @NoTransaction
   public int insert(AccessEndLog log) {
     if (!isLoggable()) return 0;
     return dao.insert(log);
   }
 
-  @NoTransaction
   public <T extends LogEntity> void rotate(Class<T> logClass) {
     dao.rotate(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, logClass.getSimpleName()));
   }

@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
-import calicosample.core.transaction.NoTransaction;
 import calicosample.dto.form.sample.mail.MailForm;
 import jp.co.freemind.calico.mail.Mail;
 import jp.co.freemind.calico.mail.Mailer;
@@ -15,7 +14,6 @@ public class MailService extends Service {
   @Inject
   Mailer mailer;
 
-  @NoTransaction
   public MailForm getForm(){
     return new MailForm(){{
       setFromAddress("admin@freemind.co.jp");
@@ -25,7 +23,6 @@ public class MailService extends Service {
     }};
   }
 
-  @NoTransaction
   public void send(@Valid MailForm form) {
     Mail.Builder builder = Mail.builder()
       .to(form.getToAddress())
