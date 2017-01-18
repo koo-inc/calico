@@ -1,52 +1,43 @@
-package calicosample.dto.record.customer;
+package calicosample.endpoint.customer;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
-import calicosample.domain.AdditionalInfoList;
+import javax.inject.Inject;
+
+import calicosample.dao.CustomerDao;
+import calicosample.entity.Customer;
+import calicosample.extenum.FamilyType;
+import calicosample.extenum.Sex;
+import calicosample.util.CsvUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import calicosample.entity.Customer;
-import calicosample.entity.CustomerFamily;
-import calicosample.extenum.FamilyType;
-import calicosample.extenum.Sex;
 import jp.co.freemind.calico.config.jackson.deser.ExtEnumNameDeserializer;
 import jp.co.freemind.calico.config.jackson.ser.ExtEnumNameSerializer;
 import jp.co.freemind.calico.dto.DTOUtil;
-import jp.co.freemind.calico.dto.Record;
 import jp.co.freemind.calico.media.Media;
+import jp.co.freemind.calico.media.WithPayload;
+import jp.co.freemind.csv.CsvMapper;
+import jp.co.freemind.csv.CsvWriter;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
-@Getter @Setter
-public class CustomerRecord extends Record {
+public class DownloadFamilyCsvEndpoint extends CustomerEndpoint<CustomerEndpoint.IdInput, DownloadFamilyCsvEndpoint.Output> {
+  @Inject private CustomerDao customerDao;
+  private final CsvMapper<CustomerFamilyRecord> csvMapper = CsvUtil.createMapperForDownload(CustomerFamilyRecord.class, CustomerFamilyRecord.CsvFormat.class);
 
-  private Integer id;
-  private String kname1;
-  private String kname2;
-  private String fname1;
-  private String fname2;
-  private Sex sex;
-  private Integer favoriteNumber;
-  private Boolean claimer;
-  private LocalDate birthday;
-  private LocalTime contactEnableStartTime;
-  private LocalTime contactEnableEndTime;
-  private Optional<String> email;
-  private String homepageUrl;
-  private String phoneNumber;
-  private Optional<Media> photo;
-  private AdditionalInfoList additionalInfoList;
+  @Getter @Setter
+  public static class Output {
+    @WithPayload
+    private Media csv;
 
-  /**
-   * CustomerFamily
-   */
-  private List<CustomerFamilyRecord> families = new ArrayList<>();
+    public Output(Media csv) {
+      this.csv = csv;
+    }
+  }
 
   @Getter @Setter
   public static class CustomerFamilyRecord {
@@ -81,15 +72,19 @@ public class CustomerRecord extends Record {
     }
   }
 
-  /**
-   * create
-   */
-  public static CustomerRecord create(Customer customer, List<CustomerFamily> customerFamilies){
-    CustomerRecord record = DTOUtil.copyProperties(new CustomerRecord(), customer);
-    for(CustomerFamily customerFamily : customerFamilies){
-      record.families.add(DTOUtil.copyProperties(new CustomerFamilyRecord(), customerFamily));
-    }
-    return record;
-  }
+  @Override
+  @SneakyThrows
+  public Output execute(IdInput input) {
+    Customer customer = customerDao.findById(input.getId());
 
+    try(ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+      CsvWriter<CustomerFamilyRecord> writer = csvMapper.createWriter();
+      customerDao.findFamiliesByCustomer(customer, stream-> {
+        stream.map(DTOUtil.toInstanceOf(CustomerFamilyRecord::new)).forEach(writer.writeTo(os));
+        return null;
+      });
+
+      return new Output(Media.create(os.toByteArray(), "顧客家族情報.csv", "text/csv"));
+    }
+  }
 }

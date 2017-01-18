@@ -3,7 +3,6 @@ package calicosample.core.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
-import jp.co.freemind.calico.dto.Form;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.seasar.doma.jdbc.SelectOptions;
 
 @Getter @Setter
-public abstract class SearchForm extends Form {
+public abstract class SearchForm {
   protected Page _page;
   protected Sort _sort;
 

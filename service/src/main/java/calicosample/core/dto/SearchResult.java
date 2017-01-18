@@ -1,13 +1,12 @@
 package calicosample.core.dto;
 
-import jp.co.freemind.calico.dto.Record;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter @Setter
-public abstract class SearchResult<T extends Record> extends Record {
+public abstract class SearchResult<T> {
   private Long _count;
   private List<T> records;
 }

@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import calicosample.core.doma.InjectConfig;
+import calicosample.endpoint.customer.SearchEndpoint;
+import calicosample.entity.Customer;
+import calicosample.entity.CustomerFamily;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Delete;
 import org.seasar.doma.Insert;
@@ -11,11 +15,6 @@ import org.seasar.doma.Select;
 import org.seasar.doma.SelectType;
 import org.seasar.doma.Update;
 import org.seasar.doma.jdbc.SelectOptions;
-import calicosample.core.doma.InjectConfig;
-import calicosample.dto.form.customer.CustomerSearchForm;
-import calicosample.dto.record.customer.CustomerSearchResult;
-import calicosample.entity.Customer;
-import calicosample.entity.CustomerFamily;
 
 /**
  * Created by tasuku on 15/03/10.
@@ -28,7 +27,7 @@ public interface CustomerDao {
   @Select
   Customer findById(Integer id);
   @Select(strategy = SelectType.STREAM)
-  List<CustomerSearchResult.Record> search(CustomerSearchForm form, SelectOptions options, Function<Stream<Customer>, List<CustomerSearchResult.Record>> function);
+  List<SearchEndpoint.Record> search(SearchEndpoint.Input form, SelectOptions options, Function<Stream<Customer>, List<SearchEndpoint.Record>> function);
   @Insert
   int insert(Customer customer);
   @Update
