@@ -9,7 +9,6 @@ import javax.sql.DataSource;
 
 import calicosample.core.auth.CalicoSampleAuthInfo;
 import calicosample.dao.log.LoggingDao;
-import calicosample.dto.form.system.JsLogForm;
 import calicosample.entity.log.AccessEndLog;
 import calicosample.entity.log.AccessStartLog;
 import calicosample.entity.log.BatchEndLog;
@@ -30,6 +29,7 @@ import jp.co.freemind.calico.mail.Mail;
 import jp.co.freemind.calico.mail.Mailer;
 import jp.co.freemind.calico.service.Service;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
@@ -46,6 +46,13 @@ public class LoggingService extends Service {
   @Inject Mailer mailer;
 
   private static final ErrorMailEnv errorMailEnv = Env.loadPartial(ErrorMailEnv.class);
+
+  @Getter @Setter
+  public static class JsLogForm {
+    private String location;
+    private String userAgent;
+    private String exception;
+  }
 
   public int insert(JsLogForm form) {
     if (!isLoggable()) return 0;
