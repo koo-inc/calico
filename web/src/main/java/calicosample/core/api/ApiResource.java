@@ -33,8 +33,7 @@ public abstract class ApiResource {
   public Object post(){
     String path = requestContext.getUriInfo().getPath();
     Endpoint endpoint = endpointManager.getEndpoint(path);
-    Type inputType = endpointManager.getInputType(path);
-    Object input = getSafeOnUnknownPropertiesObjectMapper().readValue(requestContext.getEntityStream(), objectMapper.constructType(inputType));
+    Object input = endpointManager.getInputType(path).map(this::getInput).orElse(null);
     return endpoint.execute(input);
   }
 
@@ -42,4 +41,8 @@ public abstract class ApiResource {
     return objectMapper.copy().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
+  @SneakyThrows
+  private Object getInput(Type inputType) {
+    return getSafeOnUnknownPropertiesObjectMapper().readValue(requestContext.getEntityStream(), objectMapper.constructType(inputType));
+  }
 }
