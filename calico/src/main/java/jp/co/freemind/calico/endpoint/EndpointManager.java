@@ -1,5 +1,6 @@
 package jp.co.freemind.calico.endpoint;
 
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Map;
@@ -36,6 +37,8 @@ public class EndpointManager {
         builder.append(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, fragment.toLowerCase())).append("Endpoint");
 
         Class<? extends Endpoint> endpointClass = (Class<? extends Endpoint>) Class.forName(builder.toString());
+        if (Modifier.isAbstract(endpointClass.getModifiers())) return Optional.empty();
+        if (Modifier.isInterface(endpointClass.getModifiers())) return Optional.empty();
         return Optional.of(endpointClass);
       } catch (ClassNotFoundException e) {
         return Optional.empty();
