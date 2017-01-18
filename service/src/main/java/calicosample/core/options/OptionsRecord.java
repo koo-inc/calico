@@ -3,13 +3,12 @@ package calicosample.core.options;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import jp.co.freemind.calico.dto.Record;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter(AccessLevel.PRIVATE)
-public class OptionsRecord extends Record {
+public class OptionsRecord {
   private String key;
   private Optional<Object> data;
   private boolean cacheable;
