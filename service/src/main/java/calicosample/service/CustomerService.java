@@ -16,14 +16,14 @@ import jp.co.freemind.calico.media.Media;
 import jp.co.freemind.calico.media.MediaStorage;
 import jp.co.freemind.calico.service.Service;
 
-import static jp.co.freemind.calico.dto.DTOUtil.copyProperties;
-
 public class CustomerService extends Service {
   @Inject private CustomerDao customerDao;
   @Inject private MediaStorage mediaStorage;
 
   public Customer create(CreateEndpoint.Input input) {
-    Customer customer = copyProperties(new Customer(), input);
+    Customer customer = new Customer();
+    input.copyTo(customer);
+
     input.getPhoto().ifPresent(photo -> {
       Media proxy = mediaStorage.store(photo, MediaIdGenerator::customerPhoto);
       customer.setPhoto(Optional.of(proxy));
@@ -37,7 +37,7 @@ public class CustomerService extends Service {
 
   public Customer update(UpdateEndpoint.Input input) {
     Customer customer = customerDao.findById(input.getId());
-    copyProperties(customer, input);
+    input.copyTo(customer);
 
     Optional<Media> oldPhoto = customer.getOriginalStates().getPhoto();
     input.getPhoto().ifPresent(photo -> {
@@ -65,7 +65,8 @@ public class CustomerService extends Service {
 
   private void updateCustomerFamilies(Customer customer, List<CustomerEndpoint.CommonFormInput.Family> familyForms) {
     familyForms.stream().forEach(f -> {
-      CustomerFamily family = copyProperties(new CustomerFamily(), f);
+      CustomerFamily family = new CustomerFamily();
+      f.copyTo(family);
       if (f.getDelete()) {
         if (family.getId() != null) {
           customerDao.deleteFamily(family);

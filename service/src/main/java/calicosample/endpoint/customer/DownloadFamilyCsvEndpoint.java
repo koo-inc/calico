@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import calicosample.dao.CustomerDao;
 import calicosample.entity.Customer;
+import calicosample.entity.CustomerFamily;
 import calicosample.extenum.FamilyType;
 import calicosample.extenum.Sex;
 import calicosample.util.CsvUtil;
@@ -16,7 +17,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jp.co.freemind.calico.config.jackson.deser.ExtEnumNameDeserializer;
 import jp.co.freemind.calico.config.jackson.ser.ExtEnumNameSerializer;
-import jp.co.freemind.calico.dto.DTOUtil;
 import jp.co.freemind.calico.media.Media;
 import jp.co.freemind.calico.media.WithPayload;
 import jp.co.freemind.csv.CsvMapper;
@@ -70,6 +70,18 @@ public class DownloadFamilyCsvEndpoint extends CustomerEndpoint<CustomerEndpoint
       @JsonProperty("誕生日")
       public LocalDate birthday;
     }
+
+    public static CustomerFamilyRecord of(CustomerFamily entity){
+      return new CustomerFamilyRecord(){{
+        setId(entity.getId());
+        setCustomerId(entity.getCustomerId());
+        setFamilyType(entity.getFamilyType());
+        setName(entity.getName());
+        setSex(entity.getSex());
+        setFavoriteNumber(entity.getFavoriteNumber());
+        setBirthday(entity.getBirthday());
+      }};
+    }
   }
 
   @Override
@@ -80,7 +92,7 @@ public class DownloadFamilyCsvEndpoint extends CustomerEndpoint<CustomerEndpoint
     try(ByteArrayOutputStream os = new ByteArrayOutputStream()) {
       CsvWriter<CustomerFamilyRecord> writer = csvMapper.createWriter();
       customerDao.findFamiliesByCustomer(customer, stream-> {
-        stream.map(DTOUtil.toInstanceOf(CustomerFamilyRecord::new)).forEach(writer.writeTo(os));
+        stream.map(CustomerFamilyRecord::of).forEach(writer.writeTo(os));
         return null;
       });
 

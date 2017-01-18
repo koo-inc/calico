@@ -11,6 +11,6 @@ public class UpdateFormEndpoint extends CustomerEndpoint<CustomerEndpoint.IdInpu
   @Override
   public UpdateEndpoint.Input execute(IdInput input) {
     Customer customer = customerDao.findById(input.getId());
-    return UpdateEndpoint.Input.create(customer, customerDao.findFamiliesByCustomer(customer));
+    return UpdateEndpoint.Input.of(customer, customerDao.findFamiliesByCustomer(customer));
   }
 }

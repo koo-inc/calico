@@ -24,7 +24,6 @@ import jp.co.freemind.calico.config.env.Env;
 import jp.co.freemind.calico.config.env.EnvPath;
 import jp.co.freemind.calico.config.env.PartialEnv;
 import jp.co.freemind.calico.context.Context;
-import jp.co.freemind.calico.dto.DTOUtil;
 import jp.co.freemind.calico.mail.Mail;
 import jp.co.freemind.calico.mail.Mailer;
 import jp.co.freemind.calico.service.Service;
@@ -59,7 +58,9 @@ public class LoggingService extends Service {
     Context context = contextProvider.get();
 
     JsLog log = new JsLog();
-    DTOUtil.copyProperties(log, form);
+    log.setLocation(form.getLocation());
+    log.setUserAgent(form.getUserAgent());
+    log.setException(form.getException());
     log.setLoginId(context.getAuthInfo().getLoginId());
     log.setUserId(context.getAuthInfo().getUserId());
     log.setRemoteAddr(context.getAuthToken().getRemoteAddress());

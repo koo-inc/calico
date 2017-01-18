@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 
 import calicosample.dao.CustomerDao;
 import calicosample.util.CsvUtil;
-import jp.co.freemind.calico.dto.DTOUtil;
 import jp.co.freemind.calico.media.Media;
 import jp.co.freemind.calico.service.exception.ServiceException;
 import jp.co.freemind.calico.util.OptionalUtil;
@@ -44,10 +43,8 @@ public class UploadFamilyCsvEndpoint extends CustomerEndpoint<UploadFamilyCsvEnd
     try (Stream<DownloadFamilyCsvEndpoint.CustomerFamilyRecord> stream = reader.read(new ByteArrayInputStream(input.getCsv().getPayload()))) {
       List<DownloadFamilyCsvEndpoint.CustomerFamilyRecord> records = stream.collect(Collectors.toList());
       if (reader.getErrorLocations().size() == 0) {
-        List<DownloadFamilyCsvEndpoint.CustomerFamilyRecord> families = records.stream()
-          .map(r -> DTOUtil.copyProperties(new DownloadFamilyCsvEndpoint.CustomerFamilyRecord(), r)).collect(Collectors.toList());
-        families.forEach(f -> f.setId(null));
-        return families;
+        records.forEach(f -> f.setId(null));
+        return records;
       }
     }
 

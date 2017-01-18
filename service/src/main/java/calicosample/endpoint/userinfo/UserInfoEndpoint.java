@@ -3,6 +3,7 @@ package calicosample.endpoint.userinfo;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import calicosample.entity.UserInfo;
 import jp.co.freemind.calico.endpoint.Endpoint;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,5 +25,15 @@ public abstract class UserInfoEndpoint<INPUT, OUTPUT> extends Endpoint<INPUT, OU
 
     @NotEmpty
     private String password;
+
+    public void copyFrom(UserInfo userInfo){
+      setLoginId(userInfo.getLoginId());
+      setPassword(userInfo.getPassword());
+    }
+
+    public void copyTo(UserInfo userInfo){
+      userInfo.setLoginId(getLoginId());
+      userInfo.setPassword(getPassword());
+    }
   }
 }

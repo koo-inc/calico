@@ -5,7 +5,6 @@ import javax.validation.constraints.AssertTrue;
 
 import calicosample.dao.UserInfoDao;
 import calicosample.entity.UserInfo;
-import jp.co.freemind.calico.dto.DTOUtil;
 import jp.co.freemind.calico.endpoint.dto.EmptyOutput;
 import jp.co.freemind.calico.guice.InjectUtil;
 import lombok.Getter;
@@ -28,7 +27,8 @@ public class CreateEndpoint extends UserInfoEndpoint<CreateEndpoint.Input, Empty
 
   @Override
   public EmptyOutput execute(Input input) {
-    UserInfo userInfo = DTOUtil.copyProperties(new UserInfo(), input);
+    UserInfo userInfo = new UserInfo();
+    input.copyTo(userInfo);
     userInfoDao.isnert(userInfo);
     return EmptyOutput.getInstance();
   }

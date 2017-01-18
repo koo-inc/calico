@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import calicosample.entity.Customer;
 import calicosample.entity.CustomerFamily;
 import calicosample.service.CustomerService;
-import jp.co.freemind.calico.dto.DTOUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,12 +19,14 @@ public class UpdateEndpoint extends CustomerEndpoint<UpdateEndpoint.Input, Custo
     @NotNull
     private Integer id;
 
-    public static Input create(Customer customer, List<CustomerFamily> customerFamilies){
-      Input input = DTOUtil.copyProperties(new Input(), customer);
-      for(CustomerFamily customerFamily : customerFamilies){
-        input.getFamilies().add(DTOUtil.copyProperties(new Family(), customerFamily));
-      }
-      return input;
+    public static Input of(Customer customer, List<CustomerFamily> customerFamilies){
+      return new Input(){{
+        copyFrom(customer);
+        setId(customer.getId());
+        for(CustomerFamily customerFamily : customerFamilies){
+          getFamilies().add(Family.of(customerFamily));
+        }
+      }};
     }
   }
 

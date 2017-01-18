@@ -4,7 +4,6 @@ import java.util.Properties;
 import calicosample.core.CommandInjectorFactory;
 import calicosample.core.CommandManager;
 import calicosample.core.CommandName;
-import jp.co.freemind.calico.config.beanutils.SuppressPropertiesInitializer;
 import jp.co.freemind.calico.config.env.Env;
 
 import static java.util.Comparator.comparing;
@@ -16,7 +15,6 @@ import static java.util.stream.Collectors.toList;
  */
 public class Main {
   public static void main(String[] args) {
-    SuppressPropertiesInitializer.init();
     Properties properties = new Properties();
     properties.put("injectorFactory", CommandInjectorFactory.class.getName());
     Env.init(properties);

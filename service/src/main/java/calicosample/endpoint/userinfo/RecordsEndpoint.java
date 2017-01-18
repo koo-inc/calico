@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import calicosample.dao.UserInfoDao;
-import jp.co.freemind.calico.dto.DTOUtil;
+import calicosample.entity.UserInfo;
 import jp.co.freemind.calico.endpoint.dto.EmptyInput;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,12 +18,19 @@ public class RecordsEndpoint extends UserInfoEndpoint<EmptyInput, List<RecordsEn
   public static class Output {
     private Integer id;
     private String loginId;
+
+    public static Output of(UserInfo entity){
+      return new Output(){{
+        setId(entity.getId());
+        setLoginId(entity.getLoginId());
+      }};
+    }
   }
 
   @Override
   public List<RecordsEndpoint.Output> execute(EmptyInput form) {
     return userInfoDao.findAll().stream()
-      .map(userInfo -> DTOUtil.copyProperties(new Output(), userInfo))
+      .map(Output::of)
       .collect(Collectors.toList());
   }
 }

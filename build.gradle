@@ -99,7 +99,6 @@ subprojects {
   dependencies {
     compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
     compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.3.2'
-    compile group: 'commons-beanutils', name: 'commons-beanutils', version:'1.9.2'
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version:'2.3.8'
     compile group: 'com.google.inject', name: 'guice', version: '4.0-beta5'
     compile group: 'com.google.inject.extensions', name: 'guice-servlet', version: '4.0-beta5'

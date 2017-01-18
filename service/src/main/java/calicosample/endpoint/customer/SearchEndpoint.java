@@ -11,7 +11,6 @@ import calicosample.core.dto.SearchResult;
 import calicosample.dao.CustomerDao;
 import calicosample.entity.Customer;
 import calicosample.extenum.Sex;
-import jp.co.freemind.calico.dto.DTOUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.seasar.doma.jdbc.SelectOptions;
@@ -48,7 +47,13 @@ public class SearchEndpoint extends CustomerEndpoint<SearchEndpoint.Input, Searc
     private LocalDate birthday;
 
     public static Record of(Customer customer){
-      return DTOUtil.copyProperties(new Record(), customer);
+      return new Record(){{
+        setId(customer.getId());
+        setKname1(customer.getKname1());
+        setKname2(customer.getKname2());
+        setSex(customer.getSex());
+        setBirthday(customer.getBirthday());
+      }};
     }
   }
 

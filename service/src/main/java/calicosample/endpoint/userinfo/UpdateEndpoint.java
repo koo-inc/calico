@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 
 import calicosample.dao.UserInfoDao;
 import calicosample.entity.UserInfo;
-import jp.co.freemind.calico.dto.DTOUtil;
 import jp.co.freemind.calico.endpoint.dto.EmptyOutput;
 import jp.co.freemind.calico.guice.InjectUtil;
 import lombok.Getter;
@@ -28,12 +27,19 @@ public class UpdateEndpoint extends UserInfoEndpoint<UpdateEndpoint.Input, Empty
       }
       return InjectUtil.getInstance(UserInfoDao.class).findForLoginIdUniqueCheck(getLoginId(), getId()).size() == 0;
     }
+
+    public static Input of(UserInfo userInfo){
+      return new Input(){{
+        copyFrom(userInfo);
+        setId(userInfo.getId());
+      }};
+    }
   }
 
   @Override
   public EmptyOutput execute(Input input) {
     UserInfo userInfo = userInfoDao.findById(input.getId());
-    DTOUtil.copyProperties(userInfo, input);
+    input.copyTo(userInfo);
     userInfoDao.update(userInfo);
     return EmptyOutput.getInstance();
   }
