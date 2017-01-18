@@ -3,27 +3,34 @@ package calicosample.service.sample;
 import java.util.Optional;
 
 import javax.inject.Inject;
-import javax.validation.Valid;
 
-import calicosample.dto.form.sample.mail.MailForm;
 import jp.co.freemind.calico.mail.Mail;
 import jp.co.freemind.calico.mail.Mailer;
+import jp.co.freemind.calico.media.Media;
 import jp.co.freemind.calico.service.Service;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class MailService extends Service {
-  @Inject
-  Mailer mailer;
+  @Inject Mailer mailer;
 
-  public MailForm getForm(){
-    return new MailForm(){{
-      setFromAddress("admin@freemind.co.jp");
-      setFromName(Optional.of("空管理者"));
-      setSubject("テストメール");
-      setBody("テスト\nあいうえお");
-    }};
+  @Getter @Setter
+  public static class Form {
+    @NotEmpty
+    private String toAddress;
+    @NotEmpty
+    private String fromAddress;
+    private Optional<String> fromName;
+    private Optional<String> replyTo;
+    @NotEmpty
+    private String subject;
+    @NotEmpty
+    private String body;
+    private Optional<Media> attachment;
   }
 
-  public void send(@Valid MailForm form) {
+  public void send(Form form) {
     Mail.Builder builder = Mail.builder()
       .to(form.getToAddress())
       .from(form.getFromAddress())
