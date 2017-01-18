@@ -11,6 +11,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.endpoint.Endpoint;
 import jp.co.freemind.calico.endpoint.EndpointManager;
@@ -33,8 +34,12 @@ public abstract class ApiResource {
     String path = requestContext.getUriInfo().getPath();
     Endpoint endpoint = endpointManager.getEndpoint(path);
     Type inputType = endpointManager.getInputType(path);
-    Object input = objectMapper.readValue(requestContext.getEntityStream(), objectMapper.constructType(inputType));
+    Object input = getSafeOnUnknownPropertiesObjectMapper().readValue(requestContext.getEntityStream(), objectMapper.constructType(inputType));
     return endpoint.execute(input);
+  }
+
+  private ObjectMapper getSafeOnUnknownPropertiesObjectMapper(){
+    return objectMapper.copy().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
 }
