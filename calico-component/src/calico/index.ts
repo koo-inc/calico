@@ -4,10 +4,6 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import {
-  CalendarModule,
-} from 'primeng/primeng';
-
 import { ErrorTipComponent } from "./form/errortip.component";
 import { TextFieldComponent } from "./form/textfield.component";
 import { PasswordComponent } from "./form/password.component";
@@ -43,16 +39,16 @@ export { GrowlService } from "./util/growl.service";
 
 export { SearchService, SearchContext } from "./search/search.service";
 
-import { AlertModule, ModalModule, PopoverModule, DatepickerModule } from 'ng2-bootstrap';
+import { AlertModule, ModalModule, PopoverModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    CalendarModule,
     PopoverModule,
     DatepickerModule,
+    TimepickerModule,
   ],
   declarations: [
     ErrorTipComponent,

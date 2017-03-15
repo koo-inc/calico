@@ -8,7 +8,6 @@ import './extension';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CalendarModule, } from 'primeng/primeng';
 import { ErrorTipComponent } from "./form/errortip.component";
 import { TextFieldComponent } from "./form/textfield.component";
 import { PasswordComponent } from "./form/password.component";
@@ -35,7 +34,7 @@ export { SerializeService } from "./util/serialize.service";
 export { Api } from "./util/api.service";
 export { GrowlService } from "./util/growl.service";
 export { SearchService, SearchContext } from "./search/search.service";
-import { PopoverModule, DatepickerModule } from 'ng2-bootstrap';
+import { PopoverModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
 var CalicoModule = (function () {
     function CalicoModule() {
     }
@@ -47,9 +46,9 @@ CalicoModule = __decorate([
             CommonModule,
             FormsModule,
             ReactiveFormsModule,
-            CalendarModule,
             PopoverModule,
             DatepickerModule,
+            TimepickerModule,
         ],
         declarations: [
             ErrorTipComponent,

@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, forwardRef, Injector, Input } from '@angular/core';
+import { Component, forwardRef, Injector, Input, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormItem } from "./item";
 var TimepickerComponent = TimepickerComponent_1 = (function (_super) {
@@ -27,33 +27,104 @@ var TimepickerComponent = TimepickerComponent_1 = (function (_super) {
         _this.defaultDate = Date.create('00:00');
         _this.stepHour = 1;
         _this.stepMinute = 5;
-        _this.inline = false;
+        _this.textChanged = false;
+        _this.keepFlag = false;
         return _this;
     }
-    Object.defineProperty(TimepickerComponent.prototype, "calendarValue", {
+    Object.defineProperty(TimepickerComponent.prototype, "textValue", {
         get: function () {
-            return this.innerCalendarValue;
+            return this.innerTextValue;
         },
         set: function (value) {
-            // if (value !== this.innerCalendarValue) {
-            this.innerCalendarValue = value;
-            this.value = value != null ? value.toISOString() : null;
-            // }
+            if (value !== this.innerTextValue) {
+                this.textChanged = true;
+                this.popover.hide();
+                this.innerTextValue = value;
+                var d = this.toDate(this.innerTextValue);
+                this.innerTimepickerValue = d;
+                this.value = d != null ? d.toISOString() : null;
+                this.popover.show();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    TimepickerComponent.prototype.isInvalidText = function () {
+        return this.innerTextValue != null && this.innerTextValue != '' && this.timepickerValue == null;
+    };
+    TimepickerComponent.prototype.adjustTextValue = function () {
+        if (!this.textChanged)
+            return;
+        if (this.timepickerValue != null) {
+            this.innerTextValue = this.formatDate(this.timepickerValue);
+        }
+        this.textChanged = false;
+    };
+    Object.defineProperty(TimepickerComponent.prototype, "timepickerValue", {
+        get: function () {
+            return this.innerTimepickerValue;
+        },
+        set: function (value) {
+            if (!Object.isEqual(value, this.innerTimepickerValue)) {
+                this.innerTimepickerValue = value;
+                this.innerTextValue = this.formatDate(value);
+                this.textChanged = false;
+                this.value = value != null ? value.toISOString() : null;
+            }
         },
         enumerable: true,
         configurable: true
     });
     TimepickerComponent.prototype.writeValue = function (value) {
         _super.prototype.writeValue.call(this, value);
-        if (value !== this.innerCalendarValue) {
-            if (value == null || value == '') {
-                value = null;
-            }
-            else if (!Object.isDate(value)) {
-                value = Date.create(value);
-            }
-            this.innerCalendarValue = value;
+        if (value == null || value == '') {
+            this.innerTextValue = null;
         }
+        else if (Object.isDate(value)) {
+            this.innerTextValue = this.formatDate(value);
+        }
+        else if (!Object.isDate(value)) {
+            this.innerTextValue = this.formatDate(this.toDate(value));
+        }
+        this.textChanged = false;
+        if (value == null || value == '') {
+            this.innerTimepickerValue = null;
+        }
+        else if (Object.isDate(value)) {
+            this.innerTimepickerValue = value;
+        }
+        else if (!Object.isDate(value)) {
+            this.innerTimepickerValue = this.toDate(value);
+        }
+    };
+    TimepickerComponent.prototype.toDate = function (value) {
+        var d = Date.create(value);
+        return d == 'Invalid Date' ? null : d;
+    };
+    TimepickerComponent.prototype.formatDate = function (value) {
+        if (value == null) {
+            return null;
+        }
+        return value.format('{HH}:{mm}');
+    };
+    TimepickerComponent.prototype.keep = function () {
+        this.keepFlag = true;
+    };
+    TimepickerComponent.prototype.onClick = function () {
+        this.popover.show();
+    };
+    TimepickerComponent.prototype.onFocus = function () {
+        this.popover.show();
+    };
+    TimepickerComponent.prototype.onBlur = function ($event) {
+        if (this.keepFlag) {
+            $event.target.focus();
+            this.keepFlag = false;
+        }
+        else {
+            this.popover.hide();
+        }
+        this.adjustTextValue();
     };
     return TimepickerComponent;
 }(FormItem));
@@ -71,20 +142,16 @@ __decorate([
 ], TimepickerComponent.prototype, "stepMinute", void 0);
 __decorate([
     Input(),
-    __metadata("design:type", String)
-], TimepickerComponent.prototype, "placeholder", void 0);
-__decorate([
-    Input(),
     __metadata("design:type", Object)
 ], TimepickerComponent.prototype, "disabled", void 0);
 __decorate([
-    Input(),
-    __metadata("design:type", Boolean)
-], TimepickerComponent.prototype, "inline", void 0);
+    ViewChild('popover'),
+    __metadata("design:type", Object)
+], TimepickerComponent.prototype, "popover", void 0);
 TimepickerComponent = TimepickerComponent_1 = __decorate([
     Component({
         selector: 'c-timepicker',
-        template: "\n    <p-calendar [(ngModel)]=\"calendarValue\"\n      [class.invalid]=\"isInvalid()\"\n      [timeOnly]=\"true\"\n      [defaultDate]=\"defaultDate\"\n      [stepHour]=\"stepHour\"\n      [stepMinute]=\"stepMinute\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [inline]=\"inline\"\n    ></p-calendar>\n    <c-error-tip [for]=\"control\"></c-error-tip>\n  ",
+        template: "\n    <span class=\"text-container\">\n      <input type=\"text\" [(ngModel)]=\"textValue\"\n        [class.invalid]=\"isInvalid()\"\n        #popover=\"bs-popover\"\n        [popover]=\"popoverTpl\"\n        placement=\"bottom\"\n        container=\"body\"\n        triggers=\"\"\n        (focus)=\"onFocus($event)\"\n        (blur)=\"onBlur($event)\"\n        (click)=\"onClick($event)\"\n      ><span class=\"invalid-text glyphicon glyphicon-warning-sign\"\n        [class.active]=\"isInvalidText()\"\n      ></span>\n    </span>\n    <template #popoverTpl>\n      <div class=\"c-timepicker-popover\" (mousedown)=\"keep($event)\">\n        <timepicker [(ngModel)]=\"timepickerValue\"\n          [arrowkeys]=\"true\"\n          [mousewheel]=\"false\"\n          [showSpinners]=\"true\"\n          [showMeridian]=\"false\"\n          [hourStep]=\"stepHour\"\n          [minuteStep]=\"stepMinute\"\n        ></timepicker>\n      </div>\n    </template>\n    <c-error-tip [for]=\"control\"></c-error-tip>\n  ",
         styles: ["\n    :host {\n      display: inline-block;\n      position: relative;\n    }\n    :host:not(:hover) c-error-tip {\n      display: none !important;\n    }\n  "],
         providers: [
             {

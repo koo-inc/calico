@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { CalicoModule } from 'calico';
 
-import { AlertModule, ModalModule, DatepickerModule, PopoverModule } from 'ng2-bootstrap';
+import { AlertModule, ModalModule, DatepickerModule, PopoverModule, TimepickerModule } from 'ng2-bootstrap';
 
 import {
   GrowlModule,
@@ -28,6 +28,7 @@ import { LayoutModule} from './layout/layout.module';
     PopoverModule,
     AlertModule,
     DatepickerModule,
+    TimepickerModule,
   ],
 })
 export class SharedModule { }

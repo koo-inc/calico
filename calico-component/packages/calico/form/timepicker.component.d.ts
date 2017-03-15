@@ -5,10 +5,21 @@ export declare class TimepickerComponent extends FormItem {
     defaultDate: Date;
     stepHour: number;
     stepMinute: number;
-    placeholder: string;
     disabled: any;
-    inline: boolean;
-    innerCalendarValue: Date;
-    calendarValue: Date;
+    innerTextValue: string;
+    textChanged: boolean;
+    textValue: string;
+    isInvalidText(): boolean;
+    adjustTextValue(): void;
+    innerTimepickerValue: Date;
+    timepickerValue: Date;
     writeValue(value: any): void;
+    private toDate(value);
+    private formatDate(value);
+    popover: any;
+    keepFlag: boolean;
+    keep(): void;
+    onClick(): void;
+    onFocus(): void;
+    onBlur($event: any): void;
 }
