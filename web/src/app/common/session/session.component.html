@@ -1,0 +1,12 @@
+<div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static', ignoreBackdropClick: true, keyboard: false}"
+  tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        セッションが切れました。<br/>
+        再度ログインしてください。<br/>
+        <button type="button" btn="primary" (click)="gotoLogin()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

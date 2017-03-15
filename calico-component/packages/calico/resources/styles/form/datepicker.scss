@@ -1,0 +1,14 @@
+c-datepicker {
+  input[type="text"] {
+    padding-left: 28px;
+    width: 120px;
+    background-image: url('#{$calico-images-path}/icon_calendar.png');
+    background-repeat: no-repeat;
+    background-position: 5px center;
+  }
+
+   .invalid input[type="text"] {
+     background-color: #fdd;
+     border: solid 1px red;
+   }
+}

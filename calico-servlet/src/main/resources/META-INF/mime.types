@@ -1,0 +1,55 @@
+# from https://developer.mozilla.org/ja/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+audio/aac	aac	AAC
+application/x-abiword	abw	ABW
+application/octet-stream	arc	ARC
+video/x-msvideo	avi	AVI
+application/vnd.amazon.ebook	azw	AZW
+application/octet-stream	bin	BIN
+application/x-bzip	bz	BZ
+application/x-bzip2	bz2	BZ2
+application/x-csh	csh	CSH
+text/css	css	CSS
+text/csv	csv	CSV
+application/msword	doc	DOC
+application/epub+zip	epub	EPUB
+image/gif	gif	GIF
+text/html	htm	html	HTM	HTML
+image/x-icon	ico	ICO
+text/calendar	ics	ICS
+application/java-archive	jar	JAR
+image/jpeg	jpeg	jpg	JPEG	JPG
+application/js	js	JS
+application/json	json	JSON
+audio/midi	mid	midi	MID	MIDI
+video/mpeg	mpeg	MPEG
+application/vnd.apple.installer+xml	mpkg	MPKG
+application/vnd.oasis.opendocument.presentation	odp	ODP
+application/vnd.oasis.opendocument.spreadsheet	ods	ODS
+application/vnd.oasis.opendocument.text	odt	ODT
+audio/ogg	oga	OGA
+video/ogg	ogv	OGV
+application/ogg	ogx	OGX
+application/pdf	pdf	PDF
+application/vnd.ms-powerpoint	ppt	PPT
+application/x-rar-compressed	rar	RAR
+application/rtf	rtf	RTF
+application/x-sh	sh	SH
+image/svg+xml	svg	SVG
+application/x-shockwave-flash	swf	SWF
+application/x-tar	tar	TAR
+image/tiff	tif	tiff	TIF	TIFF
+application/x-font-ttf	ttf	TTF
+application/vnd.visio	vsd	VSD
+audio/x-wav	wav	WAV
+audio/webm	weba	WEBA
+video/webm	webm	WEBM
+image/webp	webp	WEBP
+application/x-font-woff	woff	WOFF
+application/xhtml+xml	xhtml	XHTML
+application/vnd.ms-excel	xls	XLS
+application/xml	xml	XML
+application/vnd.mozilla.xul+xml	xul	XUL
+application/zip	zip	ZIP
+video/3gpp	3gp	3GP
+video/3gpp2	3g2	3G2
+application/x-7z-compressed	7z	7Z

@@ -1,0 +1,91 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'de.undercouch:gradle-download-task:3.2.0'
+  }
+}
+
+import de.undercouch.gradle.tasks.download.Download
+
+def tmpDir = "${project.buildDir}/tmp/migration"
+
+task migrationDownloadBinary(type: Download, group: 'migration') {
+  src 'https://github.com/mybatis/migrations/releases/download/mybatis-migrations-3.2.1/mybatis-migrations-3.2.1.zip'
+  dest "${tmpDir}/mybatis-migration.zip"
+  overwrite false
+  doLast {
+    copy {
+      from zipTree("${tmpDir}/mybatis-migration.zip")
+      into "${tmpDir}/mybatis-migration"
+    }
+  }
+}
+task migrationExpandBinary(type: Copy, group: 'migration', dependsOn: migrationDownloadBinary) {
+  from "${tmpDir}/mybatis-migration/mybatis-migrations-3.2.1"
+  into 'migration'
+}
+task migrationInit(type: Download, group: 'migration', dependsOn: migrationExpandBinary) {
+  src 'https://jdbc.postgresql.org/download/postgresql-42.0.0.jar'
+  dest "${tmpDir}/postgresql-42.0.0.jar"
+  overwrite false
+  doLast {
+    file("migration").eachDir { dir ->
+      if (dir.name.matches(/^(bin|lib)$/)) return
+
+      copy {
+        from "${tmpDir}/postgresql-42.0.0.jar"
+        into dir.toPath().resolve("drivers").toFile()
+      }
+    }
+  }
+}
+
+def migrationDir = "${project.projectDir}/migration/"
+
+file(migrationDir).eachDir {dir ->
+  if (dir.name.matches(/^(bin|lib)$/)) return
+
+  file("${dir.absolutePath}/environments/").eachFile {f ->
+    if (!f.name.find(/\.properties$/)) return;
+
+    def env = f.name.replaceFirst(/\.properties$/, '')
+    def target = "@${dir.name}.${env}"
+    def group = "migration:${env}"
+    task "status${target}" (type: Exec, group: group, dependsOn: migrationInit) {
+      workingDir "${dir.path}"
+      commandLine '../bin/migrate', 'status', "--env=${env}"
+    }
+
+    task "upAll${target}" (type: Exec, group: group, dependsOn: migrationInit) {
+      workingDir "${dir.path}"
+      commandLine '../bin/migrate', 'up', "--env=${env}"
+    }
+
+    task "up${target}" (type: Exec, group: group, dependsOn: migrationInit) {
+      workingDir "${dir.path}"
+      commandLine '../bin/migrate', 'up', '1', "--env=${env}"
+    }
+
+    task "down${target}" (type: Exec, group: group, dependsOn: migrationInit) {
+      workingDir "${dir.path}"
+      commandLine '../bin/migrate', 'down', "--env=${env}"
+    }
+
+    task "pending${target}" (type: Exec, group: group, dependsOn: migrationInit) {
+      workingDir "${dir.path}"
+      commandLine '../bin/migrate', 'pending', "--env=${env}"
+    }
+
+    task "bootstrap${target}" (type: Exec, group: group, dependsOn: migrationInit) {
+      workingDir "${dir.path}"
+      commandLine '../bin/migrate', 'bootstrap', "--env=${env}"
+    }
+
+    task "newScript${target}" (type: Exec, group: group, dependsOn: migrationInit) {
+      workingDir "${dir.path}"
+      commandLine '../bin/migrate', 'new', "new script"
+    }
+  }
+}

@@ -1,0 +1,155 @@
+@charset "utf-8";
+
+/* -:table
+======================================================================================*/
+
+table.table {
+  font-size: 12px;
+  background-color: #fff;
+}
+
+table.table>thead>tr>th {
+  background:#f3f3f3;
+  background: -moz-linear-gradient(top,  #ffffff 0%, #f5f5f5 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f5f5f5));
+  background: -webkit-linear-gradient(top,  #ffffff 0%,#f5f5f5 100%);
+  background: -o-linear-gradient(top,  #ffffff 0%,#f5f5f5 100%);
+  background: -ms-linear-gradient(top,  #ffffff 0%,#f5f5f5 100%);
+  background: linear-gradient(to bottom,  #ffffff 0%,#f5f5f5 100%);
+  text-shadow: 1px 1px 0 #fff;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+  vertical-align: middle;
+  padding: 4px;
+}
+
+.table tbody tr td {
+  border-color: #c0c0c0;
+}
+
+td .table>tbody>tr>td {
+  height: auto;
+}
+
+.table>tbody>tr>td,.table>tbody>tr>th {
+  height: 36px;
+}
+
+.table-condensed>tbody>tr>td,.table-condensed>tbody>tr>th {
+  height: auto;
+}
+
+th.center,td.center {
+  text-align: center;
+}
+
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+  background-color: transparent;
+}
+.table-striped > tbody > tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+
+.table-bordered, .table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {
+  border-color: #c0c0c0;
+}
+
+.table>tbody>tr>th {
+  background-color: #efefef;
+}
+
+.table > thead > tr > td.active, .table > tbody > tr > td.active, .table > tfoot > tr > td.active, .table > thead > tr > th.active, .table > tbody > tr > th.active, .table > tfoot > tr > th.active, .table > thead > tr.active > td, .table > tbody > tr.active > td, .table > tfoot > tr.active > td, .table > thead > tr.active > th, .table > tbody > tr.active > th, .table > tfoot > tr.active > th ,
+.table > thead > tr > td.active:hover, .table > tbody > tr > td.active:hover, .table > tfoot > tr > td.active:hover, .table > thead > tr > th.active:hover, .table > tbody > tr > th.active:hover, .table > tfoot > tr > th.active:hover, .table > thead > tr.active:hover > td, .table > tbody > tr.active:hover > td, .table > tfoot > tr.active:hover > td, .table > thead > tr.active:hover > th, .table > tbody > tr.active:hover > th, .table > tfoot > tr.active:hover > th {
+  background-color: #d9edf7;
+}
+
+.table > thead > tr > td.changed, .table > tbody > tr > td.changed, .table > tfoot > tr > td.changed, .table > thead > tr > th.changed, .table > tbody > tr > th.changed, .table > tfoot > tr > th.changed, .table > thead > tr.changed > td, .table > tbody > tr.changed > td, .table > tfoot > tr.changed > td, .table > thead > tr.changed > th, .table > tbody > tr.changed > th, .table > tfoot > tr.changed > th ,
+.table > thead > tr > td.changed:hover, .table > tbody > tr > td.changed:hover, .table > tfoot > tr > td.changed:hover, .table > thead > tr > th.changed:hover, .table > tbody > tr > th.changed:hover, .table > tfoot > tr > th.changed:hover, .table > thead > tr.changed:hover > td, .table > tbody > tr.changed:hover > td, .table > tfoot > tr.changed:hover > td, .table > thead > tr.changed:hover > th, .table > tbody > tr.changed:hover > th, .table > tfoot > tr.changed:hover > th {
+  background-color: #e7eeff !important;
+}
+
+.table > thead > tr > td.highlight, .table > tbody > tr > td.highlight, .table > tfoot > tr > td.highlight, .table > thead > tr > th.highlight, .table > tbody > tr > th.highlight, .table > tfoot > tr > th.highlight, .table > thead > tr.highlight > td, .table > tbody > tr.highlight > td, .table > tfoot > tr.highlight > td, .table > thead > tr.highlight > th, .table > tbody > tr.highlight > th, .table > tfoot > tr.highlight > th ,
+.table > thead > tr > td.highlight:hover, .table > tbody > tr > td.highlight:hover, .table > tfoot > tr > td.highlight:hover, .table > thead > tr > th.highlight:hover, .table > tbody > tr > th.highlight:hover, .table > tfoot > tr > th.highlight:hover, .table > thead > tr.highlight:hover > td, .table > tbody > tr.highlight:hover > td, .table > tfoot > tr.highlight:hover > td, .table > thead > tr.highlight:hover > th, .table > tbody > tr.highlight:hover > th, .table > tfoot > tr.highlight:hover > th {
+  background-color: #d9edf7 !important;
+}
+
+.table tr th.info {
+  border-bottom-color: #93b733 !important;
+}
+
+.table tr th.edit {
+  border-bottom-color: #337ab7 !important;
+}
+
+.table tr.vtop th,.table tr.vtop td,.table td.vtop {
+  vertical-align: top !important;
+}
+
+.table-hover > tbody > tr {
+  cursor: pointer;
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: #eef4ff;
+}
+
+.table th .btn-sm,.table td .btn-sm {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.table th .sort {
+  background-image: url(assets/images/sort.png);
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding-right: 10px;
+  cursor: pointer;
+  padding: 1px 0;
+}
+
+.table th .sort:hover {
+  color: #337ab7;
+}
+
+.table th .asc {
+  background-image: url(assets/images/sort_asc.png);
+}
+.table th .desc {
+  background-image: url(assets/images/sort_desc.png);
+}
+
+th.hover,td.hover {
+  cursor: pointer;
+}
+
+th.hover:hover,td.hover:hover {
+  background-color: #eef4ff;
+}
+
+/* table-search */
+table.table-search {
+  margin-bottom: 0;
+}
+/* table-list */
+table.table-list {
+  margin-bottom: 0;
+}
+.table-list > tbody > td > div {
+  min-height: 1em;
+  margin:3px 0;
+}
+/* table-simple */
+table.table-simple {
+  margin-bottom: 0;
+}
+td>.table-simple tbody tr:first-child td {
+  border: none;
+}
+
+

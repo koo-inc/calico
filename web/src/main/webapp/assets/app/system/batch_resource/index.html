@@ -1,0 +1,22 @@
+<div ng-if="index.records" panel="バッチ一覧">
+  <div class="control">
+    <label>対象処理日時:
+      <input bs-datepicker type="text" name="targetDate" ng-model="index.targetDateTime" />
+      <input bs-timepicker type="text" name="targetTime" ng-model="index.targetDateTime" />
+    </label>
+  </div>
+  <table list-table>
+    <thead>
+      <th>バッチ名</th>
+      <th>概要</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="record in index.records">
+        <td>{{::record.label}}</td>
+        <td>{{::record.description}}</td>
+        <td class="text-center"><button type="button" class="btn btn-danger" ng-click="index.execute({index: record.index, targetDateTime: index.targetDateTime})">実行</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

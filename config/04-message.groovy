@@ -1,0 +1,33 @@
+message = [
+  [key: "internalServerError", value: "サーバーエラーが発生しました。"],
+  [key: "required", value: "必須項目です。"],
+  [key: "uniqueLoginId", value: "既に使われているIDです。"],
+
+  [key: "upperBound", value: "{value}以下でなければなりません。"],
+  [key: "lowerBound", value: "{value}以上でなければなりません。"],
+  [key: "digits", value: "境界以外の数値（予測:<{integer}digits>.<{fraction}digits>）"],
+  [key: "future", value: "未来日付でなければなりません。"],
+  [key: "past", value: "過去日付でなければなりません。"],
+  [key: "pattern", value: "パターン（{regexp}）に一致しなければなりません。"],
+  [key: "size", value: "サイズは{lowerBound}以上{upperBound}以下でなければなりません。"],
+  [key: "letterCount", value: "{lowerBound}文字以上{upperBound}文字以下でなければなりません。"],
+
+  [key: "creditCardNumber", value: "正しいクレジットカード番号ではありません。"],
+  [key: "email", value: "正しいE-Mailの形式ではありません。"],
+  [key: "length", value: "長さは{min}以上{max}以下でなければなりません。"],
+  [key: "notBlank", value: "ブランクは許可されていません。"],
+  [key: "notEmpty", value: "何らかのデータが必要です。"],
+  [key: "range", value: "{min}から{max}の範囲内でなければなりません。"],
+  [key: "safeHtml", value: "安全ではないHTMLが含まれています。"],
+  [key: "scriptAssert", value: "{script}による評価が不正です。"],
+  [key: "url", value: "正しいURLではありません。"],
+
+  [key: "phoneNumber", value: "正しい電話番号ではありません。"],
+  [key: "hoge", value: "ほげ！"],
+  [key: "fromToDate", value: "終了日は開始日より後の日付を指定してください。"],
+  [key: "fromToTime", value: "終了時間は開始時間より後の時間を指定してください。"],
+  [key: "fromToTimestamp", value: "終了日時は開始日時より後の日時を指定してください。"],
+  [key: "existsEntity", value: "指定されたレコードが存在しません。"],
+  [key: "fileSize", value: "ファイルサイズは{min}以上{max}以下でなければなりません。"],
+  [key: "allowedExtensions", value: "拡張子は{value}のうちのいずれかでなければなりません。"],
+]

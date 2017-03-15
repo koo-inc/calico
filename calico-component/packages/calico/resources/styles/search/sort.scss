@@ -1,0 +1,18 @@
+.c-sort {
+  background-image: url('#{$calico-images-path}/sort.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding-right: 10px;
+  cursor: pointer;
+  padding: 1px 0;
+
+  &:hover {
+    color: #337ab7;
+  }
+  &.asc {
+    background-image: url('#{$calico-images-path}/sort_asc.png');
+  }
+  &.desc {
+    background-image: url('#{$calico-images-path}/sort_desc.png');
+  }
+}

@@ -1,0 +1,13 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+
+apply from: 'config.gradle'
+
+allprojects  {
+  group = 'jp.co.freemind.calico'
+  version = '1.0'
+
+//  sourceCompatibility = 1.8
+//  targetCompatibility = 1.8
+//  [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+}

@@ -1,0 +1,60 @@
+<form ng-if="form" name="f" novalidate>
+  <div panel="検索条件">
+    <table search-table>
+      <colgroup cols="[15,null]"></colgroup>
+      <tbody>
+        <tr>
+          <th>名前</th>
+          <td>
+            <input type="text" ng-model="form.name"/>
+          </td>
+        </tr>
+        <tr>
+          <th>性別</th>
+          <td>
+            <span clc-radios name="sex"
+              ng-model="form.sex"
+              options="sexes" label-prop="longName"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="control">
+      <button clc-submit="search(form)"
+        btn="primary" glyphicon="search">検索</button>
+    </div>
+  </div>
+</form>
+
+<div ng-if="result" panel="検索結果">
+  <div class="control">
+    <div class="pull-left">
+      <a href="{{::$href('./edit')}}"
+        btn="primary" glyphicon="plus">新規登録</a>
+    </div>
+    <div class="pull-right" clc-pager></div>
+  </div>
+  <table list-table class="table-hover">
+    <colgroup cols="[25,15,null]"></colgroup>
+    <thead>
+      <tr>
+        <th clc-sort="name">氏名</th>
+        <th clc-sort="sex">性別</th>
+        <th clc-sort="birthday">生年月日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="record in result.records" ng-click="$url('./show', {id: record.id})">
+        <td>
+          {{::record.kname1}} {{::record.kname2}}
+        </td>
+        <td>
+          {{::record.sex | options:'sex'}}
+        </td>
+        <td>
+          {{::record.birthday | date}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

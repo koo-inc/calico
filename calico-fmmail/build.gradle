@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+description = 'calico-fmmail'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  compile project(':calico-core')
+  compile(group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.4.1') {
+    exclude module: 'commons-logging'
+  }
+  compile(group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.4.1') {
+    exclude module: 'commons-logging'
+  }
+  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.14.8'
+  testCompile group: 'org.spockframework', name: 'spock-core', version: '1.0-groovy-2.4'
+}

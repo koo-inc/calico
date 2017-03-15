@@ -1,0 +1,33 @@
+<tabs></tabs>
+
+<div panel>
+  <controller-src></controller-src>
+
+  <form name="f" novalidate class="ng-submitted">
+
+    <h3>基本</h3>
+    <script sample="textarea1" type="text/ng-template">
+      <textarea name="val1" cols="50" rows="3"
+        ng-model="obj.val1"></textarea>
+    </script>
+    <pre class="inspect">{{obj.val1}}</pre>
+
+    <h3>必須チェック</h3>
+    <script sample="textarea2" type="text/ng-template">
+      <textarea name="val2" cols="50" rows="3"
+        ng-model="obj.val2"
+        ng-required="true"
+        clc-with-errors></textarea>
+    </script>
+    <pre class="inspect">{{obj.val2}}</pre>
+
+    <h3>onchange</h3>
+    <script sample="textarea3" type="text/ng-template">
+      <textarea name="val3" cols="50" rows="3"
+        ng-model="obj.val3"
+        ng-change="onchange('val3')"></textarea>
+    </script>
+    <pre class="inspect">{{obj.val3}}</pre>
+
+  </form>
+</div>

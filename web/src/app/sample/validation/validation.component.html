@@ -1,0 +1,131 @@
+<div c-panel="サンプルフォーム">
+  <form *ngIf="form1 != null" [formGroup]="form1" novalidate (ngSubmit)="save1()">
+    <table c-info-table>
+      <colgroup [c-cols]="[20, null]"></colgroup>
+      <tbody>
+        <tr>
+          <th>id</th>
+          <td>
+            <c-textfield formControlName="id"></c-textfield>
+          </td>
+        </tr>
+        <tr>
+          <th>name</th>
+          <td>
+            <c-textfield formControlName="name"></c-textfield>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button type="submit" c-btn="primary" c-glyphicon="saved">登録</button>
+    </div>
+  </form>
+
+  <form *ngIf="form2 != null" [formGroup]="form2" novalidate (ngSubmit)="save2()">
+    <table c-info-table>
+      <colgroup [c-cols]="[20, null]"></colgroup>
+      <tbody>
+        <tr>
+          <th>id</th>
+          <td>
+            <c-textfield formControlName="id"></c-textfield>
+          </td>
+        </tr>
+        <tr>
+          <th>name</th>
+          <td>
+            <c-textfield formControlName="name"></c-textfield>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <table c-info-table>
+              <thead>
+              <tr>
+                <th>id</th>
+                <th>name</th>
+              </tr>
+              </thead>
+              <tbody formArrayName="children">
+              <ng-container *ngFor="let child of form2.get('children').controls; let i = index">
+                <tr [formGroupName]="i">
+                  <td>
+                    <c-textfield formControlName="id"></c-textfield>
+                  </td>
+                  <td>
+                    <c-textfield formControlName="name"></c-textfield>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr>
+                <td colspan="2">
+                  <button type="button" c-btn="primary" (click)="addNewChild()">追加</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button type="submit" c-btn="primary" c-glyphicon="saved">登録</button>
+    </div>
+  </form>
+
+  <form *ngIf="form3 != null" [formGroup]="form3" novalidate (ngSubmit)="save3()">
+    <table c-info-table>
+      <colgroup [c-cols]="[20, null]"></colgroup>
+      <tbody>
+        <tr>
+          <th>id</th>
+          <td>
+            <c-textfield formControlName="id"></c-textfield>
+          </td>
+        </tr>
+        <tr>
+          <th>name</th>
+          <td>
+            <c-textfield formControlName="name"></c-textfield>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <table c-info-table>
+              <thead>
+              <tr>
+                <th>key</th>
+                <th>id</th>
+                <th>name</th>
+              </tr>
+              </thead>
+              <tbody formGroupName="childMap">
+              <ng-container *ngFor="let key of getForm3ChildMapKey()">
+                <tr [formGroupName]="key">
+                  <th>{{key}}</th>
+                  <td>
+                    <c-textfield formControlName="id"></c-textfield>
+                  </td>
+                  <td>
+                    <c-textfield formControlName="name"></c-textfield>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr>
+                <td colspan="3">
+                  <button type="button" c-btn="primary" (click)="putNewChild()">追加</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button type="submit" c-btn="primary" c-glyphicon="saved">登録</button>
+    </div>
+  </form>
+
+</div>

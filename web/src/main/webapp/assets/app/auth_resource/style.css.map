@@ -1,0 +1,1 @@
+{"version":3,"file":"style.css","sources":["auth_resource/style.scss"],"sourcesContent":["\ndiv.panel {\n  margin-top: 15px;\n}\n"],"mappings":";AACA,AAAG,GAAA,AAAA,MAAM,CAAC;EACR,UAAU,EAAE,IAAK,GAClB","names":[],"sourceRoot":".."}

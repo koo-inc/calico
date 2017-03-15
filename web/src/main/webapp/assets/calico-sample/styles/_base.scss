@@ -1,0 +1,546 @@
+@charset "utf-8";
+
+div.cols > div {
+  float: left;
+}
+
+div.cols:after {
+  content: ".";
+  display: block;
+  height: 0;
+  font-size:0;
+  clear: both;
+  visibility:hidden;
+}
+
+/* -base:
+======================================================================================*/
+
+html,body {
+  font-family: Verdana,"メイリオ", Meiryo, sans-serif;
+  min-width: 1000px;
+  font-size: 13px;
+  background-color: #ececea;
+}
+
+body {
+  padding-top: 50px;
+  overflow-y: scroll;
+}
+
+h2 {
+  font-size: 18px;
+  padding: 1px 5px;
+}
+
+h3 {
+  font-size: 16px;
+  border-left: 3px solid #337ab7;
+  padding: 1px 5px;
+}
+
+* a {
+  cursor: pointer;
+}
+
+hr {
+  height: 0;
+  margin: 0 0 20px 0;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid #bbb;
+}
+
+/* -layout:
+======================================================================================*/
+/* container */
+.container {
+  min-width: 1000px;
+  max-width: none !important;
+  width: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.container .row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.container-fluid {
+  position: relative;
+}
+
+.container-fluid .container {
+  min-width: 0;
+}
+
+.main > .container {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+/* page-header */
+.page-header {
+  margin-top: 0;
+  padding:15px 8px 15px 18px;
+  font-size: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #c6c6c6;
+  height: 46px;
+}
+/* container内 */
+.container .page-header {
+  background-color: #fff;
+  border-bottom: 1px solid #b0b0b0;
+  height: auto;
+}
+
+.container .page-header h1{
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+/* page title */
+.page-header .title:before {
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: "Glyphicons Halflings";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  position: relative;
+  top: 1px;
+  padding-right: 3px;
+}
+
+/* page title icon */
+.page-header.menu-icon-top .title:before {
+  content: "\e021";
+}
+
+.page-header.menu-icon-student .title:before {
+  content: "\e008";
+}
+
+.page-header.menu-icon-inquiry .title:before {
+  content: "\e182";
+}
+
+.page-header.menu-icon-master .title:before {
+  content: "\e121";
+}
+
+.page-header.menu-icon-apply .title:before {
+  content: "\e022";
+}
+
+.page-header.menu-icon-bill .title:before {
+  content: "\00a5";
+}
+/* -:component
+======================================================================================*/
+
+/* 画面下のボタンなどエリア */
+.footer {
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border-top: 1px solid #c0c0c0;
+}
+
+.footer .btn-absolute {
+  position: absolute;
+  top: 4px !important;
+  right: 29px !important;
+  border-bottom-width: 1px;
+  margin: 0;
+}
+
+/* 金額の右寄せ */
+.amount {
+  display: inline-block;
+  width: 6.5em;
+  text-align: right;
+  min-height: 17px;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.vtop {
+  vertical-align: top !important;
+}
+
+.mb {
+  margin-bottom: 20px !important;
+}
+
+.mb0 {
+  margin-bottom: 0;
+}
+
+.mt0 {
+  margin-top: 0;
+}
+
+.pre {
+  white-space: pre-wrap;
+}
+
+/* チェックマーク */
+.record-checked{
+  margin: 0;
+  color: #337ab7;
+  font-size: 14px;
+}
+
+
+/* ページング */
+.result-number {
+  display: inline-block;
+  vertical-align: top;
+  line-height: 32px;
+}
+
+.result-number span {
+  font-size: 140%;
+  color: #337ab7;
+  padding: 0 4px;
+}
+
+.pagination {
+  margin: 0;
+}
+
+.pagination > li > a, .pagination > li > span {
+  cursor: pointer;
+}
+
+/* タブ */
+.nav-tabs {
+  border-color: #c0c0c0;
+  border-bottom: 3px solid #337ab7;
+  margin-bottom: 10px;
+}
+.nav-tabs > li > a,
+.nav-tabs > li > a:hover {
+  border-color: #c0c0c0 #c0c0c0 #337ab7;
+  cursor: pointer;
+  background: #fff;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  border-color: #337ab7;
+  background-color: #337ab7;
+  color: #fff;
+}
+
+/* 問合一覧 */
+.inquiry-info {
+  margin: 2px 0;
+}
+.inquiry-info > .title{
+  font-weight: bold;
+}
+
+
+/* -:icon & label
+======================================================================================*/
+
+.glyphicon {
+  margin-right: 4px;
+}
+
+.req-mark {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #e46060;
+  padding: 0 4px;
+  color: #fff;
+  font-weight: normal;
+  font-size: 10px;
+  text-align: center;
+  margin:0 2px;
+}
+
+.male {
+  color: #588ef9 !important;
+}
+
+.female {
+  color: #fc749d !important;
+}
+
+.label-grade {
+  border-radius: 4px;
+  background-color: #3bb099;
+  display: inline-block;
+  font-size: 10px;
+  padding:1px 4px;
+  color: #fff;
+}
+
+.grade-elementary {
+  background-color: #3bb099;
+}
+.grade-junior-high {
+  background-color: #3b6ab0;
+}
+.grade-high {
+  background-color: #4c51a9;
+}
+.grade-other {
+  background-color: #337ab7;
+}
+
+.label-apply-status {
+  border-radius: 4px;
+  background-color: #83a32c;
+  display: inline-block;
+  font-size: 10px;
+  padding:1px 4px;
+  color: #fff;
+  min-width: 55px;
+  text-align: center;
+}
+
+.label-apply-status.status-10 {
+  background-color: #83a32c;
+}
+
+.label-apply-status.status-20 {
+  background-color: #40afa1;
+}
+
+.label-apply-status.status-30 {
+  background-color: #e25e5e;
+}
+
+.label-apply-status.status-40 {
+  background-color: #a16eed;
+}
+
+.label-apply-status.status-50 {
+  background-color: #3b6ab0;
+}
+
+.apply-item {
+  border-radius: 4px;
+  background-color: #ecf3ff;
+  border: 1px solid #b3c8eb;
+  margin: 3px 3px 7px 3px;
+  padding: 5px 20px 5px 5px;
+  position: relative;
+}
+
+.apply-item-lesson {
+  background-color: #ecf3ff;
+  border: 1px solid #b3c8eb;
+}
+
+.apply-item-discount {
+  background-color: #fff9ec;
+  border: 1px solid #cdb788;
+}
+
+.apply-item-add-discount {
+  background-color: #fff9ec;
+  border: 1px solid #cdb788;
+}
+
+.apply-item-add-discount .year-terms {
+  border-top: 1px solid #cdb788;
+}
+
+.apply-item-cancel-discount {
+  background-color: #eeeeee;
+  border: 1px solid #dddddd;
+}
+
+.apply-item-cancel-discount .year-terms {
+  border-top: 1px solid #dddddd;
+}
+
+.apply-item-exam {
+  background-color: #f7ffec;
+  border: 1px solid #bfcbac;
+}
+
+.apply-item-materials {
+  background-color: #f9ecff;
+  border: 1px solid #bea4ca;
+}
+
+.apply-item-add-material {
+  background-color: #f9ecff;
+  border: 1px solid #bea4ca;
+}
+
+.apply-item-cancel-material {
+  background-color: #eeeeee;
+  border: 1px solid #dddddd;
+}
+
+.apply-item-file {
+  background-color: #ecfcf9;
+  border: 1px solid #92c1b7;
+}
+
+.apply-item-file a{
+  color: #286650;
+}
+
+.apply-item-file a:hover{
+  color: #49af8b;
+}
+
+.apply-item .btn-delete {
+  display: block;
+  width :14px;
+  height: 14px;
+  position: absolute;
+  top: 5px;
+  right: 2px;
+  font-size: 11px;
+  text-align: center;
+}
+
+.apply-item-lesson .btn-delete {
+  color: #9eb3d8;
+}
+
+.apply-item-discount .btn-delete {
+  color: #cdb788;
+}
+
+.apply-item-add-discount .btn-delete {
+  color: #cdb788;
+}
+
+.apply-item-cancel-discount .btn-delete {
+  color: #868686;
+}
+
+.apply-item-exam .btn-delete {
+  color: #bfcbac;
+}
+
+.apply-item-materials .btn-delete,
+.apply-item-add-material .btn-delete {
+  color: #bea4ca;
+}
+
+.apply-item-cancel-material .btn-delete {
+  color: #868686;
+}
+.apply-item-file a.btn-delete {
+  color: #77b39e !important;
+}
+.apply-item-lesson a.btn-delete:hover {
+  color: #7c92b5;
+}
+
+.apply-item-discount .btn-delete:hover {
+  color: #cdb788;
+}
+
+.apply-item-exam .btn-delete:hover {
+  color: #9eb27e;
+}
+
+.apply-item-materials .btn-delete:hover,
+.apply-item-add-material .btn-delete:hover{
+  color: #a781b8;
+}
+
+.apply-item-file .btn-delete:hover {
+  color: #539b82 !important;
+}
+
+.apply-item .title{
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.apply-item .year-terms {
+  padding-left: 10px;
+  margin-top: 5px;
+  padding-top: 5px;
+}
+
+.apply-item .year-terms .chunk{
+  width:25%;
+  display:inline-block;
+  vertical-align: top;
+}
+
+/* ボタン、リンク内にアイコン表示 */
+a.glyphicon,
+button.glyphicon {
+  font-family: Verdana,"メイリオ", Meiryo, sans-serif;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  top: 0;
+  margin-right:0;
+}
+a.btn.glyphicon,
+button.glyphicon {
+  margin: 2px;
+}
+
+a.glyphicon:before,
+button.glyphicon:before {
+  font-family: "Glyphicons Halflings";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size:94%;
+  margin-top: 1px;
+  margin-right: 2px;
+  display: inline-block;
+  
+}
+a.glyphicon {
+  text-decoration: none;
+}
+
+
+/* -:tooltip
+======================================================================================*/
+
+.tooltip.top-left {
+  margin-left: -5px;
+}
+
+.tooltip-inner {
+  text-align: left;
+  padding: 10px;
+  background-color: #2d2d2d;
+}
+.tooltip.top-left .tooltip-arrow {
+  margin-bottom: 0 !important;
+  left: 12px;
+  border-top-color: #2d2d2d;
+}
+
+/* -:モック用
+======================================================================================*/
+.dev-memo {
+  margin: 10px 0 5px 0;
+  background-color: #cdcdcd;
+  padding: 5px;
+}
+
+/* -:教材一括申請画面（暫定
+======================================================================================*/
+.bulk-student-count {
+  font-size: 130%;
+  text-decoration: underline;
+}
+
+.students {
+  margin: .5em;
+}

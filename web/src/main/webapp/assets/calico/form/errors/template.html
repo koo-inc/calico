@@ -1,0 +1,4 @@
+<div class="validation-messages {{showAsClass()}}" ng-style="style" ng-show="input.$invalid">
+  <div ng-repeat="key in keys" ng-if="input.$invalid && input.$error[key]">{{message(key)}}</div>
+  <div ng-transclude></div>
+</div>

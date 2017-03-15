@@ -1,0 +1,59 @@
+<div c-panel="検索条件" *ngIf="searchContext.form">
+  <form [formGroup]="searchContext.form" novalidate (ngSubmit)="searchContext.search()">
+    <table c-info-table>
+      <colgroup [c-cols]="[15, 35, 15, 35]"></colgroup>
+      <tbody>
+        <tr>
+          <th>氏名</th>
+          <td>
+            <c-textfield formControlName="name"></c-textfield>
+          </td>
+          <th>性別</th>
+          <td>
+            <c-radios formControlName="sex" [options]="sexes" [nullOption]="true" nullOptionLabel="全て"></c-radios>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">
+            <button c-btn="primary" c-glyphicon="search" [disabled]="searchContext.searching">検索</button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </form>
+</div>
+
+<div c-panel="顧客一覧" *ngIf="searchContext.result">
+  <div>
+    <div class="pull-right" c-pager></div>
+    <a c-btn="primary" c-glyphicon="plus" [routerLink]="['../edit']">新規登録</a>
+  </div>
+  <table c-list-table>
+    <colgroup [c-cols]="[15, 10, null]"></colgroup>
+    <thead>
+      <tr>
+        <th c-sort="name">氏名</th>
+        <th c-sort="sex">性別</th>
+        <th c-sort="birthday">生年月日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of searchContext.result.records" (click)="onSelect(record)">
+        <td>
+          {{record.kname1}} {{record.kname2}}
+        </td>
+        <td>
+          {{record.sex?.name}}
+        </td>
+        <td>
+          {{record.birthday | date:'yyyy/MM/dd'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <div class="pull-right" c-pager></div>
+  </div>
+</div>

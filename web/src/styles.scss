@@ -1,0 +1,27 @@
+// Bootstrap
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
+
+$table-border-color: #c0c0c0;
+$table-bg-hover: #eef4ff;
+
+$zindex-navbar:            900 !default;
+$zindex-dropdown:          900 !default;
+$zindex-popover:           960 !default;
+$zindex-tooltip:           970 !default;
+$zindex-navbar-fixed:      930 !default;
+$zindex-modal-background:  940 !default;
+$zindex-modal:             950 !default;
+
+@import '~bootstrap-sass/assets/stylesheets/bootstrap';
+
+// PrimeNG
+@import '../node_modules/primeng/resources/themes/bootstrap/theme.css';
+@import '../node_modules/primeng/resources/primeng.css';
+@import '../node_modules/font-awesome/css/font-awesome.css';
+
+// calico-component
+$calico-images-path: './calico/resources/images';
+@import './calico/resources/styles/all';
+
+//$calico-images-path: '../node_modules/calico/resources/images';
+//@import '../node_modules/calico/resources/styles/all';

@@ -1,0 +1,24 @@
+<div c-panel="ユーザ情報" *ngIf="record">
+  <table c-info-table>
+    <colgroup [c-cols]="[20, null]"></colgroup>
+    <tbody>
+      <tr>
+        <th>LoginId</th>
+        <td>
+          {{record.loginId}}
+        </td>
+      </tr>
+      <tr>
+        <th>Password</th>
+        <td>
+          {{record.password}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <a c-btn="primary" c-glyphicon="pencil" [routerLink]="['../edit', {id: record.id}]">編集</a>
+    <a c-btn="danger" c-glyphicon="trash" (click)="delete()">削除</a>
+    <a c-btn="default" c-glyphicon="list" [routerLink]="['../index']">一覧へ</a>
+  </div>
+</div>
