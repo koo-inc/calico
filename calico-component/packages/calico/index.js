@@ -35,6 +35,7 @@ export { SerializeService } from "./util/serialize.service";
 export { Api } from "./util/api.service";
 export { GrowlService } from "./util/growl.service";
 export { SearchService, SearchContext } from "./search/search.service";
+import { PopoverModule, DatepickerModule } from 'ng2-bootstrap';
 var CalicoModule = (function () {
     function CalicoModule() {
     }
@@ -47,6 +48,8 @@ CalicoModule = __decorate([
             FormsModule,
             ReactiveFormsModule,
             CalendarModule,
+            PopoverModule,
+            DatepickerModule,
         ],
         declarations: [
             ErrorTipComponent,

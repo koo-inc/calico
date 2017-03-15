@@ -23,7 +23,7 @@ var ColsComponent = (function () {
             }
             this._cols = value.map(function (e) {
                 if (e == null)
-                    return 'auto';
+                    return '';
                 if (Object.isNumber(e))
                     return e + '%';
                 return e.toString();
@@ -42,7 +42,7 @@ __decorate([
 ColsComponent = __decorate([
     Component({
         selector: '[c-cols]',
-        template: "\n    <col *ngFor=\"let col of cols\" width=\"{{col}}\">\n    <ng-content></ng-content>\n  "
+        template: "\n    <col *ngFor=\"let col of cols\" [width]=\"col\">\n    <ng-content></ng-content>\n  "
     })
 ], ColsComponent);
 export { ColsComponent };

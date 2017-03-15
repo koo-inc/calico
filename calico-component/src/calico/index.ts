@@ -43,12 +43,16 @@ export { GrowlService } from "./util/growl.service";
 
 export { SearchService, SearchContext } from "./search/search.service";
 
+import { AlertModule, ModalModule, PopoverModule, DatepickerModule } from 'ng2-bootstrap';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     CalendarModule,
+    PopoverModule,
+    DatepickerModule,
   ],
   declarations: [
     ErrorTipComponent,

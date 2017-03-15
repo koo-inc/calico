@@ -17,26 +17,60 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, forwardRef, Injector, Input } from '@angular/core';
+import { Component, forwardRef, Injector, Input, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormItem } from "./item";
+// https://github.com/valor-software/ng2-bootstrap/issues/455
+import 'moment/locale/ja';
+import * as moment from 'moment';
+moment.locale('ja');
 var DatepickerComponent = DatepickerComponent_1 = (function (_super) {
     __extends(DatepickerComponent, _super);
     function DatepickerComponent(injector) {
         var _this = _super.call(this, injector) || this;
-        _this.locale = DatepickerComponent_1.locale;
         _this.defaultDate = new Date();
-        _this.inline = false;
-        _this.yearRange = '{0}:{1}'.format(Date.create().getFullYear() - 20, Date.create().getFullYear() + 20);
+        _this.textChanged = false;
+        _this.keepFlag = false;
         return _this;
     }
-    Object.defineProperty(DatepickerComponent.prototype, "calendarValue", {
+    Object.defineProperty(DatepickerComponent.prototype, "textValue", {
         get: function () {
-            return this.innerCalendarValue;
+            return this.innerTextValue;
         },
         set: function (value) {
-            if (value !== this.innerCalendarValue) {
-                this.innerCalendarValue = value;
+            if (value !== this.innerTextValue) {
+                this.textChanged = true;
+                this.popover.hide();
+                this.innerTextValue = value;
+                var d = this.toDate(this.innerTextValue);
+                this.innerDatepickerValue = d;
+                this.value = d != null ? d.toISOString() : null;
+                this.popover.show();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    DatepickerComponent.prototype.isInvalidText = function () {
+        return this.innerTextValue != null && this.innerTextValue != '' && this.datepickerValue == null;
+    };
+    DatepickerComponent.prototype.adjustTextValue = function () {
+        if (!this.textChanged)
+            return;
+        if (this.datepickerValue != null) {
+            this.innerTextValue = this.formatDate(this.datepickerValue);
+        }
+        this.textChanged = false;
+    };
+    Object.defineProperty(DatepickerComponent.prototype, "datepickerValue", {
+        get: function () {
+            return this.innerDatepickerValue;
+        },
+        set: function (value) {
+            if (!Object.isEqual(value, this.innerDatepickerValue)) {
+                this.innerDatepickerValue = value;
+                this.innerTextValue = this.formatDate(value);
+                this.textChanged = false;
                 this.value = value != null ? value.toISOString() : null;
             }
         },
@@ -45,26 +79,63 @@ var DatepickerComponent = DatepickerComponent_1 = (function (_super) {
     });
     DatepickerComponent.prototype.writeValue = function (value) {
         _super.prototype.writeValue.call(this, value);
-        if (value !== this.innerCalendarValue) {
-            if (value == null || value == '') {
-                value = null;
-            }
-            else if (!Object.isDate(value)) {
-                value = Date.create(value);
-            }
-            this.innerCalendarValue = value;
+        if (value == null || value == '') {
+            this.innerTextValue = null;
         }
+        else if (Object.isDate(value)) {
+            this.innerTextValue = this.formatDate(value);
+        }
+        else if (!Object.isDate(value)) {
+            this.innerTextValue = this.formatDate(this.toDate(value));
+        }
+        this.textChanged = false;
+        if (value == null || value == '') {
+            this.innerDatepickerValue = null;
+        }
+        else if (Object.isDate(value)) {
+            this.innerDatepickerValue = value;
+        }
+        else if (!Object.isDate(value)) {
+            this.innerDatepickerValue = this.toDate(value);
+        }
+    };
+    DatepickerComponent.prototype.toDate = function (value) {
+        var d = Date.create(value);
+        return d == 'Invalid Date' ? null : d;
+    };
+    DatepickerComponent.prototype.formatDate = function (value) {
+        if (value == null) {
+            return null;
+        }
+        return value.format('{yyyy}/{MM}/{dd}');
+    };
+    DatepickerComponent.prototype.keep = function () {
+        this.keepFlag = true;
+    };
+    DatepickerComponent.prototype.onClick = function () {
+        this.popover.show();
+    };
+    DatepickerComponent.prototype.onFocus = function () {
+        this.popover.show();
+    };
+    DatepickerComponent.prototype.onBlur = function ($event) {
+        if (this.keepFlag) {
+            $event.target.focus();
+            this.keepFlag = false;
+        }
+        else {
+            this.popover.hide();
+        }
+        this.adjustTextValue();
+    };
+    DatepickerComponent.prototype.selectionDone = function () {
+        var _this = this;
+        setTimeout(function () {
+            _this.popover.hide();
+        });
     };
     return DatepickerComponent;
 }(FormItem));
-DatepickerComponent.locale = {
-    firstDayOfWeek: 1,
-    dayNames: ["日曜", "月曜", "火曜", "水曜", "木曜", "金曜", "土曜"],
-    dayNamesShort: ["日", "月", "火", "水", "木", "金", "土"],
-    dayNamesMin: ["日", "月", "火", "水", "木", "金", "土"],
-    monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-    monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
-};
 __decorate([
     Input(),
     __metadata("design:type", Date)
@@ -86,17 +157,13 @@ __decorate([
     __metadata("design:type", Object)
 ], DatepickerComponent.prototype, "disabled", void 0);
 __decorate([
-    Input(),
-    __metadata("design:type", Boolean)
-], DatepickerComponent.prototype, "inline", void 0);
-__decorate([
-    Input(),
-    __metadata("design:type", String)
-], DatepickerComponent.prototype, "yearRange", void 0);
+    ViewChild('popover'),
+    __metadata("design:type", Object)
+], DatepickerComponent.prototype, "popover", void 0);
 DatepickerComponent = DatepickerComponent_1 = __decorate([
     Component({
         selector: 'c-datepicker',
-        template: "\n    <p-calendar [(ngModel)]=\"calendarValue\"\n      [class.invalid]=\"isInvalid()\"\n      [dateFormat]=\"'yy/mm/dd'\"\n      [monthNavigator]=\"true\"\n      [yearNavigator]=\"true\"\n      [locale]=\"locale\"\n      [defaultDate]=\"defaultDate\"\n      [minDate]=\"minDate\"\n      [maxDate]=\"maxDate\"\n      [placeholder]=\"placeholder\"\n      [disabled]=\"disabled\"\n      [inline]=\"inline\"\n      [yearRange]=\"yearRange\"\n    ></p-calendar>\n    <c-error-tip [for]=\"control\"></c-error-tip>\n  ",
+        template: "\n    <span class=\"text-container\">\n      <input type=\"text\" [(ngModel)]=\"textValue\"\n        [class.invalid]=\"isInvalid()\"\n        #popover=\"bs-popover\"\n        [popover]=\"popoverTpl\"\n        placement=\"bottom\"\n        container=\"body\"\n        triggers=\"\"\n        (focus)=\"onFocus($event)\"\n        (blur)=\"onBlur($event)\"\n        (click)=\"onClick($event)\"\n      ><span class=\"invalid-text glyphicon glyphicon-warning-sign\"\n        [class.active]=\"isInvalidText()\"\n      ></span>\n    </span>\n    <template #popoverTpl>\n      <div class=\"c-datepicker-popover\" (mousedown)=\"keep($event)\">\n        <datepicker [(ngModel)]=\"datepickerValue\"\n          [showWeeks]=\"false\"\n          [activeDate]=\"null\"\n          [startingDay]=\"1\"\n          formatDayTitle=\"YYYY\u5E74MM\u6708\"\n          formatMonth=\"MM\u6708\"\n          formatMonthTitle=\"YYYY\u5E74\"\n          formatYear=\"YYYY\u5E74\"\n          [minDate]=\"minDate\"\n          [maxDate]=\"maxDate\"\n          (selectionDone)=\"selectionDone()\"\n        ></datepicker>\n      </div>\n    </template>\n    <c-error-tip [for]=\"control\"></c-error-tip>\n  ",
         styles: ["\n    :host {\n      display: inline-block;\n      position: relative;\n    }\n    :host:not(:hover) c-error-tip {\n      display: none !important;\n    }\n  "],
         providers: [
             {

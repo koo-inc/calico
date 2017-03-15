@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { CalicoModule } from 'calico';
 
-import { AlertModule, ModalModule } from 'ng2-bootstrap';
+import { AlertModule, ModalModule, DatepickerModule, PopoverModule } from 'ng2-bootstrap';
 
 import {
   GrowlModule,
@@ -25,7 +25,9 @@ import { LayoutModule} from './layout/layout.module';
     GrowlModule,
     /* PrimeNG END */
     ModalModule,
+    PopoverModule,
     AlertModule,
+    DatepickerModule,
   ],
 })
 export class SharedModule { }

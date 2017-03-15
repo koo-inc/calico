@@ -12,6 +12,8 @@ $zindex-navbar-fixed:      930 !default;
 $zindex-modal-background:  940 !default;
 $zindex-modal:             950 !default;
 
+$popover-max-width: 800;
+
 @import '~bootstrap-sass/assets/stylesheets/bootstrap';
 
 // PrimeNG

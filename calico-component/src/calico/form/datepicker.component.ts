@@ -1,24 +1,46 @@
-import { Component, forwardRef, Injector, Input } from '@angular/core';
+import { Component, forwardRef, Injector, Input, ViewChild, TemplateRef } from '@angular/core';
 import {NG_VALUE_ACCESSOR} from '@angular/forms';
 import { FormItem } from "./item";
+
+// https://github.com/valor-software/ng2-bootstrap/issues/455
+import 'moment/locale/ja';
+import * as moment from 'moment';
+moment.locale('ja');
 
 @Component({
   selector: 'c-datepicker',
   template: `
-    <p-calendar [(ngModel)]="calendarValue"
-      [class.invalid]="isInvalid()"
-      [dateFormat]="'yy/mm/dd'"
-      [monthNavigator]="true"
-      [yearNavigator]="true"
-      [locale]="locale"
-      [defaultDate]="defaultDate"
-      [minDate]="minDate"
-      [maxDate]="maxDate"
-      [placeholder]="placeholder"
-      [disabled]="disabled"
-      [inline]="inline"
-      [yearRange]="yearRange"
-    ></p-calendar>
+    <span class="text-container">
+      <input type="text" [(ngModel)]="textValue"
+        [class.invalid]="isInvalid()"
+        #popover="bs-popover"
+        [popover]="popoverTpl"
+        placement="bottom"
+        container="body"
+        triggers=""
+        (focus)="onFocus($event)"
+        (blur)="onBlur($event)"
+        (click)="onClick($event)"
+      ><span class="invalid-text glyphicon glyphicon-warning-sign"
+        [class.active]="isInvalidText()"
+      ></span>
+    </span>
+    <template #popoverTpl>
+      <div class="c-datepicker-popover" (mousedown)="keep($event)">
+        <datepicker [(ngModel)]="datepickerValue"
+          [showWeeks]="false"
+          [activeDate]="null"
+          [startingDay]="1"
+          formatDayTitle="YYYY年MM月"
+          formatMonth="MM月"
+          formatMonthTitle="YYYY年"
+          formatYear="YYYY年"
+          [minDate]="minDate"
+          [maxDate]="maxDate"
+          (selectionDone)="selectionDone()"
+        ></datepicker>
+      </div>
+    </template>
     <c-error-tip [for]="control"></c-error-tip>
   `,
   styles: [`
@@ -43,45 +65,116 @@ export class DatepickerComponent extends FormItem {
     super(injector);
   }
 
-  static locale = {
-    firstDayOfWeek: 1,
-    dayNames: ["日曜", "月曜", "火曜", "水曜", "木曜", "金曜", "土曜"],
-    dayNamesShort: ["日", "月", "火", "水", "木", "金", "土"],
-    dayNamesMin: ["日", "月", "火", "水", "木", "金", "土"],
-    monthNames: [ "1","2","3","4","5","6","7","8","9","10","11","12" ],
-    monthNamesShort: [ "1","2","3","4","5","6","7","8","9","10","11","12" ]
-  };
-  locale = DatepickerComponent.locale;
-
   @Input() defaultDate: Date = new Date();
   @Input() minDate: Date;
   @Input() maxDate: Date;
   @Input() placeholder: string;
   @Input() disabled: any;
-  @Input() inline: boolean = false;
-  @Input() yearRange: string = '{0}:{1}'.format(Date.create().getFullYear() - 20, Date.create().getFullYear() + 20);
 
-  innerCalendarValue: Date;
+  innerTextValue: string;
+  textChanged: boolean = false;
 
-  get calendarValue(): Date {
-    return this.innerCalendarValue;
+  get textValue(): string {
+    return this.innerTextValue;
   }
-  set calendarValue(value: Date) {
-    if (value !== this.innerCalendarValue) {
-      this.innerCalendarValue = value;
+  set textValue(value: string) {
+    if (value !== this.innerTextValue) {
+      this.textChanged = true;
+      this.popover.hide();
+      this.innerTextValue = value;
+      let d: Date = this.toDate(this.innerTextValue);
+      this.innerDatepickerValue = d;
+      this.value = d != null ? d.toISOString() : null;
+      this.popover.show();
+    }
+  }
+  isInvalidText(): boolean {
+    return this.innerTextValue != null && this.innerTextValue != '' && this.datepickerValue == null;
+  }
+  adjustTextValue(): void {
+    if(!this.textChanged) return;
+    if(this.datepickerValue != null){
+      this.innerTextValue = this.formatDate(this.datepickerValue);
+    }
+    this.textChanged = false;
+  }
+
+  innerDatepickerValue: Date;
+
+  get datepickerValue(): Date {
+    return this.innerDatepickerValue;
+  }
+  set datepickerValue(value: Date) {
+    if (!Object.isEqual(value, this.innerDatepickerValue)) {
+      this.innerDatepickerValue = value;
+      this.innerTextValue = this.formatDate(value);
+      this.textChanged = false;
       this.value = value != null ? value.toISOString() : null;
     }
   }
 
   writeValue(value: any): void {
     super.writeValue(value);
-    if (value !== this.innerCalendarValue) {
-      if(value == null || value == ''){
-        value = null;
-      }else if(!Object.isDate(value)){
-        value = Date.create(value);
-      }
-      this.innerCalendarValue = value;
+
+    if(value == null || value == ''){
+      this.innerTextValue = null;
+    }else if(Object.isDate(value)){
+      this.innerTextValue = this.formatDate(value);
+    }else if(!Object.isDate(value)){
+      this.innerTextValue = this.formatDate(this.toDate(value));
     }
+    this.textChanged = false;
+
+    if(value == null || value == ''){
+      this.innerDatepickerValue = null;
+    }else if(Object.isDate(value)){
+      this.innerDatepickerValue = value;
+    }else if(!Object.isDate(value)){
+      this.innerDatepickerValue = this.toDate(value);
+    }
+  }
+
+  private toDate(value: any): Date {
+    let d: any = Date.create(value);
+    return d == 'Invalid Date' ? null : d;
+  }
+
+  private formatDate(value: Date): string {
+    if(value == null){
+      return null;
+    }
+    return value.format('{yyyy}/{MM}/{dd}');
+  }
+
+  @ViewChild('popover') popover;
+
+  keepFlag = false;
+
+  keep(): void {
+    this.keepFlag = true;
+  }
+
+  onClick(): void {
+    this.popover.show();
+  }
+
+  onFocus(): void {
+    this.popover.show();
+  }
+
+  onBlur($event): void {
+    if(this.keepFlag){
+      $event.target.focus();
+      this.keepFlag = false;
+    }else{
+      this.popover.hide();
+    }
+    this.adjustTextValue();
+  }
+
+  selectionDone(): void {
+    setTimeout(() => {
+      this.popover.hide();
+    });
   }
 }
