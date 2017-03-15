@@ -22,6 +22,7 @@ import { ButtonDirective } from "./bootstrap/button.directive";
 import { GlyphiconDirective } from "./bootstrap/glyphicon.directive";
 import { PanelComponent } from "./bootstrap/panel.component";
 import { ColsComponent } from "./bootstrap/cols.component";
+import { AlertComponent } from "./bootstrap/alert.service";
 
 import { LocalStorageService } from "./util/local-storage.service";
 import { SessionStorageService } from "./util/session-storage.service";
@@ -31,6 +32,8 @@ import { Api } from "./util/api.service";
 import { SortComponent } from "./search/sort.component";
 import { PagerComponent } from "./search/pager.component";
 
+export { AlertService } from "./bootstrap/alert.service";
+
 export { LocalStorageService, LocalStorageServiceConfig } from "./util/local-storage.service";
 export { SessionStorageService, SessionStorageServiceConfig } from "./util/session-storage.service";
 export { SerializeService } from "./util/serialize.service";
@@ -39,7 +42,7 @@ export { GrowlService } from "./util/growl.service";
 
 export { SearchService, SearchContext } from "./search/search.service";
 
-import { AlertModule, ModalModule, PopoverModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
+import { ModalModule, PopoverModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
 
 @NgModule({
   imports: [
@@ -67,6 +70,7 @@ import { AlertModule, ModalModule, PopoverModule, DatepickerModule, TimepickerMo
     GlyphiconDirective,
     PanelComponent,
     ColsComponent,
+    AlertComponent,
 
     SortComponent,
     PagerComponent,
@@ -91,6 +95,7 @@ import { AlertModule, ModalModule, PopoverModule, DatepickerModule, TimepickerMo
     GlyphiconDirective,
     PanelComponent,
     ColsComponent,
+    AlertComponent,
 
     SortComponent,
     PagerComponent,

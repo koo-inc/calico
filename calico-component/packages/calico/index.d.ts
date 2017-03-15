@@ -1,4 +1,5 @@
 import './extension';
+export { AlertService } from "./bootstrap/alert.service";
 export { LocalStorageService, LocalStorageServiceConfig } from "./util/local-storage.service";
 export { SessionStorageService, SessionStorageServiceConfig } from "./util/session-storage.service";
 export { SerializeService } from "./util/serialize.service";

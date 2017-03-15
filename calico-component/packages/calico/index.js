@@ -22,12 +22,14 @@ import { ButtonDirective } from "./bootstrap/button.directive";
 import { GlyphiconDirective } from "./bootstrap/glyphicon.directive";
 import { PanelComponent } from "./bootstrap/panel.component";
 import { ColsComponent } from "./bootstrap/cols.component";
+import { AlertComponent } from "./bootstrap/alert.service";
 import { LocalStorageService } from "./util/local-storage.service";
 import { SessionStorageService } from "./util/session-storage.service";
 import { SerializeService } from "./util/serialize.service";
 import { Api } from "./util/api.service";
 import { SortComponent } from "./search/sort.component";
 import { PagerComponent } from "./search/pager.component";
+export { AlertService } from "./bootstrap/alert.service";
 export { LocalStorageService } from "./util/local-storage.service";
 export { SessionStorageService } from "./util/session-storage.service";
 export { SerializeService } from "./util/serialize.service";
@@ -66,6 +68,7 @@ CalicoModule = __decorate([
             GlyphiconDirective,
             PanelComponent,
             ColsComponent,
+            AlertComponent,
             SortComponent,
             PagerComponent,
         ],
@@ -88,6 +91,7 @@ CalicoModule = __decorate([
             GlyphiconDirective,
             PanelComponent,
             ColsComponent,
+            AlertComponent,
             SortComponent,
             PagerComponent,
         ],
