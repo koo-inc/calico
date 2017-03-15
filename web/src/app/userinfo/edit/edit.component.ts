@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup } from "@angular/forms";
 
 import { MainService } from "../main.service";
-import { GrowlService } from "calico";
+import { AlertService } from "calico";
 
 @Component({
   selector: 'app-edit',
@@ -15,7 +15,7 @@ export class EditComponent implements OnInit {
     private mainService: MainService,
     private route: ActivatedRoute,
     private router: Router,
-    private growlService: GrowlService,
+    private alert: AlertService,
   ) { }
 
   id: number;
@@ -43,12 +43,12 @@ export class EditComponent implements OnInit {
     if(this.id == null){
       this.mainService.create(this.form)
         .subscribe(record => {
-            this.growlService.savedMessage();
+            this.alert.success('保存しました。');
             this.router.navigate(['../show', {id: record.id}], {relativeTo: this.route});
         });
     }else{
       this.mainService.update(this.form).subscribe(() => {
-        this.growlService.savedMessage();
+        this.alert.success('保存しました。');
         this.router.navigate(['../show', {id: this.id}], {relativeTo: this.route});
       });
     }

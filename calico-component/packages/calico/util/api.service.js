@@ -14,7 +14,7 @@ import 'rxjs/add/operator/map';
 import { Injectable, Inject, OpaqueToken } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Http, Headers, RequestOptions } from "@angular/http";
-import { GrowlService } from "./growl.service";
+import { AlertService } from "../bootstrap/alert.service";
 var MessageConfig = (function () {
     function MessageConfig() {
     }
@@ -23,9 +23,9 @@ var MessageConfig = (function () {
 export { MessageConfig };
 export var MESSAGE_CONFIG = new OpaqueToken('MessageConfig');
 var Api = (function () {
-    function Api(http, growl, messages) {
+    function Api(http, alert, messages) {
         this.http = http;
-        this.growl = growl;
+        this.alert = alert;
         this.messages = messages;
     }
     Api.prototype.submit = function (url, form) {
@@ -44,7 +44,7 @@ var Api = (function () {
                 }
                 catch (e) {
                     console.error(e);
-                    _this.growl.error(_this.messages['internalServerError'] || '500 Internal Server Error');
+                    _this.alert.warning(_this.messages['internalServerError'] || '500 Internal Server Error');
                     throw e;
                 }
                 Object.keys(errors).forEach(function (key) {
@@ -55,7 +55,7 @@ var Api = (function () {
                     }
                     else {
                         var message = errors[key].map(function (msg) { return _this.messages[msg] || msg; }).join('\n');
-                        _this.growl.error(message);
+                        _this.alert.warning(message);
                     }
                 });
                 throw e;
@@ -69,7 +69,7 @@ var Api = (function () {
                 }
                 catch (e) {
                     console.error(e);
-                    _this.growl.error(_this.messages['internalServerError'] || '500 Internal Server Error');
+                    _this.alert.warning(_this.messages['internalServerError'] || '500 Internal Server Error');
                 }
                 throw e;
             });
@@ -80,7 +80,7 @@ var Api = (function () {
 Api = __decorate([
     Injectable(),
     __param(2, Inject(MESSAGE_CONFIG)),
-    __metadata("design:paramtypes", [Http, GrowlService, MessageConfig])
+    __metadata("design:paramtypes", [Http, AlertService, MessageConfig])
 ], Api);
 export { Api };
 //# sourceMappingURL=api.service.js.map

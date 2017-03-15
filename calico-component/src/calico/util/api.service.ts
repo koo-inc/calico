@@ -5,7 +5,7 @@ import { Injectable, Inject, OpaqueToken } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Http, Headers, RequestOptions } from "@angular/http";
 
-import { GrowlService } from "./growl.service";
+import { AlertService } from "../bootstrap/alert.service";
 
 export class MessageConfig {
   [id: string]: string
@@ -15,7 +15,7 @@ export const MESSAGE_CONFIG = new OpaqueToken('MessageConfig');
 
 @Injectable()
 export class Api {
-  constructor(private http: Http, private growl: GrowlService, @Inject(MESSAGE_CONFIG) private messages: MessageConfig) { }
+  constructor(private http: Http, private alert: AlertService, @Inject(MESSAGE_CONFIG) private messages: MessageConfig) { }
 
   submit<T> (url: string): Observable<T>;
   submit<T> (url: string, form: FormGroup): Observable<T>;
@@ -37,7 +37,7 @@ export class Api {
         }
         catch (e) {
           console.error(e);
-          this.growl.error(this.messages['internalServerError'] || '500 Internal Server Error');
+          this.alert.warning(this.messages['internalServerError'] || '500 Internal Server Error');
           throw e;
         }
         Object.keys(errors).forEach(key => {
@@ -48,7 +48,7 @@ export class Api {
           }
           else {
             let message = errors[key].map((msg: string) => this.messages[msg] || msg ).join('\n');
-            this.growl.error(message);
+            this.alert.warning(message);
           }
         });
         throw e;
@@ -62,7 +62,7 @@ export class Api {
         }
         catch (e) {
           console.error(e);
-          this.growl.error(this.messages['internalServerError'] || '500 Internal Server Error');
+          this.alert.warning(this.messages['internalServerError'] || '500 Internal Server Error');
         }
         throw e;
       });

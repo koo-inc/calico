@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import {Api} from "calico";
-import { GrowlService } from "calico";
+import { AlertService } from "calico";
 import { AppConfig } from "../../app.config";
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ValidationService {
 
   constructor(
     private api: Api,
-    private growl: GrowlService,
+    private alert: AlertService,
     private fb: FormBuilder,
   ) { }
 
@@ -23,7 +23,7 @@ export class ValidationService {
       }
       catch (e) {
         console.error(e);
-        this.growl.error(AppConfig.messages.internalServerError);
+        this.alert.warning(AppConfig.messages.internalServerError);
         return;
       }
       Object.keys(errors).forEach(key => {
@@ -34,7 +34,7 @@ export class ValidationService {
         }
         else {
           let message = errors[key].map((msg: string) => AppConfig.messages[msg] || msg ).join('\n');
-          this.growl.error(message);
+          this.alert.warning(message);
         }
       });
       throw caught;

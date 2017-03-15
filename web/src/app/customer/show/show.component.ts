@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { MainService, Record } from "../main.service";
-import { GrowlService } from "calico";
+import { AlertService } from "calico";
 import { SearchService } from "calico";
 
 @Component({
@@ -15,7 +15,7 @@ export class ShowComponent implements OnInit {
     private mainService: MainService,
     private route: ActivatedRoute,
     private router: Router,
-    private growlService: GrowlService,
+    private alert: AlertService,
     private searchService: SearchService,
   ) { }
 
@@ -34,7 +34,7 @@ export class ShowComponent implements OnInit {
   delete(): void {
     if(!confirm('削除してもよろしいですか？')) return;
     this.mainService.delete(this.record).subscribe(() => {
-      this.growlService.deletedMessage();
+      this.alert.success('削除しました。');
       this.router.navigate(['../index'], {relativeTo: this.route});
     });
   }

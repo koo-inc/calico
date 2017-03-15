@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup, FormControl, Validators, FormArray } from "@angular/forms";
 
 import { ValidationService } from "./validation.service";
-import { GrowlService } from "calico";
+import { AlertService } from "calico";
 
 @Component({
   selector: 'app-validation',
@@ -15,7 +15,7 @@ export class ValidationComponent implements OnInit {
     private service: ValidationService,
     private route: ActivatedRoute,
     private router: Router,
-    private growlService: GrowlService,
+    private alert: AlertService,
   ) { }
 
   id: number;

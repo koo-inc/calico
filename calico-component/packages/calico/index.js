@@ -34,7 +34,6 @@ export { LocalStorageService } from "./util/local-storage.service";
 export { SessionStorageService } from "./util/session-storage.service";
 export { SerializeService } from "./util/serialize.service";
 export { Api } from "./util/api.service";
-export { GrowlService } from "./util/growl.service";
 export { SearchService, SearchContext } from "./search/search.service";
 import { PopoverModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
 var CalicoModule = (function () {

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { GrowlService } from "calico";
 
 @Component({
   selector: 'app-root',
@@ -7,7 +6,5 @@ import { GrowlService } from "calico";
   styleUrls: ['app.component.css'],
 })
 export class AppComponent {
-  constructor(
-    private growlService: GrowlService,
-  ) { }
+  constructor() { }
 }

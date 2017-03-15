@@ -8,7 +8,7 @@ import { AlertModule, ModalModule, PopoverModule, DatepickerModule, TimepickerMo
 import { AuthService } from "app/common/api/auth.service";
 import { ExtEnumService } from "app/common/ext-enum/ext-enum.service";
 import { AppConfig } from "app/app.config";
-import { GrowlService, AlertService } from "calico";
+import { AlertService } from "calico";
 
 @NgModule({
   imports: [
@@ -23,7 +23,6 @@ import { GrowlService, AlertService } from "calico";
   providers: [
     AuthService,
     ExtEnumService,
-    GrowlService,
     AlertService,
     SearchService,
     {provide: 'LocalStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', deployedAt: AppConfig.deployedAt}},
