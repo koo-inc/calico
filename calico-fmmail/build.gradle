@@ -4,7 +4,9 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-description = 'calico-fmmail'
+description = 'Calico Framework Fmmail Plugin'
+
+apply from: '../bintray.gradle'
 
 repositories {
   mavenLocal()

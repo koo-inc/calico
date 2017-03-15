@@ -1,0 +1,13 @@
+language: java
+jdk:
+  - oraclejdk8
+install: true
+before_script:
+  - ln -s "$(pwd)/calico-component/src/calico" "$(pwd)/web/src/calico"
+script:
+  - ./gradlew clean build
+deploy:
+  - provider: script
+    script: ./gradlew bintrayUpload
+    on:
+      tags: true
