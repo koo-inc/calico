@@ -3,8 +3,6 @@ package calicosample;
 import calicosample.auth.CalicoSampleAuthority;
 import calicosample.core.ServicePlugin;
 import calicosample.core.auth.CalicoSampleAuthInfo;
-import calicosample.core.options.OptionsManager;
-import calicosample.core.options.OptionsManagerImpl;
 import calicosample.entity.log.AccessStartLog;
 import com.google.inject.matcher.Matchers;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
@@ -37,7 +35,6 @@ public class WebPlugin extends CalicoServletPlugin {
       binder.bind(CertificateAuthority.class).to(CalicoSampleAuthority.class);
     });
     bindInstant(binder -> {
-      binder.bind(OptionsManager.class).to(OptionsManagerImpl.class);
       binder.bind(AccessStartLog.class).in(TransactionScoped.class);
     });
   }
