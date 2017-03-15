@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      groupId project.group
+      artifactId project.name
+      version project.version
+    }
+  }
+}
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  override = true
+  pkg {
+    repo = 'maven'
+    name = project.name
+    userOrg = 'koo-inc'
+    desc = project.description
+    licenses = ['MIT']
+    websiteUrl = "https://github.com/koo-inc/calico/tree/master/${project.name}"
+    issueTrackerUrl = 'https://github.com/koo-inc/calico/issues'
+    vcsUrl = 'https://github.com/koo-inc/calico.git'
+    githubRepo = 'koo-inc/calico'
+    version {
+      name = project.version
+      vcsTag = project.version.toString().split(/-/)[0]
+    }
+    publications = ['mavenJava']
+  }
+}

@@ -1,11 +1,21 @@
+
 apply plugin: 'maven'
 apply plugin: 'java'
 
 apply from: 'config.gradle'
 
 allprojects  {
+  buildscript {
+    repositories {
+      jcenter()
+    }
+    dependencies {
+      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+  }
+
   group = 'jp.co.freemind.calico'
-  version = '1.0'
+  version = System.getenv("TRAVIS_TAG") ?: '1.0-SNAPSHOT'
 
 //  sourceCompatibility = 1.8
 //  targetCompatibility = 1.8
