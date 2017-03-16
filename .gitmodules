@@ -1,0 +1,3 @@
+[submodule "calico-ng"]
+	path = calico-ng
+	url = git@github.com:koo-inc/calico-ng.git
