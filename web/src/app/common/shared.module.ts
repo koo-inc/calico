@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { CalicoModule } from 'calico';
+import { ModalModule, PopoverModule } from 'ng2-bootstrap';
 
-import { AlertModule, ModalModule, DatepickerModule, PopoverModule, TimepickerModule } from 'ng2-bootstrap';
-
+import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule } from 'calico';
 import { LayoutModule} from './layout/layout.module';
 
 @NgModule({
@@ -15,13 +14,13 @@ import { LayoutModule} from './layout/layout.module';
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    CalicoModule,
+    CalicoCoreModule,
+    CalicoUiModule,
+    CalicoFormModule,
+    CalicoSearchModule,
     LayoutModule,
     ModalModule,
     PopoverModule,
-    AlertModule,
-    DatepickerModule,
-    TimepickerModule,
   ],
 })
 export class SharedModule { }

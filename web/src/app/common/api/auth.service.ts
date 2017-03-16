@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { Observable, Subject } from "rxjs";
 
-import { Api } from "calico/util/api.service";
+import { Api } from "calico";
 
 export interface AuthInfo {
   userId: number;
