@@ -5,20 +5,18 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { LayoutNormal } from './layout-normal/layout-normal.component';
 import { LayoutLogin } from './layout-login/layout-login.component';
-import { HeaderMenubar, HeaderMenubarSub } from "app/common/layout/header/header-menu.component";
 import { SessionComponent } from "../session/session.component";
-import { ModalModule } from 'ng2-bootstrap';
+import { ModalModule, DropdownModule } from 'ng2-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     ModalModule,
+    DropdownModule,
   ],
   declarations: [
     HeaderComponent,
-    HeaderMenubar,
-    HeaderMenubarSub,
     LayoutNormal,
     LayoutLogin,
     SessionComponent,

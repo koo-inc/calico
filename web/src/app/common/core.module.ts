@@ -3,7 +3,7 @@ import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core
 import { MESSAGE_CONFIG } from "calico/util/api.service";
 import { SearchService } from "calico";
 
-import { AlertModule, ModalModule, PopoverModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
+import { ModalModule, PopoverModule, DropdownModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
 
 import { AuthService } from "app/common/api/auth.service";
 import { ExtEnumService } from "app/common/ext-enum/ext-enum.service";
@@ -14,7 +14,7 @@ import { AlertService } from "calico";
   imports: [
     ModalModule.forRoot(),
     PopoverModule.forRoot(),
-    AlertModule.forRoot(),
+    DropdownModule.forRoot(),
     DatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
   ],

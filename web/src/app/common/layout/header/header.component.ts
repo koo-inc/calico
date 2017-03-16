@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService, AuthInfo } from "app/common/api/auth.service";
-import { MenuItem } from "primeng/primeng";
 import { Router } from "@angular/router";
 
 @Component({
@@ -15,7 +14,7 @@ export class HeaderComponent {
     private auth: AuthService
   ) { }
 
-  items: MenuItem[] = [
+  items = [
       {
         label: '顧客',
         routerLink: ['/customer/index']
