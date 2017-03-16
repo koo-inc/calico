@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { MainService, Record } from "../main.service";
-import { ExtEnumService, ExtEnum } from "app/common/ext-enum/ext-enum.service";
-import { SearchContext } from "calico";
+import { SearchContext, ExtEnumService, ExtEnum } from "calico";
 
 @Component({
   selector: 'app-index',

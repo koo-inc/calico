@@ -3,8 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup } from "@angular/forms";
 
 import { MainService } from "../main.service";
-import { AlertService } from "calico";
-import { ExtEnum, ExtEnumService } from "app/common/ext-enum/ext-enum.service";
+import { AlertService, ExtEnum, ExtEnumService } from "calico";
 
 @Component({
   selector: 'app-edit',

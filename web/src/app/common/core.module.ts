@@ -4,7 +4,6 @@ import { ModalModule, PopoverModule, DropdownModule, DatepickerModule, Timepicke
 import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule, MESSAGE_CONFIG } from "calico";
 import { AppConfig } from "app/app.config";
 import { AuthService } from "app/common/api/auth.service";
-import { ExtEnumService } from "app/common/ext-enum/ext-enum.service";
 
 @NgModule({
   imports: [
@@ -22,7 +21,6 @@ import { ExtEnumService } from "app/common/ext-enum/ext-enum.service";
   ],
   providers: [
     AuthService,
-    ExtEnumService,
     {provide: 'LocalStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', deployedAt: AppConfig.deployedAt}},
     {provide: 'SessionStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', deployedAt: AppConfig.deployedAt}},
     {provide: 'ExtEnumServiceConfig', useValue: {apiPath: 'endpoint/system/ext_enum'}},
