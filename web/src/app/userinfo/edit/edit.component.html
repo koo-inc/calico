@@ -1,4 +1,4 @@
-<div c-panel="ユーザ情報" *ngIf="form">
+<c-panel title="ユーザ情報" *ngIf="form">
   <form [formGroup]="form" novalidate (ngSubmit)="save()">
     <table c-info-table>
       <colgroup [c-cols]="[20, null]"></colgroup>
@@ -23,4 +23,4 @@
       <a *ngIf="id" c-btn="default" c-glyphicon="chevron-left" [routerLink]="['../show', {id: id}]">取消</a>
     </div>
   </form>
-</div>
+</c-panel>

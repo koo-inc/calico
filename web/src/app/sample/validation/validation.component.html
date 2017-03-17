@@ -1,4 +1,4 @@
-<div c-panel="サンプルフォーム">
+<c-panel title="サンプルフォーム">
   <form *ngIf="form1 != null" [formGroup]="form1" novalidate (ngSubmit)="save1()">
     <table c-info-table>
       <colgroup [c-cols]="[20, null]"></colgroup>
@@ -128,4 +128,4 @@
     </div>
   </form>
 
-</div>
+</c-panel>

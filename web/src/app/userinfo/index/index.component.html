@@ -1,4 +1,4 @@
-<div c-panel="ユーザ一覧" *ngIf="records">
+<c-panel title="ユーザ一覧" *ngIf="records">
   <div>
     <a c-btn="primary" c-glyphicon="plus" [routerLink]="['../edit']">新規登録</a>
   </div>
@@ -19,4 +19,4 @@
       </tr>
     </tbody>
   </table>
-</div>
+</c-panel>

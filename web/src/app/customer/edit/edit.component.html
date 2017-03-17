@@ -1,4 +1,4 @@
-<div c-panel="ユーザ情報" *ngIf="form">
+<c-panel title="顧客情報" *ngIf="form">
   <form [formGroup]="form" novalidate (ngSubmit)="save()">
     <table c-info-table>
       <colgroup [c-cols]="[15, 35, 15, 35]"></colgroup>
@@ -108,4 +108,4 @@
     </div>
   </form>
   <!--<div class="pre">{{form.value | json}}</div>-->
-</div>
+</c-panel>

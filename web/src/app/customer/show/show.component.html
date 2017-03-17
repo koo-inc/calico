@@ -1,4 +1,4 @@
-<div c-panel="顧客情報" *ngIf="record">
+<c-panel title="顧客情報" *ngIf="record">
   <table c-info-table>
     <colgroup [c-cols]="[15, 35, 15, 35]"></colgroup>
     <tbody>
@@ -94,4 +94,4 @@
     <a c-btn="danger" c-glyphicon="trash" (click)="delete()">削除</a>
     <a c-btn="default" c-glyphicon="list" [routerLink]="['../index']" [fragment]="fragment">一覧へ</a>
   </div>
-</div>
+</c-panel>
