@@ -1,4 +1,4 @@
-<c-panel title="顧客情報" *ngIf="form">
+<c-panel title="ユーザ情報" *ngIf="form">
   <form [formGroup]="form" novalidate (ngSubmit)="save()">
     <table c-info-table>
       <colgroup [c-cols]="[15, 35, 15, 35]"></colgroup>
@@ -102,7 +102,7 @@
       </tfoot>
     </table>
     <div>
-      <button type="submit" c-btn="primary" c-glyphicon="saved">登録</button>
+      <button type="submit" c-btn="primary" c-glyphicon="saved" [disabled]="form | submitting">登録</button>
       <a *ngIf="!id" c-btn="default" c-glyphicon="chevron-left" [routerLink]="['../index']">取消</a>
       <a *ngIf="id" c-btn="default" c-glyphicon="chevron-left" [routerLink]="['../show', {id: id}]">取消</a>
     </div>

@@ -18,7 +18,7 @@
       </tbody>
     </table>
     <div>
-      <button c-btn="primary" c-glyphicon="saved">登録</button>
+      <button c-btn="primary" c-glyphicon="saved" [disabled]="form | submitting">登録</button>
       <a *ngIf="!id" c-btn="default" c-glyphicon="chevron-left" [routerLink]="['../index']">取消</a>
       <a *ngIf="id" c-btn="default" c-glyphicon="chevron-left" [routerLink]="['../show', {id: id}]">取消</a>
     </div>

@@ -17,7 +17,7 @@
       <tfoot>
         <tr>
           <td colspan="4">
-            <button c-btn="primary" c-glyphicon="search" [disabled]="searchContext.searching">検索</button>
+            <button c-btn="primary" c-glyphicon="search" [disabled]="searchContext.form | submitting">検索</button>
           </td>
         </tr>
       </tfoot>

@@ -27,7 +27,7 @@
         </tbody>
       </table>
       <div class="control">
-        <button type="submit" c-btn="primary">ログイン</button>
+        <button type="submit" c-btn="primary" [disabled]="loginForm | submitting">ログイン</button>
       </div>
     </c-panel>
   </form>
