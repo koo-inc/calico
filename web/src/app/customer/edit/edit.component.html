@@ -18,7 +18,7 @@
         <tr>
           <th>性別</th>
           <td>
-            <c-radios formControlName="sex" [options]="sexes"></c-radios>
+            <c-radios formControlName="sex" [options]="options.sex"></c-radios>
           </td>
           <th>生年月日</th>
           <td>
@@ -74,13 +74,13 @@
       <tbody>
         <tr *ngFor="let family of form.get('families').controls; let i = index" [formGroupName]="i">
           <td>
-            <c-select formControlName="familyType" [options]="familyTypes"></c-select>
+            <c-select formControlName="familyType" [options]="options.familyType"></c-select>
           </td>
           <td>
             <c-textfield formControlName="name"></c-textfield>
           </td>
           <td>
-            <c-radios formControlName="sex" [options]="sexes"></c-radios>
+            <c-radios formControlName="sex" [options]="options.sex"></c-radios>
           </td>
           <td>
             <c-textfield formControlName="favoriteNumber"></c-textfield>

@@ -6,14 +6,13 @@ import calicosample.Messages;
 import calicosample.dao.UserInfoDao;
 import calicosample.entity.UserInfo;
 import com.google.common.base.Strings;
-import jp.co.freemind.calico.core.endpoint.dto.EmptyOutput;
 import jp.co.freemind.calico.core.endpoint.validation.Validate;
 import jp.co.freemind.calico.core.validation.Violation;
 import jp.co.freemind.calico.core.zone.Zone;
 import lombok.Getter;
 import lombok.Setter;
 
-public class UpdateEndpoint extends UserInfoEndpoint<UpdateEndpoint.Input, EmptyOutput> {
+public class UpdateEndpoint extends UserInfoEndpoint<UpdateEndpoint.Input, UserInfoEndpoint.IdOutput> {
   @Inject private UserInfoDao userInfoDao;
 
   @Getter @Setter
@@ -37,10 +36,10 @@ public class UpdateEndpoint extends UserInfoEndpoint<UpdateEndpoint.Input, Empty
   }
 
   @Override
-  public EmptyOutput execute(Input input) {
+  public IdOutput execute(Input input) {
     UserInfo userInfo = userInfoDao.findById(input.getId());
     input.copyTo(userInfo);
     userInfoDao.update(userInfo);
-    return EmptyOutput.getInstance();
+    return IdOutput.of(userInfo.getId());
   }
 }

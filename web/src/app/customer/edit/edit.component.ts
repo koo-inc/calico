@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormGroup } from "@angular/forms";
 
 import { MainService } from "../main.service";
-import { AlertService, ExtEnum, ExtEnumService } from "calico";
+import { AlertService, ExtEnumService } from "calico";
 
 @Component({
   selector: 'app-edit',
@@ -21,27 +21,16 @@ export class EditComponent implements OnInit {
 
   id: number;
   form: FormGroup;
-
-  sexes: ExtEnum[] = [];
-  familyTypes: ExtEnum[] = [];
+  options = {};
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = params['id'] == null ? null : +params['id'];
-      if(this.id == null){
-        this.mainService.getCreateForm().subscribe(form => {
-          this.form = form;
-        });
-      }else{
-        this.mainService.getUpdateForm(this.id).subscribe(form => {
-          this.form = form;
-        });
-      }
+      this.mainService.getEditForm(this.id).subscribe(form => {
+        this.form = form;
+      });
     });
-    this.extEnumService.values('sex', 'familyType').subscribe(data => {
-      this.sexes = data['sex'];
-      this.familyTypes = data['familyType'];
-    });
+    this.extEnumService.setValues(this.options, 'sex', 'familyType');
   }
 
   addFamily(): void {
@@ -53,20 +42,10 @@ export class EditComponent implements OnInit {
   }
 
   save(): void {
-    if(this.form.invalid){
-      return;
-    }
-    if(this.id == null){
-      this.mainService.create(this.form).subscribe((record) => {
-        this.alert.success('保存しました。');
-        this.router.navigate(['../show', {id: record.id}], {relativeTo: this.route});
-      });
-    }else{
-      this.mainService.update(this.form).subscribe(() => {
-        this.alert.success('保存しました。');
-        this.router.navigate(['../show', {id: this.id}], {relativeTo: this.route});
-      });
-    }
+    this.mainService.save(this.form).subscribe(data => {
+      this.alert.success('保存しました。');
+      this.router.navigate(['../show', {id: data.id}], {relativeTo: this.route});
+    });
   }
 
 }

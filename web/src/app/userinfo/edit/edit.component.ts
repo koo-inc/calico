@@ -24,34 +24,17 @@ export class EditComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = params['id'] == null ? null : +params['id'];
-      if(this.id == null){
-        this.mainService.getCreateForm().subscribe(form => {
-          this.form = form;
-        });
-      }else{
-        this.mainService.getUpdateForm(this.id).subscribe(form => {
-          this.form = form;
-        });
-      }
+      this.mainService.getEditForm(this.id).subscribe(form => {
+        this.form = form;
+      });
     });
   }
 
   save(): void {
-    if(this.form.invalid){
-      return;
-    }
-    if(this.id == null){
-      this.mainService.create(this.form)
-        .subscribe(record => {
-            this.alert.success('保存しました。');
-            this.router.navigate(['../show', {id: record.id}], {relativeTo: this.route});
-        });
-    }else{
-      this.mainService.update(this.form).subscribe(() => {
-        this.alert.success('保存しました。');
-        this.router.navigate(['../show', {id: this.id}], {relativeTo: this.route});
-      });
-    }
+    this.mainService.save(this.form).subscribe(data => {
+      this.alert.success('保存しました。');
+      this.router.navigate(['../show', {id: data.id}], {relativeTo: this.route});
+    });
   }
 
 }

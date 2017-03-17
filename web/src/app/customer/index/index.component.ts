@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { MainService, Record } from "../main.service";
-import { SearchContext, ExtEnumService, ExtEnum } from "calico";
+import { SearchContext, ExtEnumService } from "calico";
 
 @Component({
   selector: 'app-index',
@@ -21,18 +21,16 @@ export class IndexComponent implements OnInit, OnDestroy {
     private searchContext: SearchContext,
   ) { }
 
-  sexes: ExtEnum[];
+  options = {};
 
   ngOnInit() {
-    this.extEnumService.values('sex').subscribe(data => {
-      this.sexes = data['sex'];
-    });
     this.searchContext.init({
-      search: () => { return this.mainService.search(this.searchContext.form.value); },
+      search: () => { return this.mainService.search(this.searchContext.form); },
       getForm: () => { return this.mainService.getSearchForm(); },
       toForm: (form: any) => { return this.mainService.toSearchForm(form); },
       initialSearch: true,
     });
+    this.extEnumService.setValues(this.options, 'sex');
   }
   ngOnDestroy(): void {
     this.searchContext.onDestroy();

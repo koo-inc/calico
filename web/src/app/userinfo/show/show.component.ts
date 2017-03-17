@@ -29,7 +29,7 @@ export class ShowComponent implements OnInit {
 
   delete(): void {
     if(!confirm('削除してもよろしいですか？')) return;
-    this.mainService.delete(this.record).subscribe(() => {
+    this.mainService.delete(this.record.id).subscribe(() => {
       this.alert.success('削除しました。');
       this.router.navigate(['../index'], {relativeTo: this.route});
     });

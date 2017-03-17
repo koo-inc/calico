@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
-import {Api} from "calico";
+import { Api, SearchFormBuilder } from "calico";
 
 @Injectable()
 export class MainService {
@@ -10,6 +10,7 @@ export class MainService {
   constructor(
     private api: Api,
     private fb: FormBuilder,
+    private sfb: SearchFormBuilder,
   ) { }
 
   private submit<T>(url: string, data: any): Observable<T> {
@@ -22,21 +23,13 @@ export class MainService {
   }
 
   toSearchForm(data: any): FormGroup {
-    return this.fb.group({
+    return this.sfb.rootGroup(data, {
       name: [data.name],
       sex: [data.sex],
-      _page: this.fb.group({
-        no: [data._page.no],
-        perPage: [data._page.perPage],
-      }),
-      _sort: this.fb.group({
-        prop: [data._sort.prop],
-        type: [data._sort.type],
-      }),
     });
   }
 
-  search(form: any): Observable<SearchResult>{
+  search(form: FormGroup): Observable<SearchResult>{
     return this.submit('search', form);
   }
 
@@ -44,17 +37,21 @@ export class MainService {
     return this.submit('record', {id: id});
   }
 
-  getCreateForm(): Observable<FormGroup>{
+  getEditForm(id: number): Observable<FormGroup>{
+    return id == null ? this.getCreateForm() : this.getUpdateForm(id);
+  }
+
+  private getCreateForm(): Observable<FormGroup>{
     return this.submit('create_form', {})
-      .map(data => this.toForm(data));
+      .map(data => this.toEditForm(data));
   }
 
-  getUpdateForm(id: any): Observable<FormGroup>{
+  private getUpdateForm(id: number): Observable<FormGroup>{
     return this.submit('update_form', {id: id})
-      .map(data => this.toForm(data));
+      .map(data => this.toEditForm(data));
   }
 
-  private toForm(data: any): FormGroup {
+  private toEditForm(data: any): FormGroup {
     return this.fb.group({
       id: [data.id],
       kname1: [data.kname1, Validators.required],
@@ -72,12 +69,13 @@ export class MainService {
       phoneNumber: [data.phoneNumber],
       // photo: [data.photo],
       families: this.fb.array(
-        (<any[]>data.families).map((family: any) => this.toFamilyForm(family))
+        (<any[]>data.families).map((family: any) => this.toEditFamilyForm(family))
       ),
       // additionalInfoList: [],
     });
   }
-  private toFamilyForm(family: any): FormGroup {
+
+  private toEditFamilyForm(family: any): FormGroup {
     return this.fb.group({
       id: [family.id],
       familyType: [family.familyType],
@@ -90,7 +88,7 @@ export class MainService {
 
   addFamily(form: FormGroup): void {
     let families: FormArray = form.get('families') as FormArray;
-    families.push(this.toFamilyForm({}));
+    families.push(this.toEditFamilyForm({}));
   }
 
   removeFamily(form: FormGroup, index: number): void {
@@ -98,16 +96,20 @@ export class MainService {
     families.removeAt(index);
   }
 
-  create(form: FormGroup): Observable<Record> {
+  save(form: FormGroup): Observable<Record> {
+    return form.value.id == null ? this.create(form) : this.update(form);
+  }
+
+  private create(form: FormGroup): Observable<Record> {
     return this.submit('create', form);
   }
 
-  update(form: FormGroup): Observable<Record> {
+  private update(form: FormGroup): Observable<Record> {
     return this.submit('update', form);
   }
 
-  delete(record: Record): Observable<Record> {
-    return this.submit('delete', {id: record.id});
+  delete(id: number): Observable<Record> {
+    return this.submit('delete', {id: id});
   }
 
 }

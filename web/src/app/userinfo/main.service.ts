@@ -24,34 +24,42 @@ export class MainService {
     return this.submit('record', {id: id});
   }
 
-  getCreateForm(): Observable<FormGroup>{
+  getEditForm(id: number): Observable<FormGroup>{
+    return id == null ? this.getCreateForm() : this.getUpdateForm(id);
+  }
+
+  private getCreateForm(): Observable<FormGroup>{
     return this.submit('create_form', {})
-      .map(form => this.createForm(form));
+      .map(data => this.toEditForm(data));
   }
 
-  getUpdateForm(id: any): Observable<FormGroup>{
+  private getUpdateForm(id: number): Observable<FormGroup>{
     return this.submit('update_form', {id: id})
-      .map(form => this.createForm(form));
+      .map(data => this.toEditForm(data));
   }
 
-  private createForm(form: any): FormGroup {
+  private toEditForm(data: any): FormGroup {
     return this.fb.group({
-      id: [form.id],
-      loginId: [form.loginId, Validators.required],
-      password: [form.password, Validators.required],
+      id: [data.id],
+      loginId: [data.loginId, Validators.required],
+      password: [data.password, Validators.required],
     });
   }
 
-  create(form: FormGroup): Observable<Record> {
+  save(form: FormGroup): Observable<Record> {
+    return form.value.id == null ? this.create(form) : this.update(form);
+  }
+
+  private create(form: FormGroup): Observable<Record> {
     return this.submit('create', form);
   }
 
-  update(form: FormGroup): Observable<Record> {
+  private update(form: FormGroup): Observable<Record> {
     return this.submit('update', form);
   }
 
-  delete(record: Record): Observable<Record> {
-    return this.submit('delete', {id: record.id});
+  delete(id: number): Observable<Record> {
+    return this.submit('delete', {id: id});
   }
 
 }
