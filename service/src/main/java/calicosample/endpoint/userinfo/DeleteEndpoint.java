@@ -7,7 +7,7 @@ import calicosample.entity.UserInfo;
 import jp.co.freemind.calico.core.auth.Restriction;
 import jp.co.freemind.calico.core.endpoint.dto.EmptyOutput;
 
-@Restriction(WriteAuthR.class)
+@Restriction(WriteAuthZ.class)
 public class DeleteEndpoint extends UserInfoEndpoint<UserInfoEndpoint.IdInput, EmptyOutput> {
   @Inject private UserInfoDao userInfoDao;
 

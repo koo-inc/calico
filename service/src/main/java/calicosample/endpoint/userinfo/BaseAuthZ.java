@@ -7,10 +7,10 @@ import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.exception.AuthorizationException;
 import jp.co.freemind.calico.core.zone.Context;
 
-public class WriteAuthR implements Authorizable {
+public class BaseAuthZ implements Authorizable {
   @Override
   public void authorize(Context context, EndpointInvocation invocation) throws AuthorizationException {
-    if (!hasRights(context, CalicoSampleRight.USER_INFO_WRITE)) {
+    if (!hasRights(context, CalicoSampleRight.USER_INFO_READ)) {
       throw new AuthorizationException(Messages.NOT_AUTHORIZED);
     }
   }
