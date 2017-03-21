@@ -27,9 +27,18 @@ export class EditModalComponent implements OnInit {
   }
 
   save(): void {
-    this.mainService.save(this.form).subscribe(data => {
+    this.mainService.save(this.form).subscribe(() => {
       this.alert.success('保存しました。');
-      this.onSaved.emit(data.id);
+      this.onSaved.emit();
+    });
+  }
+
+  delete() :void {
+    if(this.id == null) return;
+    if(!confirm('削除してもよろしいですか？')) return;
+    this.mainService.delete(this.id).subscribe(() => {
+      this.alert.success('削除しました。');
+      this.onSaved.emit();
     });
   }
 

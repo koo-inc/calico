@@ -20,10 +20,6 @@ export class MainService {
     return this.submit('records', {});
   }
 
-  getRecord(id: any): Observable<Record>{
-    return this.submit('record', {id: id});
-  }
-
   getEditForm(id: number): Observable<FormGroup>{
     return id == null ? this.getCreateForm() : this.getUpdateForm(id);
   }

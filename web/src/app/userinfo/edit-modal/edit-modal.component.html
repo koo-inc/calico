@@ -19,6 +19,7 @@
     </table>
     <div>
       <button c-btn="primary" c-glyphicon="saved" [disabled]="form | submitting">登録</button>
+      <a *ngIf="id" c-btn="danger" c-glyphicon="trash" (click)="delete()">削除</a>
     </div>
   </form>
 </div>
