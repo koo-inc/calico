@@ -5,14 +5,16 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 
 import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import jp.co.freemind.calico.core.auth.Authorizable;
 import jp.co.freemind.calico.core.auth.Restriction;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
+import jp.co.freemind.calico.core.endpoint.EndpointRoot;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.util.Throwables;
@@ -48,13 +50,19 @@ public class AuthorizationInterceptor implements EndpointInterceptor {
   }
 
   private Stream<Package> packageStream(String className) {
+    List<Package> packages = new ArrayList<>();
     String[] fragments = className.split("\\.");
-    return Stream.iterate(1, n -> n + 1)
-      .limit(fragments.length)
-      .map(n -> stream(copyOf(fragments, n)).collect(joining(".")))
-      .map(Package::getPackage)
-      .filter(Objects::nonNull)
-      ;
+    for (int n = fragments.length - 1; n > 0; n--) {
+      String pkgName = stream(copyOf(fragments, n)).collect(joining("."));
+      Package pkg = Package.getPackage(pkgName);
+      if (pkg == null) continue;
+
+      packages.add(pkg);
+      if (pkg.isAnnotationPresent(EndpointRoot.class)) {
+        break;
+      }
+    }
+    return packages.stream();
   }
 
   private Optional<Restriction> getRestriction(AnnotatedElement element) {
