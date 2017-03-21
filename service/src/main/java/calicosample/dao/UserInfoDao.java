@@ -18,16 +18,16 @@ import org.seasar.doma.Update;
 @InjectConfig
 public interface UserInfoDao {
   @Select(ensureResult = true)
-  UserInfo findById(Integer id);
+  UserInfo.WithAdditionalData findById(Integer id);
 
   @Select
-  Optional<UserInfo> findByLoginId(String loginId);
+  Optional<UserInfo.WithAdditionalData> findByLoginId(String loginId);
 
   @Select
   List<UserInfo> findAll();
 
   @Select
-  Optional<UserInfo> findForLogin(String loginId, String password);
+  Optional<UserInfo.WithAdditionalData> findForLogin(String loginId, String password);
 
   @Select
   List<UserInfo> findForLoginIdUniqueCheck(String loginId, Integer exceptId);
@@ -37,7 +37,7 @@ public interface UserInfoDao {
   }
 
   @Insert
-  int isnert(UserInfo userInfo);
+  int insert(UserInfo userInfo);
 
   @Update
   int update(UserInfo userInfo);

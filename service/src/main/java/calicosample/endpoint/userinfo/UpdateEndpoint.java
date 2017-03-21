@@ -6,12 +6,14 @@ import calicosample.Messages;
 import calicosample.dao.UserInfoDao;
 import calicosample.entity.UserInfo;
 import com.google.common.base.Strings;
+import jp.co.freemind.calico.core.auth.Restriction;
 import jp.co.freemind.calico.core.endpoint.validation.Validate;
 import jp.co.freemind.calico.core.validation.Violation;
 import jp.co.freemind.calico.core.zone.Zone;
 import lombok.Getter;
 import lombok.Setter;
 
+@Restriction(WriteAuthR.class)
 public class UpdateEndpoint extends UserInfoEndpoint<UpdateEndpoint.Input, UserInfoEndpoint.IdOutput> {
   @Inject private UserInfoDao userInfoDao;
 

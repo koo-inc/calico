@@ -4,8 +4,10 @@ import javax.inject.Inject;
 
 import calicosample.dao.UserInfoDao;
 import calicosample.entity.UserInfo;
+import jp.co.freemind.calico.core.auth.Restriction;
 import jp.co.freemind.calico.core.endpoint.dto.EmptyOutput;
 
+@Restriction(WriteAuthR.class)
 public class DeleteEndpoint extends UserInfoEndpoint<UserInfoEndpoint.IdInput, EmptyOutput> {
   @Inject private UserInfoDao userInfoDao;
 

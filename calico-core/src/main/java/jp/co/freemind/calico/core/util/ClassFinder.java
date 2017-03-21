@@ -31,7 +31,7 @@ public final class ClassFinder {
             classes.addAll(findClasses(packageName, file));
           } else if ("jar".equals(protocol)) {
             JarURLConnection jarUrlConnection = (JarURLConnection) resource.openConnection();
-            classes.addAll(findClassesForJar(packageName, jarUrlConnection.getJarFile()));
+            classes.addAll(findClassesInJar(packageName, jarUrlConnection.getJarFile()));
           }
         }
       }
@@ -61,7 +61,7 @@ public final class ClassFinder {
     return classes;
   }
 
-  private static List<Class<?>> findClassesForJar(String packageName, JarFile jarFile) throws IOException, ClassNotFoundException {
+  private static List<Class<?>> findClassesInJar(String packageName, JarFile jarFile) throws IOException, ClassNotFoundException {
     List<Class<?>> classes = new ArrayList<Class<?>>();
     String dirName = packageName.replace('.', '/');
     Enumeration<JarEntry> entries = jarFile.entries();

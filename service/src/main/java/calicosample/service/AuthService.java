@@ -14,7 +14,7 @@ public class AuthService {
   @Inject private Context context;
 
   public CalicoSampleAuthInfo login(String loginId, String password) {
-    UserInfo userInfo = userInfoDao.findForLogin(loginId, password).orElseThrow(() ->
+    UserInfo.WithAdditionalData userInfo = userInfoDao.findForLogin(loginId, password).orElseThrow(() ->
       new InconsistentDataException("loginId", "IDまたはパスワードが間違っています。"));
     return CalicoSampleAuthInfo.of(userInfo, context.getRemoteAddress(), context.getProcessDateTime());
   }
@@ -25,7 +25,7 @@ public class AuthService {
 
   public CalicoSampleAuthInfo keep(@Nullable CalicoSampleAuthInfo authInfo) {
     if (authInfo == null || authInfo.getUserId() == null) return CalicoSampleAuthInfo.ofNull(context.getRemoteAddress(), context.getProcessDateTime());
-    UserInfo userInfo = userInfoDao.findById(authInfo.getUserId());
+    UserInfo.WithAdditionalData userInfo = userInfoDao.findById(authInfo.getUserId());
     return CalicoSampleAuthInfo.of(userInfo, context.getRemoteAddress(), context.getProcessDateTime());
   }
 }

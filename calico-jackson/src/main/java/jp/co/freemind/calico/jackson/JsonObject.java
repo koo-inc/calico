@@ -48,9 +48,6 @@ public class JsonObject<T> {
   }
 
   private static ObjectMapper buildMapper() {
-    ObjectMapper mapper = ObjectMapperProvider.createMapper();
-    mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
-
     SimpleModule module = new SimpleModule("DomaModule");
     module.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ISO_LOCAL_DATE));
     module.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -58,7 +55,9 @@ public class JsonObject<T> {
     module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     module.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ISO_LOCAL_TIME));
     module.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ISO_LOCAL_TIME));
-    mapper.registerModule(module);
+
+    ObjectMapper mapper = ObjectMapperProvider.createMapper(module);
+    mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
 
     return mapper;
   }

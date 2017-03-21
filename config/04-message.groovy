@@ -1,6 +1,7 @@
 message = [
   [key: "internalServerError", value: "サーバーエラーが発生しました。"],
   [key: "required", value: "必須項目です。"],
+  [key: "notAuthorized", value: "許可されていない操作です。"],
   [key: "uniqueLoginId", value: "既に使われているIDです。"],
 
   [key: "upperBound", value: "{value}以下でなければなりません。"],

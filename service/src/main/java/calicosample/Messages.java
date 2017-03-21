@@ -16,6 +16,8 @@ public final class Messages {
       
       public static final Message REQUIRED = new Message("必須項目です。");
       
+      public static final Message NOT_AUTHORIZED = new Message("許可されていない操作です。");
+      
       public static final Message UNIQUE_LOGIN_ID = new Message("既に使われているIDです。");
       
       public static Function<FieldAccessor, Message> UPPER_BOUND(Function<FieldAccessor, Map<String, Object>> mapper) {
