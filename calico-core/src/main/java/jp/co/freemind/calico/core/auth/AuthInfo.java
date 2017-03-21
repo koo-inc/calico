@@ -1,12 +1,13 @@
 package jp.co.freemind.calico.core.auth;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public interface AuthInfo extends Serializable {
   Integer getUserId();
   String getLoginId();
   boolean isAuthenticated();
-  boolean hasRights(Rights rights);
+  Set<Right> getRights();
 
   AuthToken getAuthToken();
 }

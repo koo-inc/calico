@@ -10,10 +10,11 @@ import jp.co.freemind.calico.core.zone.Context;
 public interface Authorizable {
   void authorize(Context context, EndpointInvocation invocation) throws AuthorizationException;
 
-  default boolean hasRights(Context context, Rights... rights) {
+  default boolean hasRights(Context context, Right... rights) {
     return context.getAuthInfo()
-      .flatMap(ai -> Arrays.stream(rights)
-        .filter(ai::hasRights)
+      .map(AuthInfo::getRights)
+      .flatMap(rs -> Arrays.stream(rights)
+        .filter(rs::contains)
         .findFirst())
       .isPresent();
   }

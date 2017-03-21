@@ -11,7 +11,7 @@ import calicosample.entity.UserInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.auth.AuthToken;
-import jp.co.freemind.calico.core.auth.Rights;
+import jp.co.freemind.calico.core.auth.Right;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -22,7 +22,7 @@ import lombok.Value;
 
   private Integer userId;
   private String loginId;
-  private Set<Rights> rights;
+  private Set<Right> rights;
   @JsonIgnore
   private AuthToken authToken;
 
@@ -31,12 +31,12 @@ import lombok.Value;
    */
   public static CalicoSampleAuthInfo of(@NonNull UserInfo.WithAdditionalData userInfo, String remoteAddress, LocalDateTime processDateTime){
     AuthToken authToken = AuthToken.create(userInfo.getLoginId(), remoteAddress, processDateTime);
-    return new CalicoSampleAuthInfo(userInfo.getId(), userInfo.getLoginId(), userInfo.getRightsSet(), authToken);
+    return new CalicoSampleAuthInfo(userInfo.getId(), userInfo.getLoginId(), userInfo.getRights(), authToken);
   }
 
   public static CalicoSampleAuthInfo of(@NonNull AuthToken authToken, Function<AuthToken, Optional<UserInfo.WithAdditionalData>> authenticator){
     return authenticator.apply(authToken)
-      .map(ui -> new CalicoSampleAuthInfo(ui.getId(), ui.getLoginId(), ui.getRightsSet(), authToken))
+      .map(ui -> new CalicoSampleAuthInfo(ui.getId(), ui.getLoginId(), ui.getRights(), authToken))
       .orElseGet(() -> new CalicoSampleAuthInfo(null, null, emptySet(), authToken));
   }
 
@@ -51,8 +51,8 @@ import lombok.Value;
   }
 
   @Override
-  public boolean hasRights(Rights rights) {
-    return this.rights.contains(rights);
+  public Set<Right> getRights() {
+    return this.rights;
   }
 
   @Override
