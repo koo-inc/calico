@@ -32,6 +32,7 @@ import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
+import jp.co.freemind.calico.core.endpoint.interceptor.result.Result;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
@@ -86,15 +87,17 @@ public class CalicoServlet extends HttpServlet {
       .provide(Keys.SERVLET_RESPONSE, res)
       .onError(e -> {
         e.printStackTrace();
-        try {
-          if (!res.isCommitted()) {
-            res.sendError(500);
-          }
-        } catch (IOException e1) {
-          throw new UncheckedIOException(e1);
-        }
+        new DefaultRenderer(500).render(null);
       })
-    ).run(()-> new Dispatcher(resolver).dispatch(path, req.getInputStream(), interceptionHandlers));
+    ).run(()-> {
+      Object output = new Dispatcher(resolver).dispatch(path, req.getInputStream(), interceptionHandlers);
+      if (output instanceof Result) {
+        new ResultRenderer().render((Result) output);
+      }
+      else {
+        new DefaultRenderer(200).render(output);
+      }
+    });
   }
 
   private String getContextPath() {

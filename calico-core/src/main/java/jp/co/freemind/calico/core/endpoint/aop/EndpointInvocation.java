@@ -1,6 +1,7 @@
 package jp.co.freemind.calico.core.endpoint.aop;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -53,7 +54,11 @@ public class EndpointInvocation implements Invocation {
   @SuppressWarnings("unchecked")
   public Object proceed() throws Throwable {
     if (handlers.length == 0) {
-      return method.invoke(getThis(), input);
+      try {
+        return method.invoke(getThis(), input);
+      } catch (InvocationTargetException t) {
+        throw t.getCause();
+      }
     }
     EndpointInvocation next = new EndpointInvocation(resolver, endpointClass, method, input, Arrays.copyOfRange(handlers, 1, handlers.length));
     return handlers[0].invoke(next);

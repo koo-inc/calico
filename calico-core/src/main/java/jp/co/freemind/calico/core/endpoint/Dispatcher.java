@@ -23,12 +23,12 @@ public class Dispatcher {
   }
 
   @SuppressWarnings("unchecked")
-  public void dispatch(String path, InputStream is, InterceptionHandler... handlers) throws Throwable {
+  public Object dispatch(String path, InputStream is, InterceptionHandler... handlers) throws Throwable {
     Class<? extends Endpoint<?, ?>> endpointClass = resolver.getEndpointClass(path)
       .orElseThrow(() -> new UnknownEndpointException(path));
 
     Object input = resolver.getInputType(endpointClass).map(inputType -> getInput(inputType, is)).orElse(null);
-    new EndpointInvocation(resolver, endpointClass, input, handlers).proceed();
+    return new EndpointInvocation(resolver, endpointClass, input, handlers).proceed();
   }
 
   private Object getInput(Class<?> inputType, InputStream input) {
