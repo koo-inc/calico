@@ -35,18 +35,9 @@ export class SessionComponent implements OnInit, OnDestroy {
       addEventListener: (type: string, listener: (e: any) => void, useCapture: boolean) => { },
       removeEventListener: (type: string, listener: (e: any) => void, useCapture: boolean) => { },
     };
-
-    this.focusListener = (e: any) => {
-      let having = this.having([this.elem.nativeElement], e.target);
-      if (!having) {
-        this.elem.nativeElement.firstElementChild.focus();
-      }
-    };
   }
 
   ngOnInit(): void {
-    this.view.addEventListener('focus', this.focusListener, true);
-
     const interval = 60 * 1000;
 
     this.zone.runOutsideAngular(() => {
@@ -86,25 +77,10 @@ export class SessionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.view.removeEventListener('focus', this.focusListener, true);
     this.subscription.unsubscribe();
   }
 
   gotoLogin(): void {
     this.router.navigateByUrl('login').then(_ => this.modal.hide());
-  }
-
-  private having(elements: any[], target: any): boolean {
-    if (elements == null) return false;
-
-    for (let element of elements) {
-      if (target === element) {
-        return true;
-      }
-      if (this.having(element.children, target)) {
-        return true;
-      }
-    }
-    return false;
   }
 }
