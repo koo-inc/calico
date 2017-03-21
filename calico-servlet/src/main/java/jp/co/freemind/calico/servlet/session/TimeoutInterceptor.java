@@ -12,7 +12,7 @@ import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
-import jp.co.freemind.calico.core.endpoint.dto.ContextualOutput;
+import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.zone.Context;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.Keys;
@@ -45,11 +45,11 @@ public class TimeoutInterceptor implements EndpointInterceptor {
         ).run(()-> ref.set(invocation.proceed()));
 
         Object result = ref.get();
-        if (result instanceof ContextualOutput) {
+        if (result instanceof Result) {
           return result;
         }
         else {
-          return new ContextualOutput<>(newContext, result);
+          return new Result(newContext, result);
         }
       }
     }

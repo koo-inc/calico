@@ -1,13 +1,13 @@
 package jp.co.freemind.calico.core.validation;
 
-import static jp.co.freemind.calico.core.endpoint.interceptor.result.ResultType.JSON;
-import static jp.co.freemind.calico.core.endpoint.interceptor.result.ResultType.invalid;
+import static jp.co.freemind.calico.core.endpoint.result.ResultType.JSON;
+import static jp.co.freemind.calico.core.endpoint.result.ResultType.invalid;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
-import jp.co.freemind.calico.core.endpoint.interceptor.result.Result;
+import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.exception.VerificationException;
 import jp.co.freemind.calico.core.util.Throwables;
 import jp.co.freemind.calico.core.zone.Zone;

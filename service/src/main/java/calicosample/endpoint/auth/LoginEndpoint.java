@@ -4,12 +4,12 @@ import calicosample.core.auth.CalicoSampleAuthInfo;
 import calicosample.service.AuthService;
 import com.google.inject.Inject;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
-import jp.co.freemind.calico.core.endpoint.dto.ContextualOutput;
+import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.zone.Context;
 import lombok.Getter;
 import lombok.Setter;
 
-public class LoginEndpoint implements Endpoint<LoginEndpoint.Input, ContextualOutput<CalicoSampleAuthInfo>> {
+public class LoginEndpoint implements Endpoint<LoginEndpoint.Input, Result> {
   @Inject private AuthService authService;
   @Inject private Context context;
 
@@ -20,8 +20,8 @@ public class LoginEndpoint implements Endpoint<LoginEndpoint.Input, ContextualOu
   }
 
   @Override
-  public ContextualOutput<CalicoSampleAuthInfo> execute(Input input) {
+  public Result execute(Input input) {
     CalicoSampleAuthInfo authInfo = authService.login(input.getLoginId(), input.getPassword());
-    return new ContextualOutput<>(context.extend(s -> s.authInfo(authInfo)), authInfo);
+    return new Result(context.extend(s -> s.authInfo(authInfo)), authInfo);
   }
 }

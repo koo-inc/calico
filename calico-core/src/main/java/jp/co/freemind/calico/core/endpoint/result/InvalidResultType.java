@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.core.endpoint.interceptor.result;
+package jp.co.freemind.calico.core.endpoint.result;
 
 import javax.annotation.Nonnull;
 

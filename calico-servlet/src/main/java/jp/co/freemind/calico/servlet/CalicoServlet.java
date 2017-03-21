@@ -32,7 +32,7 @@ import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
-import jp.co.freemind.calico.core.endpoint.interceptor.result.Result;
+import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;

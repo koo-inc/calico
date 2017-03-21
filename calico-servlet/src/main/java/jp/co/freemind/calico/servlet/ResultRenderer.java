@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.auth.AuthInfo;
-import jp.co.freemind.calico.core.endpoint.interceptor.result.Result;
+import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.util.SessionUtil;
 
