@@ -12,7 +12,6 @@ import jp.co.freemind.calico.core.zone.Context;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.CalicoServletPlugin;
 import jp.co.freemind.calico.servlet.CertificateAuthority;
-import jp.co.freemind.calico.servlet.DefaultResultRenderer;
 import jp.co.freemind.calico.servlet.session.TimeoutInterceptor;
 
 public class WebPlugin extends CalicoServletPlugin {
@@ -28,7 +27,7 @@ public class WebPlugin extends CalicoServletPlugin {
       TransactionInterceptor.class,
       Matchers.inSubpackage(ROOT_PACKAGE),
       new TimeoutInterceptor(WebPlugin::getNullAuthInfo),
-      new ResultMapper(new DefaultResultRenderer())
+      new ResultMapper()
     );
 
     bind(binder -> {

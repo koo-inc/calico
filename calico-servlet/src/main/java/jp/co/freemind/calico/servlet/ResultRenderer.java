@@ -3,7 +3,6 @@ package jp.co.freemind.calico.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
-import java.util.function.Consumer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +13,9 @@ import jp.co.freemind.calico.core.endpoint.interceptor.result.Result;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.util.SessionUtil;
 
-public class DefaultResultRenderer implements Consumer<Result> {
+public class ResultRenderer implements Renderer<Result> {
   @Override
-  public void accept(Result result) {
+  public void render(Result result) {
     Zone current = Zone.getCurrent();
     HttpServletResponse res = current.getInstance(Keys.SERVLET_RESPONSE);
     if (res.isCommitted()) return;
