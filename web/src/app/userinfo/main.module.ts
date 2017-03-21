@@ -7,6 +7,7 @@ import { LayoutNormal } from '../common/layout/layout-normal/layout-normal.compo
 import { IndexComponent } from './index/index.component';
 import { ShowComponent } from './show/show.component';
 import { EditComponent } from './edit/edit.component';
+import { EditModalComponent } from "./edit-modal/edit-modal.component";
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
   declarations: [
     IndexComponent,
     ShowComponent,
-    EditComponent
+    EditComponent,
+    EditModalComponent,
   ],
   providers: [
     MainService,

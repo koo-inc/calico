@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { MainService, Record } from "../main.service";
+import { ModalComponent } from "calico";
 
 @Component({
   selector: 'app-index',
@@ -11,20 +11,32 @@ export class IndexComponent implements OnInit {
 
   constructor(
     private mainService: MainService,
-    private route: ActivatedRoute,
-    private router: Router,
   ) { }
 
   records: Record[];
 
   ngOnInit() {
+    this.getRecords();
+  }
+
+  private getRecords(): void {
     this.mainService.getRecords().subscribe(records => {
       this.records = records;
     });
   }
 
-  onSelect(record: Record): void {
-    this.router.navigate(['../show', {id: record.id}], {relativeTo: this.route});
+  @ViewChild('editModal')
+  editModal: ModalComponent;
+  editId: number = null;
+
+  editRecord(id: number): void {
+    this.editId = id;
+    this.editModal.show();
+  }
+
+  onSaved(): void {
+    this.editModal.hide();
+    this.getRecords();
   }
 
 }

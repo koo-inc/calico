@@ -1,6 +1,6 @@
 <c-panel title="ユーザ一覧" *ngIf="records">
   <div>
-    <a c-btn="primary" c-glyphicon="plus" [routerLink]="['../edit']">新規登録</a>
+    <a c-btn="primary" c-glyphicon="plus" (click)="editRecord(null)">新規登録</a>
   </div>
   <table c-list-table>
     <colgroup [c-cols]="[null]"></colgroup>
@@ -12,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let record of records" (click)="onSelect(record)">
+      <tr *ngFor="let record of records" (click)="editRecord(record.id)">
         <td>
           {{record.loginId}}
         </td>
@@ -20,3 +20,7 @@
     </tbody>
   </table>
 </c-panel>
+
+<c-modal #editModal title="ユーザ情報">
+  <app-edit-modal *ngIf="editModal.shown" [id]="editId" (onSaved)="onSaved()"></app-edit-modal>
+</c-modal>

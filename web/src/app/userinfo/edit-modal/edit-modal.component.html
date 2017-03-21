@@ -1,0 +1,24 @@
+<div *ngIf="form">
+  <form [formGroup]="form" novalidate (ngSubmit)="save()">
+    <table c-info-table>
+      <colgroup [c-cols]="[20, null]"></colgroup>
+      <tbody>
+        <tr>
+          <th>LoginId</th>
+          <td>
+            <c-textfield formControlName="loginId"></c-textfield>
+          </td>
+        </tr>
+        <tr>
+          <th>Password</th>
+          <td>
+            <c-textfield formControlName="password"></c-textfield>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button c-btn="primary" c-glyphicon="saved" [disabled]="form | submitting">登録</button>
+    </div>
+  </form>
+</div>

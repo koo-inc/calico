@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { AuthService, AuthInfo } from "../api/auth.service";
 import { DOCUMENT } from "@angular/platform-browser";
 import { Subscription, Observable } from "rxjs";
-import {ModalDirective} from "ng2-bootstrap";
+import { ModalComponent } from "calico";
 
 @Component({
   selector: 'app-session',
@@ -12,8 +12,8 @@ import {ModalDirective} from "ng2-bootstrap";
 })
 export class SessionComponent implements OnInit, OnDestroy {
 
-  @ViewChild(ModalDirective)
-  private modal: ModalDirective;
+  @ViewChild('modal')
+  private modal: ModalComponent;
 
   private initialized: boolean = false;
 
