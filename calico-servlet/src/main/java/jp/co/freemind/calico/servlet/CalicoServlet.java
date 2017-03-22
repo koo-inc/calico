@@ -38,7 +38,7 @@ import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
 import jp.co.freemind.calico.servlet.util.NetworkUtil;
-import jp.co.freemind.calico.servlet.util.SessionUtil;
+import jp.co.freemind.calico.servlet.util.CookieUtil;
 import nu.validator.htmlparser.dom.Dom2Sax;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import nu.validator.htmlparser.sax.HtmlSerializer;
@@ -73,7 +73,7 @@ public class CalicoServlet extends HttpServlet {
     String path = req.getPathInfo();
     String remoteAddress = firstNonNull(NetworkUtil.getRemoteAddrWithConsiderForwarded(req), "(unknown)");
     LocalDateTime processDatetime = LocalDateTime.now();
-    AuthToken authToken = SessionUtil.getSessionToken(req)
+    AuthToken authToken = CookieUtil.getSessionToken(req)
       .map(AuthToken::of)
       .orElseGet(() -> AuthToken.createEmpty(remoteAddress, processDatetime));
 

@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.servlet.session;
+package jp.co.freemind.calico.servlet;
 
 import jp.co.freemind.calico.core.config.Setting;
 

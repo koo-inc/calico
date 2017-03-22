@@ -12,7 +12,8 @@ import jp.co.freemind.calico.core.zone.Context;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.CalicoServletPlugin;
 import jp.co.freemind.calico.servlet.AuthenticationProcedure;
-import jp.co.freemind.calico.servlet.session.TimeoutInterceptor;
+import jp.co.freemind.calico.servlet.interceptor.TimeoutInterceptor;
+import jp.co.freemind.calico.servlet.interceptor.VersioningInterceptor;
 
 public class WebPlugin extends CalicoServletPlugin {
   private static String ROOT_PACKAGE = "calicosample.endpoint";
@@ -23,6 +24,11 @@ public class WebPlugin extends CalicoServletPlugin {
 
     install(new ServicePlugin());
 
+    interceptBefore(TransactionInterceptor.class,
+      Matchers.inSubpackage(ROOT_PACKAGE),
+      new VersioningInterceptor()
+    );
+
     interceptAfter(
       TransactionInterceptor.class,
       Matchers.inSubpackage(ROOT_PACKAGE),
@@ -30,12 +36,11 @@ public class WebPlugin extends CalicoServletPlugin {
       new ResultMapper()
     );
 
-    bind(binder -> {
-      binder.bind(AuthenticationProcedure.class).to(CalicoSampleAuthNProcedure.class);
-    });
-    bindInstant(binder -> {
-      binder.bind(AccessStartLog.class).in(TransactionScoped.class);
-    });
+    bind(binder ->
+      binder.bind(AuthenticationProcedure.class).to(CalicoSampleAuthNProcedure.class));
+
+    bindInstant(binder ->
+      binder.bind(AccessStartLog.class).in(TransactionScoped.class));
   }
 
   private static CalicoSampleAuthInfo getNullAuthInfo() {

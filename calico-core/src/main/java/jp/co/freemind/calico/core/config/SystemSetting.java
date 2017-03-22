@@ -7,6 +7,7 @@ public interface SystemSetting {
   String getEnvName();
   String getRootPackage();
   String getVersion();
+  String getVersionTag();
 
   default long version() {
     if (Holder.version != null) return Holder.version;

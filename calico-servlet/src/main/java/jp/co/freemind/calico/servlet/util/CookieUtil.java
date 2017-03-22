@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.zone.Zone;
-import jp.co.freemind.calico.servlet.session.SessionSetting;
+import jp.co.freemind.calico.servlet.SessionSetting;
 
-public final class SessionUtil {
-  private SessionUtil() {}
+public final class CookieUtil {
+  private CookieUtil() {}
 
   public static Optional<String> getSessionToken(HttpServletRequest req) {
     if(req.getCookies() == null) return Optional.empty();
@@ -28,17 +28,18 @@ public final class SessionUtil {
   }
 
   public static void setSessionToken(ServletContext context, HttpServletResponse res, AuthToken token) {
-    Cookie cookie = new Cookie(getSetting().getTokenKey(), token.getValue());
-    cookie.setHttpOnly(true);
-    cookie.setPath(getContextPath(context));
-    res.addCookie(cookie);
+    res.addCookie(generateCookie(context, getSetting().getTokenKey(), token.getValue(), true));
   }
 
   public static void setXsrfToken(ServletContext context, HttpServletResponse res, AuthToken token) {
-    Cookie cookie = new Cookie(getSetting().getCsrfTokenKey(), token.getCsrfToken());
-    cookie.setHttpOnly(false);
+    res.addCookie(generateCookie(context, getSetting().getCsrfTokenKey(), token.getCsrfToken(), false));
+  }
+
+  public static Cookie generateCookie(ServletContext context, String key, Object value, boolean httpOnly) {
+    Cookie cookie = new Cookie(key, String.valueOf(value));
     cookie.setPath(getContextPath(context));
-    res.addCookie(cookie);
+    cookie.setHttpOnly(httpOnly);
+    return cookie;
   }
 
   private static SessionSetting getSetting() {

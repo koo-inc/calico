@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.zone.Zone;
-import jp.co.freemind.calico.servlet.util.SessionUtil;
+import jp.co.freemind.calico.servlet.util.CookieUtil;
 
 public class ResultRenderer implements Renderer<Result> {
   @Override
@@ -28,8 +28,8 @@ public class ResultRenderer implements Renderer<Result> {
     result.getContext().getAuthInfo()
       .map(AuthInfo::getAuthToken)
       .ifPresent(token -> {
-        SessionUtil.setSessionToken(servletContext, res, token);
-        SessionUtil.setXsrfToken(servletContext, res, token);
+        CookieUtil.setSessionToken(servletContext, res, token);
+        CookieUtil.setXsrfToken(servletContext, res, token);
       });
 
     try (PrintWriter writer = res.getWriter()) {

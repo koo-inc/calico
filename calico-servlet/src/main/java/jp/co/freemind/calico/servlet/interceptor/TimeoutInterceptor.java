@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.servlet.session;
+package jp.co.freemind.calico.servlet.interceptor;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -16,6 +16,7 @@ import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.zone.Context;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.Keys;
+import jp.co.freemind.calico.servlet.SessionSetting;
 
 public class TimeoutInterceptor implements EndpointInterceptor {
   private final Supplier<AuthInfo> nullAuthInfoSupplier;
