@@ -14,13 +14,13 @@
 --    limitations under the License.
 --
 
--- // create user right
+-- // create user authority
 -- Migration SQL that makes the change goes here.
 
-CREATE TABLE user_right (
+CREATE TABLE user_authority (
   id SERIAL NOT NULL,
   user_id INTEGER NOT NULL,
-  "right" TEXT NOT NULL,
+  authority TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   created_by TEXT,
   updated_at TIMESTAMP,
@@ -28,14 +28,14 @@ CREATE TABLE user_right (
   PRIMARY KEY (id)
 );
 
-CREATE INDEX user_right_idx1 ON user_right (user_id);
-CREATE INDEX user_right_idx2 ON user_right ("right");
+CREATE INDEX user_authority_idx1 ON user_authority (user_id);
+CREATE INDEX user_authority_idx2 ON user_authority (authority);
 
-ALTER TABLE user_right ADD CONSTRAINT user_right_fk1 FOREIGN KEY (user_id) REFERENCES user_info;
+ALTER TABLE user_authority ADD CONSTRAINT user_authority_fk1 FOREIGN KEY (user_id) REFERENCES user_info;
 
 
 -- //@UNDO
 -- SQL to undo the change goes here.
 
-DROP TABLE user_right;
+DROP TABLE user_authority;
 

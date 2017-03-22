@@ -38,10 +38,10 @@ public class CalicoServletPlugin extends CalicoPlugin {
 
       binder.bind(Context.class).toProvider(() -> {
         Zone current = Zone.getCurrent();
-        CertificateAuthority authority = current.getInstance(CertificateAuthority.class);
+        AuthenticationProcedure authority = current.getInstance(AuthenticationProcedure.class);
         AuthToken token = current.getInstance(Keys.AUTH_TOKEN);
         return new Context(s -> s
-          .authInfo(authority.authenticate(token))
+          .authInfo(authority.proceed(token))
           .processDateTime(current.getInstance(Keys.PROCESS_DATETIME))
           .remoteAddress(current.getInstance(Keys.REMOTE_ADDRESS))
           .path(current.getInstance(Keys.PATH))

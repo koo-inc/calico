@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Restriction {
-  Class<? extends Authorizable>[] value();
+  Class<? extends AuthorizationRule>[] value();
 }

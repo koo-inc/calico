@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import calicosample.extenum.CalicoSampleRight;
-import jp.co.freemind.calico.core.auth.Right;
+import calicosample.extenum.CalicoSampleAuthority;
+import jp.co.freemind.calico.core.auth.Authority;
 import jp.co.freemind.calico.jackson.JsonList;
 import jp.co.freemind.calico.jackson.JsonObject;
 import lombok.Getter;
@@ -38,19 +38,19 @@ public class UserInfo extends CalicoSampleEntity {
   @Entity
   @Getter @Setter
   public static class WithAdditionalData extends UserInfo {
-    private RightList rights;
+    private AuthorityList authorities;
 
-    public Set<Right> getRights() {
-      if (rights == null) return Collections.emptySet();
-      return rights.stream()
-        .map(r -> (Right) r)
+    public Set<Authority> getAuthorities() {
+      if (authorities == null) return Collections.emptySet();
+      return authorities.stream()
+        .map(r -> (Authority) r)
         .collect(toSet());
     }
   }
 
   @Domain(valueType = String.class)
-  public static class RightList extends JsonObject<List<CalicoSampleRight>> implements JsonList<CalicoSampleRight> {
-    public RightList(String json) {
+  public static class AuthorityList extends JsonObject<List<CalicoSampleAuthority>> implements JsonList<CalicoSampleAuthority> {
+    public AuthorityList(String json) {
       super(json);
     }
   }

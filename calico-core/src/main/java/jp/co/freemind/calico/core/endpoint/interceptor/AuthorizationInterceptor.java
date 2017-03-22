@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import jp.co.freemind.calico.core.auth.Authorizable;
+import jp.co.freemind.calico.core.auth.AuthorizationRule;
 import jp.co.freemind.calico.core.auth.Restriction;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
 import jp.co.freemind.calico.core.endpoint.EndpointRoot;
@@ -24,12 +24,12 @@ public class AuthorizationInterceptor implements EndpointInterceptor {
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
     authorizableStream(invocation)
-      .forEach(a -> a.authorize(Zone.getContext(), invocation));
+      .forEach(a -> a.apply(Zone.getContext(), invocation.getEndpointClass(), invocation.getInput()));
 
     return invocation.proceed();
   }
 
-  private Stream<Authorizable> authorizableStream(EndpointInvocation invocation){
+  private Stream<AuthorizationRule> authorizableStream(EndpointInvocation invocation){
     Class<? extends Endpoint<?, ?>> endpointClass = invocation.getEndpointClass();
 
     return Stream.concat(

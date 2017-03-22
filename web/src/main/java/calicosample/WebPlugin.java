@@ -1,6 +1,6 @@
 package calicosample;
 
-import calicosample.auth.CalicoSampleAuthority;
+import calicosample.auth.CalicoSampleAuthNProcedure;
 import calicosample.core.ServicePlugin;
 import calicosample.core.auth.CalicoSampleAuthInfo;
 import calicosample.entity.log.AccessStartLog;
@@ -11,7 +11,7 @@ import jp.co.freemind.calico.core.endpoint.interceptor.TransactionInterceptor;
 import jp.co.freemind.calico.core.zone.Context;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.CalicoServletPlugin;
-import jp.co.freemind.calico.servlet.CertificateAuthority;
+import jp.co.freemind.calico.servlet.AuthenticationProcedure;
 import jp.co.freemind.calico.servlet.session.TimeoutInterceptor;
 
 public class WebPlugin extends CalicoServletPlugin {
@@ -31,7 +31,7 @@ public class WebPlugin extends CalicoServletPlugin {
     );
 
     bind(binder -> {
-      binder.bind(CertificateAuthority.class).to(CalicoSampleAuthority.class);
+      binder.bind(AuthenticationProcedure.class).to(CalicoSampleAuthNProcedure.class);
     });
     bindInstant(binder -> {
       binder.bind(AccessStartLog.class).in(TransactionScoped.class);

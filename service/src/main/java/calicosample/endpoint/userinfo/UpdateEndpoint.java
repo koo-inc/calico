@@ -13,7 +13,7 @@ import jp.co.freemind.calico.core.zone.Zone;
 import lombok.Getter;
 import lombok.Setter;
 
-@Restriction(WriteAuthZ.class)
+@Restriction(WriteAuthZRule.class)
 public class UpdateEndpoint extends UserInfoEndpoint<UpdateEndpoint.Input, UserInfoEndpoint.IdOutput> {
   @Inject private UserInfoDao userInfoDao;
 

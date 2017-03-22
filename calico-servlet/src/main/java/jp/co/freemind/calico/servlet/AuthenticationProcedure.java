@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.auth.AuthToken;
 
-public interface CertificateAuthority {
+public interface AuthenticationProcedure {
   @Nonnull
-  <T extends AuthInfo> T authenticate(@Nonnull AuthToken authToken);
+  <T extends AuthInfo> T proceed(@Nonnull AuthToken authToken);
 }
