@@ -19,13 +19,13 @@ import jp.co.freemind.calico.core.zone.Zone;
 public class AuthorizationInterceptor implements EndpointInterceptor {
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
-    authorizableStream(invocation)
-      .forEach(a -> a.apply(Zone.getContext(), invocation.getEndpointClass(), invocation.getInput()));
+    ruleStream(invocation)
+      .forEach(rule -> rule.apply(Zone.getContext(), invocation.getEndpointClass(), invocation.getInput()));
 
     return invocation.proceed();
   }
 
-  private Stream<AuthorizationRule> authorizableStream(EndpointInvocation invocation){
+  private Stream<AuthorizationRule> ruleStream(EndpointInvocation invocation){
     Class<? extends Endpoint<?, ?>> endpointClass = invocation.getEndpointClass();
 
     return Stream.concat(
