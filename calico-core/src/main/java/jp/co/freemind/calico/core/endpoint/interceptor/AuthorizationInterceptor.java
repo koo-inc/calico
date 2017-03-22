@@ -1,11 +1,6 @@
 package jp.co.freemind.calico.core.endpoint.interceptor;
 
-import static java.util.Arrays.copyOf;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
-
 import java.lang.reflect.AnnotatedElement;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +13,7 @@ import jp.co.freemind.calico.core.endpoint.EndpointRoot;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.util.Throwables;
+import jp.co.freemind.calico.core.util.Types;
 import jp.co.freemind.calico.core.zone.Zone;
 
 public class AuthorizationInterceptor implements EndpointInterceptor {
@@ -34,7 +30,7 @@ public class AuthorizationInterceptor implements EndpointInterceptor {
 
     return Stream.concat(
         Stream.of(getRestriction(endpointClass)),
-        packageStream(endpointClass.getName()).map(this::getRestriction)
+        packageStream(endpointClass).map(this::getRestriction)
       )
       .filter(Optional::isPresent)
       .map(Optional::get)
@@ -49,20 +45,13 @@ public class AuthorizationInterceptor implements EndpointInterceptor {
       });
   }
 
-  private Stream<Package> packageStream(String className) {
-    List<Package> packages = new ArrayList<>();
-    String[] fragments = className.split("\\.");
-    for (int n = fragments.length - 1; n > 0; n--) {
-      String pkgName = stream(copyOf(fragments, n)).collect(joining("."));
-      Package pkg = Package.getPackage(pkgName);
-      if (pkg == null) continue;
-
-      packages.add(pkg);
-      if (pkg.isAnnotationPresent(EndpointRoot.class)) {
-        break;
-      }
-    }
-    return packages.stream();
+  private Stream<Package> packageStream(Class<?> type) {
+    List<Package> packages = Types.getAncestorPackages(type);
+    Optional<Package> rootPkg = packages.stream()
+      .filter(pkg -> pkg.isAnnotationPresent(EndpointRoot.class))
+      .findFirst();
+    return rootPkg.map(pkg -> packages.subList(0, packages.indexOf(pkg) + 1)).orElse(packages)
+      .stream();
   }
 
   private Optional<Restriction> getRestriction(AnnotatedElement element) {
