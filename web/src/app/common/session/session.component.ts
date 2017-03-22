@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, Inject, ViewChild, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewChild, NgZone } from '@angular/core';
 import { Router } from "@angular/router";
 import { AuthService, AuthInfo } from "../api/auth.service";
 import { DOCUMENT } from "@angular/platform-browser";
@@ -17,8 +17,6 @@ export class SessionComponent implements OnInit, OnDestroy {
 
   private initialized: boolean = false;
 
-  private view: any;
-  private focusListener: (e: any) => void;
   private subscription: Subscription;
 
   private static activateEvents = ['mousemove', 'touchstart', 'pointerdown', 'pointermove'];
@@ -26,16 +24,9 @@ export class SessionComponent implements OnInit, OnDestroy {
   constructor(
       private router: Router,
       @Inject(DOCUMENT) private doc: any,
-      private elem: ElementRef,
       private authService: AuthService,
       private zone: NgZone
-  ) {
-
-    this.view = doc.defaultView || {
-      addEventListener: (type: string, listener: (e: any) => void, useCapture: boolean) => { },
-      removeEventListener: (type: string, listener: (e: any) => void, useCapture: boolean) => { },
-    };
-  }
+  ) { }
 
   ngOnInit(): void {
     const interval = 60 * 1000;
