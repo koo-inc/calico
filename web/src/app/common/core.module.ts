@@ -21,8 +21,8 @@ import { AuthService } from "app/common/api/auth.service";
   ],
   providers: [
     AuthService,
-    {provide: 'LocalStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', deployedAt: AppConfig.deployedAt}},
-    {provide: 'SessionStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', deployedAt: AppConfig.deployedAt}},
+    {provide: 'LocalStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
+    {provide: 'SessionStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
     {provide: 'ExtEnumServiceConfig', useValue: {apiPath: 'endpoint/system/ext_enum'}},
     {provide: 'AlertConfig', useValue: {
       common: {position: 'top-right', lifetime: 3000},

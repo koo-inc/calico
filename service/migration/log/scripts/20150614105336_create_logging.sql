@@ -5,7 +5,7 @@ CREATE UNLOGGED TABLE log (
   id BIGSERIAL,
   ts TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   key TEXT NOT NULL DEFAULT to_char(current_date, 'YYYYMM'),
-  deployed_at BIGINT,
+  version BIGINT,
   PRIMARY KEY (id)
 );
 CREATE INDEX log_idx1 ON log (key);

@@ -6,22 +6,22 @@ import lombok.extern.log4j.Log4j2;
 public interface SystemSetting {
   String getEnvName();
   String getRootPackage();
-  String getDeployedAt();
+  String getVersion();
 
-  default long deployedAt() {
-    if (Holder.deployedAt != null) return Holder.deployedAt;
+  default long version() {
+    if (Holder.version != null) return Holder.version;
     try {
-      Holder.deployedAt = Long.parseLong(getDeployedAt());
+      Holder.version = Long.parseLong(getVersion());
     }
     catch (Exception e) {
-      Holder.log.warn(".autogen.properties が存在しないようです。deployedAt にはクラスロード時間が使われます。");
-      Holder.deployedAt = System.currentTimeMillis();
+      Holder.log.warn("system.version がプロパティに存在しないようです。version にはクラスロード時間が使われます。");
+      Holder.version = System.currentTimeMillis();
     }
-    return Holder.deployedAt;
+    return Holder.version;
   }
 
   @Log4j2
   final class Holder {
-    static Long deployedAt;
+    static Long version;
   }
 }

@@ -28,11 +28,11 @@ public abstract class LogEntity implements Log {
   private Long id;
   private LocalDateTime ts;
   private String key;
-  private Long deployedAt;
+  private Long version;
 
   public LogEntity() {
     ts = LocalDateTime.now();
-    deployedAt = Zone.getCurrent().getInstance(SystemSetting.class).deployedAt();
+    version = Zone.getCurrent().getInstance(SystemSetting.class).version();
   }
 
   public static class LogEntityListener<T extends LogEntity> implements EntityListener<T> {
