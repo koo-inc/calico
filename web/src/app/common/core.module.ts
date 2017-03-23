@@ -4,6 +4,8 @@ import { ModalModule, PopoverModule, DropdownModule, DatepickerModule, Timepicke
 import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule, MESSAGE_CONFIG } from "calico";
 import { AppConfig } from "app/app.config";
 import { AuthService } from "app/common/api/auth.service";
+import { REQUEST_HOOK } from "calico/core/api.service";
+import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
 
 @NgModule({
   imports: [
@@ -29,7 +31,10 @@ import { AuthService } from "app/common/api/auth.service";
       warning: {position: 'top-left', lifetime: null},
       danger: {position: 'top-left', lifetime: null},
     }},
-    {provide: MESSAGE_CONFIG, useValue: AppConfig.messages}
+    {provide: MESSAGE_CONFIG, useValue: AppConfig.messages},
+    {provide: VERSION_INFO, useValue: {key: AppConfig.versionTag, currentVersion: AppConfig.version}},
+    VersionCheckHook,
+    {provide: REQUEST_HOOK, useExisting: VersionCheckHook, multi: true}
   ]
 })
 export class CoreModule {

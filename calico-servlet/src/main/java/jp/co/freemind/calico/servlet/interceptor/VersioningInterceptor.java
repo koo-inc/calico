@@ -1,6 +1,5 @@
 package jp.co.freemind.calico.servlet.interceptor;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,7 +8,6 @@ import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.Keys;
-import jp.co.freemind.calico.servlet.util.CookieUtil;
 
 public class VersioningInterceptor implements EndpointInterceptor {
   @Override
@@ -21,12 +19,11 @@ public class VersioningInterceptor implements EndpointInterceptor {
   }
 
   private void setVersionTag(HttpServletRequest req, HttpServletResponse res) {
-    Cookie cookie = CookieUtil.generateCookie(req.getServletContext(), getVersionTag(), getVersion(), false);
-    res.addCookie(cookie);
+    res.setHeader(getVersionTag(), getVersion());
   }
 
-  private long getVersion() {
-    return Zone.getRoot().getInstance(SystemSetting.class).version();
+  private String getVersion() {
+    return String.valueOf(Zone.getRoot().getInstance(SystemSetting.class).version());
   }
 
   private String getVersionTag() {
