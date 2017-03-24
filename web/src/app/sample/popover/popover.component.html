@@ -1,0 +1,12 @@
+<c-panel title="サンプルポップオーバー">
+  <button type="button" c-btn="primary" (click)="log(parentTemplate)">parent popover</button>
+</c-panel>
+<div (test)="test()">
+<div *cPopover #parentTemplate="cPopover">
+  <p>This is parent</p>
+  <button type="button" c-btn="danger" (chick)="childTemplate.toggle(this)">child popover</button>
+  <div *cPopover #childTemplate>
+    <p>This is child</p>
+  </div>
+</div>
+</div>

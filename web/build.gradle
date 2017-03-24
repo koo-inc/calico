@@ -63,7 +63,7 @@ clean {
 }
 
 task ngBuild(type: NpmTask, dependsOn: 'npmInstall') {
-  args = ['run', 'ng', 'build', '--prod']
+  args = ['run', 'ng', 'build', '--aot', '-e', 'prod', '--progress', 'false']
   inputs.dir 'src'
   outputs.dir 'dist'
 }
