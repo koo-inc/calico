@@ -1,4 +1,4 @@
-<c-panel title="検索条件" *ngIf="searchContext.form">
+<c-panel heading="検索条件" *ngIf="searchContext.form">
   <form [formGroup]="searchContext.form" novalidate (ngSubmit)="searchContext.search()">
     <table cInfoTable>
       <colgroup [cCols]="[15, 35, 15, 35]"></colgroup>
@@ -25,7 +25,7 @@
   </form>
 </c-panel>
 
-<c-panel title="顧客一覧" *ngIf="searchContext.result">
+<c-panel heading="顧客一覧" *ngIf="searchContext.result">
   <div>
     <div class="pull-right" cPager></div>
     <a cBtn="primary" cGlyphicon="plus" [routerLink]="['../edit']">新規登録</a>

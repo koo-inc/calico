@@ -1,4 +1,4 @@
-<c-panel title="ユーザ一覧" *ngIf="records">
+<c-panel heading="ユーザ一覧" *ngIf="records">
   <div>
     <a cBtn="primary" cGlyphicon="plus" (click)="editRecord(null)">新規登録</a>
   </div>
@@ -21,6 +21,6 @@
   </table>
 </c-panel>
 
-<c-modal #editModal title="ユーザ情報">
+<c-modal #editModal heading="ユーザ情報">
   <app-edit-modal *ngIf="editModal.shown" [id]="editId" (onSaved)="onSaved()"></app-edit-modal>
 </c-modal>
