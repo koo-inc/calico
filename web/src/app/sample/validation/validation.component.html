@@ -1,7 +1,7 @@
 <c-panel title="サンプルフォーム">
   <form *ngIf="form1 != null" [formGroup]="form1" novalidate (ngSubmit)="save1()">
-    <table c-info-table>
-      <colgroup [c-cols]="[20, null]"></colgroup>
+    <table cInfoTable>
+      <colgroup [cCols]="[20, null]"></colgroup>
       <tbody>
         <tr>
           <th>id</th>
@@ -18,13 +18,13 @@
       </tbody>
     </table>
     <div>
-      <button type="submit" c-btn="primary" c-glyphicon="saved">登録</button>
+      <button type="submit" cBtn="primary" cGlyphicon="saved">登録</button>
     </div>
   </form>
 
   <form *ngIf="form2 != null" [formGroup]="form2" novalidate (ngSubmit)="save2()">
-    <table c-info-table>
-      <colgroup [c-cols]="[20, null]"></colgroup>
+    <table cInfoTable>
+      <colgroup [cCols]="[20, null]"></colgroup>
       <tbody>
         <tr>
           <th>id</th>
@@ -40,7 +40,7 @@
         </tr>
         <tr>
           <td colspan="2">
-            <table c-info-table>
+            <table cInfoTable>
               <thead>
               <tr>
                 <th>id</th>
@@ -60,7 +60,7 @@
               </ng-container>
               <tr>
                 <td colspan="2">
-                  <button type="button" c-btn="primary" (click)="addNewChild()">追加</button>
+                  <button type="button" cBtn="primary" (click)="addNewChild()">追加</button>
                 </td>
               </tr>
               </tbody>
@@ -70,13 +70,13 @@
       </tbody>
     </table>
     <div>
-      <button type="submit" c-btn="primary" c-glyphicon="saved">登録</button>
+      <button type="submit" cBtn="primary" cGlyphicon="saved">登録</button>
     </div>
   </form>
 
   <form *ngIf="form3 != null" [formGroup]="form3" novalidate (ngSubmit)="save3()">
-    <table c-info-table>
-      <colgroup [c-cols]="[20, null]"></colgroup>
+    <table cInfoTable>
+      <colgroup [cCols]="[20, null]"></colgroup>
       <tbody>
         <tr>
           <th>id</th>
@@ -92,7 +92,7 @@
         </tr>
         <tr>
           <td colspan="2">
-            <table c-info-table>
+            <table cInfoTable>
               <thead>
               <tr>
                 <th>key</th>
@@ -114,7 +114,7 @@
               </ng-container>
               <tr>
                 <td colspan="3">
-                  <button type="button" c-btn="primary" (click)="putNewChild()">追加</button>
+                  <button type="button" cBtn="primary" (click)="putNewChild()">追加</button>
                 </td>
               </tr>
               </tbody>
@@ -124,7 +124,7 @@
       </tbody>
     </table>
     <div>
-      <button type="submit" c-btn="primary" c-glyphicon="saved">登録</button>
+      <button type="submit" cBtn="primary" cGlyphicon="saved">登録</button>
     </div>
   </form>
 

@@ -1,7 +1,7 @@
 <div *ngIf="form">
   <form [formGroup]="form" novalidate (ngSubmit)="save()">
-    <table c-info-table>
-      <colgroup [c-cols]="[20, null]"></colgroup>
+    <table cInfoTable>
+      <colgroup [cCols]="[20, null]"></colgroup>
       <tbody>
         <tr>
           <th>LoginId</th>
@@ -18,8 +18,8 @@
       </tbody>
     </table>
     <div>
-      <button c-btn="primary" c-glyphicon="saved" [disabled]="form | submitting">登録</button>
-      <a *ngIf="id" c-btn="danger" c-glyphicon="trash" (click)="delete()">削除</a>
+      <button cBtn="primary" cGlyphicon="saved" [disabled]="form | submitting">登録</button>
+      <a *ngIf="id" cBtn="danger" cGlyphicon="trash" (click)="delete()">削除</a>
     </div>
   </form>
 </div>

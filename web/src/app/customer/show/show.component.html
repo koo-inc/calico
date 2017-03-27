@@ -1,6 +1,6 @@
 <c-panel title="顧客情報" *ngIf="record">
-  <table c-info-table>
-    <colgroup [c-cols]="[15, 35, 15, 35]"></colgroup>
+  <table cInfoTable>
+    <colgroup [cCols]="[15, 35, 15, 35]"></colgroup>
     <tbody>
       <tr>
         <th>氏名</th>
@@ -58,8 +58,8 @@
       </tr>
     </tbody>
   </table>
-  <table c-list-table [hover]="false">
-    <colgroup [c-cols]="[15, 20, 15, 15, null]"></colgroup>
+  <table cListTable [hover]="false">
+    <colgroup [cCols]="[15, 20, 15, 15, null]"></colgroup>
     <thead>
       <tr>
         <th>続柄</th>
@@ -90,8 +90,8 @@
     </tbody>
   </table>
   <div>
-    <a c-btn="primary" c-glyphicon="pencil" [routerLink]="['../edit', {id: record.id}]">編集</a>
-    <a c-btn="danger" c-glyphicon="trash" (click)="delete()">削除</a>
-    <a c-btn="default" c-glyphicon="list" [routerLink]="['../index']" [fragment]="fragment">一覧へ</a>
+    <a cBtn="primary" cGlyphicon="pencil" [routerLink]="['../edit', {id: record.id}]">編集</a>
+    <a cBtn="danger" cGlyphicon="trash" (click)="delete()">削除</a>
+    <a cBtn="default" cGlyphicon="list" [routerLink]="['../index']" [fragment]="fragment">一覧へ</a>
   </div>
 </c-panel>

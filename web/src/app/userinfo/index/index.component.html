@@ -1,9 +1,9 @@
 <c-panel title="ユーザ一覧" *ngIf="records">
   <div>
-    <a c-btn="primary" c-glyphicon="plus" (click)="editRecord(null)">新規登録</a>
+    <a cBtn="primary" cGlyphicon="plus" (click)="editRecord(null)">新規登録</a>
   </div>
-  <table c-list-table>
-    <colgroup [c-cols]="[null]"></colgroup>
+  <table cListTable>
+    <colgroup [cCols]="[null]"></colgroup>
     <thead>
       <tr>
         <th>

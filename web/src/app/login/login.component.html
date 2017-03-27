@@ -10,7 +10,7 @@
 <div class="container-fluid">
   <form *ngIf="loginForm" [formGroup]="loginForm" novalidate (ngSubmit)="login()">
     <c-panel title="ログイン">
-      <table c-info-table>
+      <table cInfoTable>
         <tbody>
           <tr>
             <th>ログインID</th>
@@ -27,7 +27,7 @@
         </tbody>
       </table>
       <div class="control">
-        <button type="submit" c-btn="primary" [disabled]="loginForm | submitting">ログイン</button>
+        <button type="submit" cBtn="primary" [disabled]="loginForm | submitting">ログイン</button>
       </div>
     </c-panel>
   </form>

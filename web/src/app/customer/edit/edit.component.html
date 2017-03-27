@@ -1,7 +1,7 @@
 <c-panel title="ユーザ情報" *ngIf="form">
   <form [formGroup]="form" novalidate (ngSubmit)="save()">
-    <table c-info-table>
-      <colgroup [c-cols]="[15, 35, 15, 35]"></colgroup>
+    <table cInfoTable>
+      <colgroup [cCols]="[15, 35, 15, 35]"></colgroup>
       <tbody>
         <tr>
           <th>氏名</th>
@@ -59,8 +59,8 @@
         </tr>
       </tbody>
     </table>
-    <table c-list-table [hover]="false" formArrayName="families">
-      <colgroup [c-cols]="[15, 20, 15, 15, 25, null]"></colgroup>
+    <table cListTable [hover]="false" formArrayName="families">
+      <colgroup [cCols]="[15, 20, 15, 15, 25, null]"></colgroup>
       <thead>
         <tr>
           <th>続柄</th>
@@ -89,22 +89,22 @@
             <c-datepicker formControlName="birthday"></c-datepicker>
           </td>
           <td>
-            <a c-btn="default,sm" c-glyphicon="trash" (click)="removeFamily(i)">削除</a>
+            <a cBtn="default,sm" cGlyphicon="trash" (click)="removeFamily(i)">削除</a>
           </td>
         </tr>
       </tbody>
       <tfoot>
         <tr>
           <td colspan="6">
-            <a c-btn="default,sm" c-glyphicon="plus" (click)="addFamily()">家族追加</a>
+            <a cBtn="default,sm" cGlyphicon="plus" (click)="addFamily()">家族追加</a>
           </td>
         </tr>
       </tfoot>
     </table>
     <div>
-      <button type="submit" c-btn="primary" c-glyphicon="saved" [disabled]="form | submitting">登録</button>
-      <a *ngIf="!id" c-btn="default" c-glyphicon="chevron-left" [routerLink]="['../index']">取消</a>
-      <a *ngIf="id" c-btn="default" c-glyphicon="chevron-left" [routerLink]="['../show', {id: id}]">取消</a>
+      <button type="submit" cBtn="primary" cGlyphicon="saved" [disabled]="form | submitting">登録</button>
+      <a *ngIf="!id" cBtn="default" cGlyphicon="chevron-left" [routerLink]="['../index']">取消</a>
+      <a *ngIf="id" cBtn="default" cGlyphicon="chevron-left" [routerLink]="['../show', {id: id}]">取消</a>
     </div>
   </form>
   <!--<div class="pre">{{form.value | json}}</div>-->

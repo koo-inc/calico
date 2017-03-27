@@ -1,7 +1,7 @@
 <c-panel title="検索条件" *ngIf="searchContext.form">
   <form [formGroup]="searchContext.form" novalidate (ngSubmit)="searchContext.search()">
-    <table c-info-table>
-      <colgroup [c-cols]="[15, 35, 15, 35]"></colgroup>
+    <table cInfoTable>
+      <colgroup [cCols]="[15, 35, 15, 35]"></colgroup>
       <tbody>
         <tr>
           <th>氏名</th>
@@ -17,7 +17,7 @@
       <tfoot>
         <tr>
           <td colspan="4">
-            <button c-btn="primary" c-glyphicon="search" [disabled]="searchContext.form | submitting">検索</button>
+            <button cBtn="primary" cGlyphicon="search" [disabled]="searchContext.form | submitting">検索</button>
           </td>
         </tr>
       </tfoot>
@@ -27,16 +27,16 @@
 
 <c-panel title="顧客一覧" *ngIf="searchContext.result">
   <div>
-    <div class="pull-right" c-pager></div>
-    <a c-btn="primary" c-glyphicon="plus" [routerLink]="['../edit']">新規登録</a>
+    <div class="pull-right" cPager></div>
+    <a cBtn="primary" cGlyphicon="plus" [routerLink]="['../edit']">新規登録</a>
   </div>
-  <table c-list-table>
-    <colgroup [c-cols]="[15, 10, null]"></colgroup>
+  <table cListTable>
+    <colgroup [cCols]="[15, 10, null]"></colgroup>
     <thead>
       <tr>
-        <th c-sort="name">氏名</th>
-        <th c-sort="sex">性別</th>
-        <th c-sort="birthday">生年月日</th>
+        <th cSort="name">氏名</th>
+        <th cSort="sex">性別</th>
+        <th cSort="birthday">生年月日</th>
       </tr>
     </thead>
     <tbody>
@@ -54,6 +54,6 @@
     </tbody>
   </table>
   <div>
-    <div class="pull-right" c-pager></div>
+    <div class="pull-right" cPager></div>
   </div>
 </c-panel>
