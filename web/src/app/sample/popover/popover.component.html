@@ -1,7 +1,7 @@
 <c-panel title="サンプルポップオーバー">
-  <button type="button" c-btn="primary" [cPopover]="parentTemplate" #cPopover1="cPopover" (click)="cPopover1.toggle()">parent popover</button>
+  <button type="button" cBtn="primary" [cPopover]="parentTemplate" #cPopover1="cPopover" (click)="cPopover1.toggle()">parent popover</button>
   <template #parentTemplate>
-    <button type="button" c-btn="danger" [cPopover]="childTemplate" #cPopover2="cPopover" (click)="cPopover2.toggle()">child popover</button>
+    <button type="button" cBtn="danger" [cPopover]="childTemplate" #cPopover2="cPopover" (click)="cPopover2.toggle()">child popover</button>
     <p>This is parent</p>
     <template #childTemplate>
       <p>This is child</p>
