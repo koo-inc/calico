@@ -1,12 +1,27 @@
 <c-panel title="サンプルポップオーバー">
-  <button type="button" c-btn="primary" (click)="log(parentTemplate)">parent popover</button>
+  <button type="button" c-btn="primary" [cPopover]="parentTemplate" #cPopover1="cPopover" (click)="cPopover1.toggle()">parent popover</button>
+  <template #parentTemplate>
+    <button type="button" c-btn="danger" [cPopover]="childTemplate" #cPopover2="cPopover" (click)="cPopover2.toggle()">child popover</button>
+    <p>This is parent</p>
+    <template #childTemplate>
+      <p>This is child</p>
+      <p>This is child</p>
+      <p>This is child</p>
+      <p>This is child</p>
+      <p>This is child</p>
+      <p>This is child</p>
+      <p>This is child</p>
+      <p>This is child</p>
+    </template>
+  </template>
+
+  <c-textfield [cPopover]="panel1" [(ngModel)]="value1" #cPopover3="cPopover" (focus)="cPopover3.open()"></c-textfield>
+  <c-textfield [cPopover]="panel2" [(ngModel)]="value2" #cPopover4="cPopover" (focus)="cPopover4.open()"></c-textfield>
+  <template #panel1>
+    <c-panel>test1 <c-textfield [(ngModel)]="value3"></c-textfield></c-panel>
+  </template>
+  <template #panel2>
+    <c-panel>test2 <c-textfield [(ngModel)]="value4"></c-textfield></c-panel>
+  </template>
 </c-panel>
-<div (test)="test()">
-<div *cPopover #parentTemplate="cPopover">
-  <p>This is parent</p>
-  <button type="button" c-btn="danger" (chick)="childTemplate.toggle(this)">child popover</button>
-  <div *cPopover #childTemplate>
-    <p>This is child</p>
-  </div>
-</div>
-</div>
+
