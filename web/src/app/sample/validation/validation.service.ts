@@ -16,29 +16,7 @@ export class ValidationService {
   ) { }
 
   private submit<T>(url: string, form: FormGroup): Observable<T> {
-    return this.api.submit('endpoint/sample/form/' + url, form.value).catch((e: any, caught: Observable<any>): Observable<any> => {
-      let errors: any;
-      try {
-        errors = e.json();
-      }
-      catch (e) {
-        console.error(e);
-        this.alert.warning(AppConfig.messages.internalServerError);
-        return;
-      }
-      Object.keys(errors).forEach(key => {
-        let violation = errors[key].reduce((a:any, b:string) => {a[b] = true; return a}, {});
-        let ctrl = form.get(key);
-        if (ctrl != null) {
-          ctrl.setErrors(violation);
-        }
-        else {
-          let message = errors[key].map((msg: string) => AppConfig.messages[msg] || msg ).join('\n');
-          this.alert.warning(message);
-        }
-      });
-      throw caught;
-    });
+    return this.api.submit('endpoint/sample/form/' + url, form);
   }
 
   validationObject(form: FormGroup): Observable<Record> {

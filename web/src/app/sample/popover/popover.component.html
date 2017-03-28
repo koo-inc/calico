@@ -1,9 +1,9 @@
 <c-panel heading="サンプルポップオーバー">
   <button type="button" cBtn="primary" [cPopover]="parentTemplate" #cPopover1="cPopover" (click)="cPopover1.toggle()">parent popover</button>
-  <template #parentTemplate>
+  <ng-template #parentTemplate>
     <button type="button" cBtn="danger" [cPopover]="childTemplate" #cPopover2="cPopover" (click)="cPopover2.toggle()">child popover</button>
     <p>This is parent</p>
-    <template #childTemplate>
+    <ng-template #childTemplate>
       <p>This is child</p>
       <p>This is child</p>
       <p>This is child</p>
@@ -12,16 +12,16 @@
       <p>This is child</p>
       <p>This is child</p>
       <p>This is child</p>
-    </template>
-  </template>
+    </ng-template>
+  </ng-template>
 
   <c-textfield [cPopover]="panel1" [(ngModel)]="value1" #cPopover3="cPopover" (focus)="cPopover3.open()"></c-textfield>
   <c-textfield [cPopover]="panel2" [(ngModel)]="value2" #cPopover4="cPopover" (focus)="cPopover4.open()"></c-textfield>
-  <template #panel1>
+  <ng-template #panel1>
     <c-panel>test1 <c-textfield [(ngModel)]="value3"></c-textfield></c-panel>
-  </template>
-  <template #panel2>
+  </ng-template>
+  <ng-template #panel2>
     <c-panel>test2 <c-textfield [(ngModel)]="value4"></c-textfield></c-panel>
-  </template>
+  </ng-template>
 </c-panel>
 

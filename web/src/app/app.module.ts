@@ -5,6 +5,7 @@ import { SharedModule } from "app/common/shared.module";
 
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { routing } from './app.routing';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CoreModule.forRoot(),
     SharedModule,
     routing,

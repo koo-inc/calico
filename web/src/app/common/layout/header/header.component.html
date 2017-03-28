@@ -8,20 +8,20 @@
         <ul class="nav navbar-nav">
           <ng-container *ngFor="let item of items">
             <li *ngIf="item.items == null">
-              <template [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></template>
+              <ng-template [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></ng-template>
             </li>
             <li *ngIf="item.items != null" dropdown>
               <a dropdownToggle>{{item.label}} <span class="caret"></span></a>
               <ul dropdownMenu>
                 <li>
-                  <template *ngFor="let item of item.items" [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></template>
+                  <ng-template *ngFor="let item of item.items" [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></ng-template>
                 </li>
               </ul>
             </li>
           </ng-container>
-          <template #linkTpl let-item="item">
+          <ng-template #linkTpl let-item="item">
             <a [routerLink]="item.routerLink">{{item.label}}</a>
-          </template>
+          </ng-template>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>

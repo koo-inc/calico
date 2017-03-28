@@ -1,10 +1,10 @@
 import { Observable } from "rxjs";
-import { Injectable, OpaqueToken, Inject } from "@angular/core";
+import { Injectable, Inject, InjectionToken } from "@angular/core";
 import { Response } from "@angular/http";
 import { Router, NavigationStart } from "@angular/router";
 import { RequestHook } from "calico/core/api.service";
 
-export const VERSION_INFO = new OpaqueToken("versionInfo");
+export const VERSION_INFO = new InjectionToken<VersionInfo>("versionInfo");
 
 export interface VersionInfo {
   key: string;
@@ -24,6 +24,7 @@ export class VersionCheckHook implements RequestHook {
         if (version == null || version == this.versionInfo.currentVersion) return;
         this.router.events
           .filter(e => e instanceof NavigationStart)
+          .map(e => e as NavigationStart)
           .subscribe(loc => location.href = loc.url);
       });
   }
