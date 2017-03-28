@@ -16,8 +16,10 @@ $popover-max-width: 800;
 
 @import '~bootstrap-sass/assets/stylesheets/bootstrap';
 
+// font-awesome
+$fa-font-path: "~font-awesome/fonts" !default;
+@import '~font-awesome/scss/font-awesome';
+
 // calico-ng
-$calico-images-path: './calico/resources/images';
 @import './calico/resources/styles/all';
-//$calico-images-path: '../node_modules/calico/resources/images';
 //@import '../node_modules/calico/resources/styles/all';
