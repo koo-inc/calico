@@ -6,13 +6,13 @@
         <tr>
           <th>氏名</th>
           <td>
-            <c-textfield formControlName="kname1"></c-textfield>
-            <c-textfield formControlName="kname2"></c-textfield>
+            <c-textfield formControlName="kname1" placeholder="姓" class="person-name"></c-textfield>
+            <c-textfield formControlName="kname2" placeholder="名" class="person-name"></c-textfield>
           </td>
           <th>氏名(ふりがな)</th>
           <td>
-            <c-textfield formControlName="fname1"></c-textfield>
-            <c-textfield formControlName="fname2"></c-textfield>
+            <c-textfield formControlName="fname1" placeholder="せい" class="person-name"></c-textfield>
+            <c-textfield formControlName="fname2" placeholder="めい" class="person-name"></c-textfield>
           </td>
         </tr>
         <tr>
@@ -50,11 +50,11 @@
         <tr>
           <th>好きな数字</th>
           <td>
-            <c-textfield formControlName="favoriteNumber"></c-textfield>
+            <c-integer formControlName="favoriteNumber"></c-integer>
           </td>
           <th>クレーマー</th>
           <td>
-            <c-checkbox formControlName="claimer" label="◯"></c-checkbox>
+            <c-checkbox formControlName="claimer" label="クレーマー"></c-checkbox>
           </td>
         </tr>
       </tbody>
@@ -77,13 +77,13 @@
             <c-select formControlName="familyType" [options]="options.familyType"></c-select>
           </td>
           <td>
-            <c-textfield formControlName="name"></c-textfield>
+            <c-textfield formControlName="name" placeholder="名" class="person-name"></c-textfield>
           </td>
           <td>
             <c-radios formControlName="sex" [options]="options.sex"></c-radios>
           </td>
           <td>
-            <c-textfield formControlName="favoriteNumber"></c-textfield>
+            <c-integer formControlName="favoriteNumber"></c-integer>
           </td>
           <td>
             <c-datepicker formControlName="birthday"></c-datepicker>
