@@ -80,22 +80,6 @@ public final class Messages {
         return field -> new Message("拡張子は{value}のうちのいずれかでなければなりません。", mapper);
       }
       
-      public static final Message INTEGER_FORMAT = new Message("正しい数値の形式ではありません。");
-      
-      public static final Message FLOAT_FORMAT = new Message("正しい数値の形式ではありません。");
-      
-      public static final Message DATE_FORMAT = new Message("正しい日付の形式ではありません。");
-      
-      public static final Message TIME_FORMAT = new Message("正しい時間の形式ではありません。");
-      
-      public static final Message PHONE_NUMBER_FORMAT = new Message("正しい電話番号の形式ではありません。");
-      
-      public static final Message EMAIL_FORMAT = new Message("正しいメールアドレスの形式ではありません。");
-      
-      public static final Message URL_FORMAT = new Message("正しいURLの形式ではありません。");
-      
-      public static final Message CREDIT_CARD_NUMBER_FORMAT = new Message("正しいクレジットカード番号の形式ではありません。");
-      
       public static final Message UNIQUE_LOGIN_ID = new Message("既に使われているIDです。");
       
 }

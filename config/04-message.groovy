@@ -27,14 +27,5 @@ message = [
   [key: "fileSize", value: "ファイルサイズは{min}以上{max}以下でなければなりません。"],
   [key: "allowedExtensions", value: "拡張子は{value}のうちのいずれかでなければなりません。"],
 
-  [key: "integerFormat", value: "正しい数値の形式ではありません。"],
-  [key: "floatFormat", value: "正しい数値の形式ではありません。"],
-  [key: "dateFormat", value: "正しい日付の形式ではありません。"],
-  [key: "timeFormat", value: "正しい時間の形式ではありません。"],
-  [key: "phoneNumberFormat", value: "正しい電話番号の形式ではありません。"],
-  [key: "emailFormat", value: "正しいメールアドレスの形式ではありません。"],
-  [key: "urlFormat", value: "正しいURLの形式ではありません。"],
-  [key: "creditCardNumberFormat", value: "正しいクレジットカード番号の形式ではありません。"],
-
   [key: "uniqueLoginId", value: "既に使われているIDです。"],
 ]
