@@ -1,0 +1,48 @@
+<tabs></tabs>
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
+  <c-panel>
+    <div><button cBtn="primary">submit</button></div>
+
+    <div>
+      <h3>PLAIN</h3>
+      <c-float formControlName="val1"></c-float>
+      <div inspect="val1"></div>
+    </div>
+
+    <div>
+      <h3>PLAIN(値あり)</h3>
+      <c-float formControlName="val2"></c-float>
+      <div inspect="val2"></div>
+    </div>
+
+    <div>
+      <h3>placeholder, size</h3>
+      <c-float formControlName="val3"
+        placeholder="好きな数字"
+        class="large"></c-float>
+      <div inspect="val3"></div>
+    </div>
+
+    <div>
+      <h3>必須</h3>
+      <c-float formControlName="val4"></c-float>
+      <div inspect="val4"></div>
+    </div>
+
+    <div>
+      <h3>負数許可</h3>
+      <c-float formControlName="val5"
+        [allowNegative]="true"></c-float>
+      <div inspect="val5"></div>
+    </div>
+
+    <div>
+      <h3>単位指定(0.25)</h3>
+      <c-float formControlName="val6"
+        [step]="0.25"></c-float>
+      <div inspect="val6"></div>
+    </div>
+
+    <div><button cBtn="primary">submit</button></div>
+  </c-panel>
+</form>

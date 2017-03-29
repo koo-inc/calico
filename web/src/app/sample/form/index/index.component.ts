@@ -41,6 +41,7 @@ export class FormTabsComponent {
     { name: 'c-timepicker', path: 'timepicker', },
     { name: 'c-integer', path: 'integer', },
     { name: 'c-currency', path: 'currency', },
+    { name: 'c-float', path: 'float', },
   ];
 
   select(tab: any): void {

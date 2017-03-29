@@ -19,6 +19,7 @@ import { DatepickerComponent } from "./form/datepicker/datepicker.component";
 import { TimepickerComponent } from "./form/timepicker/timepicker.component";
 import { IntegerComponent } from "./form/integer/integer.component";
 import { CurrencyComponent } from "./form/currency/currency.component";
+import { FloatComponent } from "./form/float/float.component";
 
 const routes: Routes = [
   {
@@ -40,6 +41,7 @@ const routes: Routes = [
       {path: "form/timepicker", component: TimepickerComponent},
       {path: "form/integer", component: IntegerComponent},
       {path: "form/currency", component: CurrencyComponent},
+      {path: "form/float", component: FloatComponent},
     ]
   },
 ];
@@ -67,6 +69,7 @@ const routes: Routes = [
     TimepickerComponent,
     IntegerComponent,
     CurrencyComponent,
+    FloatComponent,
   ],
   providers: [
     ValidationService,
