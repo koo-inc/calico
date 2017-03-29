@@ -1,0 +1,55 @@
+<tabs></tabs>
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
+  <c-panel>
+    <div><button cBtn="primary">submit</button></div>
+
+    <div>
+      <h3>PLAIN</h3>
+      <c-select formControlName="val1" [options]="options.familyType"></c-select>
+      <div inspect="val1"></div>
+    </div>
+
+    <div>
+      <h3>PLAIN(値あり)</h3>
+      <c-select formControlName="val2" [options]="options.sex"></c-select>
+      <div inspect="val2"></div>
+    </div>
+
+    <div>
+      <h3>必須</h3>
+      <c-select formControlName="val3" [options]="options.familyType"></c-select>
+      <div inspect="val3"></div>
+    </div>
+
+    <div>
+      <h3>nullOptionなし</h3>
+      <c-select formControlName="val4" [options]="options.familyType"
+        [nullOption]="false"></c-select>
+      <div inspect="val4"></div>
+    </div>
+
+    <div>
+      <h3>nullOptionLabel, optionLabel</h3>
+      <c-select formControlName="val5" [options]="options.familyType"
+        nullOptionLabel="不明"
+        optionLabel="NAME"></c-select>
+      <div inspect="val5"></div>
+    </div>
+
+    <div>
+      <h3>optionValue, optionKey</h3>
+      <c-select formControlName="val6" [options]="options.familyType"
+        optionValue="NAME"
+        optionKey="NAME"></c-select>
+      <div inspect="val6"></div>
+    </div>
+
+    <div>
+      <h3>オブジェクト配列以外のoptions</h3>
+      <c-select formControlName="val7" [options]="[1,2,3,4,5]"></c-select>
+      <div inspect="val7"></div>
+    </div>
+
+    <div><button cBtn="primary">submit</button></div>
+  </c-panel>
+</form>

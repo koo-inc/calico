@@ -33,7 +33,15 @@ export class HeaderComponent {
         items: [
           {
             label: 'FormUI',
-            routerLink: ['']
+            routerLink: ['/sample/form']
+          },
+          {
+            label: 'Validation',
+            routerLink: ['/sample/validation']
+          },
+          {
+            label: 'Popover',
+            routerLink: ['/sample/popover']
           },
           {
             label: 'Mail送信',

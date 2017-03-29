@@ -28,7 +28,7 @@ import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
     {provide: 'ExtEnumServiceConfig', useValue: {apiPath: 'endpoint/system/ext_enum'}},
     {provide: 'AlertConfig', useValue: {
       common: {position: 'top-right', lifetime: 3000},
-      warning: {position: 'top-left', lifetime: null},
+      warning: {position: 'top-right', lifetime: null},
       danger: {position: 'top-left', lifetime: null},
     }},
     {provide: MESSAGE_CONFIG, useValue: AppConfig.messages},

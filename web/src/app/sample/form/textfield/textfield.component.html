@@ -1,0 +1,34 @@
+<tabs></tabs>
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
+  <c-panel>
+    <div><button cBtn="primary">submit</button></div>
+
+    <div>
+      <h3>PLAIN</h3>
+      <c-textfield formControlName="val1"></c-textfield>
+      <div inspect="val1"></div>
+    </div>
+
+    <div>
+      <h3>PLAIN(値あり)</h3>
+      <c-textfield formControlName="val2"></c-textfield>
+      <div inspect="val2"></div>
+    </div>
+
+    <div>
+      <h3>placeholder, size</h3>
+      <c-textfield formControlName="val3"
+        placeholder="名前"
+        class="large"></c-textfield>
+      <div inspect="val3"></div>
+    </div>
+
+    <div>
+      <h3>必須</h3>
+      <c-textfield formControlName="val4"></c-textfield>
+      <div inspect="val4"></div>
+    </div>
+
+    <div><button cBtn="primary">submit</button></div>
+  </c-panel>
+</form>
