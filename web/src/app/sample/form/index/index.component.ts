@@ -71,17 +71,13 @@ export class FormTabsComponent {
 })
 export class FormInspectComponent {
   constructor(
-    @Optional() @Host() @SkipSelf() private parent: ControlContainer
+    @Host() private formGroupDirective: FormGroupDirective
   ) {}
 
   @Input('inspect') prop: string;
 
   get value(): any {
-    if(this.parent.formDirective instanceof FormGroupDirective){
-      return this.parent.formDirective.form.get(this.prop).value;
-    }else{
-      throw new Error('cannot get FormGroup');
-    }
+    return this.formGroupDirective.form.get(this.prop).value;
   }
 }
 
