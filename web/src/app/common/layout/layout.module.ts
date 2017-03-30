@@ -7,14 +7,14 @@ import { LayoutNormal } from './layout-normal/layout-normal.component';
 import { LayoutLogin } from './layout-login/layout-login.component';
 import { SessionComponent } from "../session/session.component";
 import { CalicoUiModule } from 'calico';
-import { DropdownModule } from 'ng2-bootstrap';
+import { BsDropdownModule } from 'ng2-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     CalicoUiModule,
-    DropdownModule,
+    BsDropdownModule,
   ],
   declarations: [
     HeaderComponent,

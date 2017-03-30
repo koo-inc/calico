@@ -1,5 +1,5 @@
 import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core';
-import { ModalModule, PopoverModule, DropdownModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
+import { ModalModule, PopoverModule, BsDropdownModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
 
 import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule, MESSAGE_CONFIG } from "calico";
 import { AppConfig } from "app/app.config";
@@ -11,7 +11,7 @@ import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
   imports: [
     ModalModule.forRoot(),
     PopoverModule.forRoot(),
-    DropdownModule.forRoot(),
+    BsDropdownModule.forRoot(),
     DatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
     CalicoCoreModule.forRoot(),

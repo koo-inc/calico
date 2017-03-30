@@ -10,9 +10,9 @@
             <li *ngIf="item.items == null">
               <ng-template [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></ng-template>
             </li>
-            <li *ngIf="item.items != null" dropdown>
+            <li *ngIf="item.items != null" dropdown container="body">
               <a dropdownToggle>{{item.label}} <span class="caret"></span></a>
-              <ul dropdownMenu>
+              <ul *dropdownMenu  class="dropdown-menu">
                 <li>
                   <ng-template *ngFor="let item of item.items" [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></ng-template>
                 </li>
