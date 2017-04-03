@@ -31,5 +31,6 @@ task expandConfig(type: Copy) {
 
   from 'config/template'
   into project.rootDir
+  rename '[.]tpl$', ''
   expand(configParams)
 }
