@@ -23,10 +23,10 @@ public class VersioningInterceptor implements EndpointInterceptor {
   }
 
   private String getVersion() {
-    return String.valueOf(Zone.getRoot().getInstance(SystemSetting.class).version());
+    return String.valueOf(Zone.getCurrent().getInstance(SystemSetting.class).version());
   }
 
   private String getVersionTag() {
-    return Zone.getRoot().getInstance(SystemSetting.class).getVersionTag();
+    return Zone.getCurrent().getInstance(SystemSetting.class).getVersionTag();
   }
 }

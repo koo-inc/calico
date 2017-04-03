@@ -25,7 +25,7 @@ public class CacheControlFilter implements Filter {
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
-    this.assetsSetting = Zone.getRoot().getInstance(AssetsSetting.class);
+    this.assetsSetting = Zone.getCurrent().getInstance(AssetsSetting.class);
   }
 
   @Override

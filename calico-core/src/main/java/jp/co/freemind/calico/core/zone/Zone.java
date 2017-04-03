@@ -46,6 +46,12 @@ public class Zone {
     return root;
   }
 
+  static synchronized void dispose() {
+    if (root == null) throw new IllegalStateException("Zone is not initialized yet.");
+    currentRef.remove();
+    root = null;
+  }
+
   public static Zone getCurrent() {
     if (root == null) throw new IllegalStateException("Zone is not yet initialized.");
     Zone current = currentRef.get();
@@ -55,16 +61,12 @@ public class Zone {
     return root;
   }
 
-  public static Zone getRoot() {
-    return root;
-  }
-
   public static Context getContext() {
     return Zone.getCurrent().getInstance(Context.class);
   }
 
   public static Registry getRegistry() {
-    return Zone.getRoot().getInstance(Registry.class);
+    return Zone.getCurrent().getInstance(Registry.class);
   }
 
   public Zone fork(Function<ZoneSpec, ZoneSpec> specFn) {

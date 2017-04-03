@@ -43,7 +43,7 @@ public final class CookieUtil {
   }
 
   private static SessionSetting getSetting() {
-    return Zone.getRoot().getInstance(SessionSetting.class);
+    return Zone.getCurrent().getInstance(SessionSetting.class);
   }
 
   private static String getContextPath(ServletContext context) {

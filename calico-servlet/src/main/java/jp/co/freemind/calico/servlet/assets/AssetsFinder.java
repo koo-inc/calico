@@ -53,7 +53,7 @@ public class AssetsFinder {
     synchronized (cacheLock) {
       if (cache != null) return cache;
       cache = CacheBuilder.newBuilder()
-        .maximumSize(Zone.getRoot().getInstance(AssetsSetting.class).cacheEnabled() ? 5000 : 0)
+        .maximumSize(Zone.getCurrent().getInstance(AssetsSetting.class).cacheEnabled() ? 5000 : 0)
         .build(new AssetCacheLoader());
       return cache;
     }

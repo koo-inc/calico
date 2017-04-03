@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit
 class ZoneTest extends Specification {
   static Zone root
   def setupSpec() {
-    Zone.root = null
     root = Zone.initialize({spec ->
       spec.modules(new Module() {
         @Override
@@ -25,6 +24,10 @@ class ZoneTest extends Specification {
         }
       })
     })
+  }
+
+  def cleanupSpec() {
+    Zone.dispose()
   }
 
   def "forkしたとき新しいInjectorのスコープが生まれる"() {
