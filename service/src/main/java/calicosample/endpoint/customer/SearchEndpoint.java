@@ -45,7 +45,7 @@ public class SearchEndpoint extends CustomerEndpoint<SearchEndpoint.Input, Searc
 
   @Getter @Setter
   public static class Record {
-    private Integer id;
+    private Customer.ID id;
     private String kname1;
     private String kname2;
     private Sex sex;

@@ -30,12 +30,12 @@ public abstract class CustomerEndpoint<INPUT, OUTPUT> implements Endpoint<INPUT,
 
   @Getter @Setter
   public static class IdInput {
-    private Integer id;
+    private Customer.ID id;
   }
 
   @Getter @Setter
   public static class IdOutput {
-    private Integer id;
+    private Customer.ID id;
   }
 
   @Getter @Setter

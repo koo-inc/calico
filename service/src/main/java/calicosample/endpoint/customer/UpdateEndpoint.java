@@ -15,7 +15,7 @@ public class UpdateEndpoint extends CustomerEndpoint<UpdateEndpoint.Input, Custo
 
   @Getter @Setter
   public static class Input extends CustomerEndpoint.CommonFormInput {
-    private Integer id;
+    private Customer.ID id;
 
     public static Input of(Customer customer, List<CustomerFamily> customerFamilies){
       return new Input(){{

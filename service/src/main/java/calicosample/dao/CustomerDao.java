@@ -25,7 +25,7 @@ public interface CustomerDao {
   @Select
   List<Customer> findAll();
   @Select
-  Customer findById(Integer id);
+  Customer findById(Customer.ID id);
   @Select(strategy = SelectType.STREAM)
   List<SearchEndpoint.Record> search(SearchEndpoint.Input form, SelectOptions options, Function<Stream<Customer>, List<SearchEndpoint.Record>> function);
   @Insert

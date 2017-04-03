@@ -42,7 +42,7 @@ public class DownloadFamilyCsvEndpoint extends CustomerEndpoint<CustomerEndpoint
   @Getter @Setter
   public static class CustomerFamilyRecord {
     private Integer id;
-    private Integer customerId;
+    private Customer.ID customerId;
     private FamilyType familyType;
     private String name;
     private Sex sex;

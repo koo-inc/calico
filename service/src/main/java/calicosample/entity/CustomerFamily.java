@@ -18,7 +18,7 @@ public class CustomerFamily extends CalicoSampleEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private Integer customerId;
+  private Customer.ID customerId;
   private FamilyType familyType;
   private String name;
   private Sex sex;

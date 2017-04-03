@@ -38,6 +38,8 @@ public class ObjectMapperProvider implements Provider<ObjectMapper> {
     // JsonObject 対応
     ret.registerModule(new JsonObjectModule());
 
+    ret.registerModule(new IdentifierModule());
+
     ret.registerModule(new NullStringModule());
 
     return ret;

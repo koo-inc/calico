@@ -23,7 +23,7 @@ public class RecordEndpoint extends CustomerEndpoint<CustomerEndpoint.IdInput, R
   @Getter @Setter
   public static class Output {
 
-    private Integer id;
+    private Customer.ID id;
     private String kname1;
     private String kname2;
     private String fname1;
@@ -48,7 +48,7 @@ public class RecordEndpoint extends CustomerEndpoint<CustomerEndpoint.IdInput, R
     @Getter @Setter
     public static class CustomerFamilyRecord {
       private Integer id;
-      private Integer customerId;
+      private Customer.ID customerId;
       private FamilyType familyType;
       private String name;
       private Sex sex;

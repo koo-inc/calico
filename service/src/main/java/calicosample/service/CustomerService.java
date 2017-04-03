@@ -84,7 +84,7 @@ public class CustomerService {
     });
   }
 
-  public Customer delete(Integer id) {
+  public Customer delete(Customer.ID id) {
     Customer customer = customerDao.findById(id);
     List<CustomerFamily> families = customerDao.findFamiliesByCustomer(customer);
     families.forEach(f -> customerDao.deleteFamily(f));
