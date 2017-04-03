@@ -15,6 +15,7 @@ import java.nio.channels.WritableByteChannel;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -104,10 +105,13 @@ public class CalicoServlet extends HttpServlet {
     return firstNonNull(emptyToNull(getServletContext().getContextPath()), "/");
   }
 
+  private static Pattern INDEX_PATTERN = Pattern.compile("^(?:/[^./]*)+$");
+
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     String path = Paths.get(req.getPathInfo()).normalize().toString();
-    if (path.matches("/[^./]*$")) {
+    System.out.println(path);
+    if (INDEX_PATTERN.matcher(path).matches()) {
       sendIndex(res);
     }
     else {
