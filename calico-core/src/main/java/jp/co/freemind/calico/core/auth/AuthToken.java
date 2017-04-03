@@ -14,9 +14,6 @@ import jp.co.freemind.calico.core.zone.Zone;
 import lombok.NonNull;
 import lombok.Value;
 
-/**
- * Created by tasuku on 15/03/25.
- */
 @Value public class AuthToken {
   @NonNull private String value;
   @NonNull private String id;

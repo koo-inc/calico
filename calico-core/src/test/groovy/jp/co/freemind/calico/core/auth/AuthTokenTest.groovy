@@ -1,18 +1,15 @@
 package jp.co.freemind.calico.core.auth
 
+import com.google.inject.Binder
+import jp.co.freemind.calico.core.zone.Zone
 import spock.lang.Specification
 
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-/**
- * Created by tasuku on 15/03/25.
- */
+
 class AuthTokenTest extends Specification {
   def setupSpec() {
-    Env.init([
-      injectorFactory: "helper.CalicoTestInjectorFactory",
-      secretToken: "w1EnfE@Xjo;_YbA="
-    ] as Properties)
+    Zone.initialize() {s -> s.modules(new MockModule()) }
   }
 
   def "復号できること"() {
@@ -71,5 +68,18 @@ class AuthTokenTest extends Specification {
     token.csrfToken == decryptedToken.csrfToken
     and:
     token.csrfToken == regeneratedToken.csrfToken
+  }
+
+  private static class MockModule implements com.google.inject.Module {
+
+    @Override
+    void configure(Binder binder) {
+      binder.bind(AuthSetting).toInstance(new AuthSetting() {
+        @Override
+        String getSecretToken() {
+          return "1234567890123456"
+        }
+      })
+    }
   }
 }
