@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit
 
 class AuthTokenTest extends Specification {
   def setupSpec() {
+    Zone.root = null
     Zone.initialize() {s -> s.modules(new MockModule()) }
   }
 
