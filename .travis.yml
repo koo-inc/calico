@@ -5,7 +5,7 @@ install: true
 before_script:
   - ln -s "$(pwd)/calico-ng/src/calico" "$(pwd)/web/src/calico"
 script:
-  - ./gradlew clean build
+  - ./gradlew clean build --info
 deploy:
   - provider: script
     script: ./gradlew bintrayUpload
