@@ -9,6 +9,8 @@ buildscript {
 
 import de.undercouch.gradle.tasks.download.Download
 
+import java.nio.file.Paths
+
 def tmpDir = "${project.buildDir}/tmp/migration"
 
 task migrationDownloadBinary(type: Download, group: 'migration') {
@@ -44,6 +46,8 @@ task migrationInit(type: Download, group: 'migration', dependsOn: migrationExpan
 
 def migrationDir = "${project.projectDir}/migration/"
 
+def migrate = Paths.get(migrationDir, "bin", file('/bin/bash').exists() ? 'migrate' : 'migrate.cmd')
+
 file(migrationDir).eachDir {dir ->
   if (dir.name.matches(/^(bin|lib)$/)) return
 
@@ -55,37 +59,37 @@ file(migrationDir).eachDir {dir ->
     def group = "migration:${env}"
     task "status${target}" (type: Exec, group: group, dependsOn: migrationInit) {
       workingDir "${dir.path}"
-      commandLine '../bin/migrate', 'status', "--env=${env}"
+      commandLine migrate, 'status', "--env=${env}"
     }
 
     task "upAll${target}" (type: Exec, group: group, dependsOn: migrationInit) {
       workingDir "${dir.path}"
-      commandLine '../bin/migrate', 'up', "--env=${env}"
+      commandLine migrate, 'up', "--env=${env}"
     }
 
     task "up${target}" (type: Exec, group: group, dependsOn: migrationInit) {
       workingDir "${dir.path}"
-      commandLine '../bin/migrate', 'up', '1', "--env=${env}"
+      commandLine migrate, 'up', '1', "--env=${env}"
     }
 
     task "down${target}" (type: Exec, group: group, dependsOn: migrationInit) {
       workingDir "${dir.path}"
-      commandLine '../bin/migrate', 'down', "--env=${env}"
+      commandLine migrate, 'down', "--env=${env}"
     }
 
     task "pending${target}" (type: Exec, group: group, dependsOn: migrationInit) {
       workingDir "${dir.path}"
-      commandLine '../bin/migrate', 'pending', "--env=${env}"
+      commandLine migrate, 'pending', "--env=${env}"
     }
 
     task "bootstrap${target}" (type: Exec, group: group, dependsOn: migrationInit) {
       workingDir "${dir.path}"
-      commandLine '../bin/migrate', 'bootstrap', "--env=${env}"
+      commandLine migrate, 'bootstrap', "--env=${env}"
     }
 
     task "newScript${target}" (type: Exec, group: group, dependsOn: migrationInit) {
       workingDir "${dir.path}"
-      commandLine '../bin/migrate', 'new', "new script"
+      commandLine migrate, 'new', "new script"
     }
   }
 }
