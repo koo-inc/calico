@@ -110,7 +110,6 @@ public class CalicoServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     String path = Paths.get(req.getPathInfo()).normalize().toString();
-    System.out.println(path);
     if (INDEX_PATTERN.matcher(path).matches()) {
       sendIndex(res);
     }
