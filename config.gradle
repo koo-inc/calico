@@ -1,3 +1,4 @@
+import java.nio.file.Paths
 import java.util.function.BinaryOperator
 
 def loadConfig(path) {
@@ -29,8 +30,21 @@ task expandConfig(type: Copy) {
   configParams.merge(loadConfig("${System.properties['user.home']}/.calico/${project.name}/"))
   configParams.putAll(project: project, generated: new Date())
 
-  from 'config/template'
-  into project.rootDir
+  def templateDir = file('config/template')
+  def buildTarget = "${project.buildDir}/config/"
+
+  from templateDir
+  into buildTarget
   rename '[.]tpl$', ''
   expand(configParams)
+
+  doLast {
+    fileTree(buildTarget).files.each {f ->
+      def rel = Paths.get(buildTarget).relativize(f.toPath())
+      f.renameTo(project.rootDir.toPath().resolve(rel).toFile())
+    }
+  }
+
+  outputs.upToDateWhen { false }
 }
+
