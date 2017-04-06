@@ -1,7 +1,6 @@
 package jp.co.freemind.calico.servlet;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
-import static com.google.common.base.Strings.emptyToNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
@@ -38,8 +39,8 @@ import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
-import jp.co.freemind.calico.servlet.util.NetworkUtil;
 import jp.co.freemind.calico.servlet.util.CookieUtil;
+import jp.co.freemind.calico.servlet.util.NetworkUtil;
 import nu.validator.htmlparser.dom.Dom2Sax;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import nu.validator.htmlparser.sax.HtmlSerializer;
@@ -101,17 +102,13 @@ public class CalicoServlet extends HttpServlet {
     });
   }
 
-  private String getContextPath() {
-    return firstNonNull(emptyToNull(getServletContext().getContextPath()), "/");
-  }
-
   private static Pattern INDEX_PATTERN = Pattern.compile("^(?:/[^./]*)+$");
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     String path = Paths.get(req.getPathInfo()).normalize().toString();
     if (INDEX_PATTERN.matcher(path).matches()) {
-      sendIndex(res);
+      sendIndex(req, res);
     }
     else {
       sendAsset(res, path);
@@ -119,12 +116,14 @@ public class CalicoServlet extends HttpServlet {
   }
 
   private Asset index;
-  private void sendIndex(HttpServletResponse res) {
+  private String indexHtml;
+  private static final String BASE_HREF_PLACEHOLDER = "{{{{ BASE HREF PLACEHOLDER }}}}";
+  private void sendIndex(HttpServletRequest req, HttpServletResponse res) {
     if (index == null || !assetsSetting.cacheEnabled()) {
-      Asset asset = Zone.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), assetsSetting.getIndex())
+      index = Zone.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), assetsSetting.getIndex())
         .orElseThrow(()-> new IllegalStateException("'assets.index' setting is invalid."));
 
-      ByteBuffer content = asset.getContent();
+      ByteBuffer content = index.getContent();
       HtmlDocumentBuilder builder = new HtmlDocumentBuilder();
       try (InputStream is = new ByteBufferBackedInputStream(content)) {
         Document document = builder.parse(is);
@@ -133,7 +132,7 @@ public class CalicoServlet extends HttpServlet {
           for (int i = 0, len = baseTags.getLength(); i < len; i++) {
             Node baseTag = baseTags.item(i);
             Node href = baseTag.getAttributes().getNamedItem("href");
-            href.setNodeValue(getContextPath());
+            href.setNodeValue(BASE_HREF_PLACEHOLDER);
           }
         }
 
@@ -148,7 +147,7 @@ public class CalicoServlet extends HttpServlet {
           byteBuffer.put(os.toByteArray());
           byteBuffer.compact();
 
-          index = new Asset(byteBuffer.asReadOnlyBuffer(), asset.getContentType(), os.size(), asset.getLastModified());
+          indexHtml = os.toString();
         }
         catch (Exception e) {
           e.printStackTrace();
@@ -160,7 +159,9 @@ public class CalicoServlet extends HttpServlet {
       }
     }
 
-    sendAsset(res, index);
+    byte[] content = indexHtml.replace(BASE_HREF_PLACEHOLDER, getBaseHref(req)).getBytes();
+    Asset asset = new Asset(ByteBuffer.wrap(content), index.getContentType(), content.length, index.getLastModified());
+    sendAsset(res, asset);
   }
 
   private void sendAsset(HttpServletResponse res, String path) throws IOException {
@@ -184,4 +185,20 @@ public class CalicoServlet extends HttpServlet {
       throw new UncheckedIOException(e);
     }
   }
+
+  private String getBaseHref(HttpServletRequest req) {
+    URI uri = URI.create(req.getRequestURL().toString());
+    StringBuilder path = new StringBuilder();
+    path.append(req.getContextPath());
+    path.append(req.getServletPath());
+    if (path.length() > 0) {
+      path.append('/');
+    }
+    try {
+      return new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), path.toString(), null, null).toString();
+    } catch (URISyntaxException e) {
+      throw new IllegalStateException(e);
+    }
+  }
+
 }
