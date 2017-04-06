@@ -25,7 +25,7 @@ def loadConfig(path) {
   }).get()
 }
 
-task expandConfig(type: Copy) {
+task expandConfig(type: Copy, group: 'develop', description: 'expand config files from config/template') {
   def configParams = loadConfig('config/')
   configParams.merge(loadConfig("${System.properties['user.home']}/.calico/${project.name}/"))
   configParams.putAll(project: project, generated: new Date())
@@ -41,7 +41,9 @@ task expandConfig(type: Copy) {
   doLast {
     fileTree(buildTarget).files.each {f ->
       def rel = Paths.get(buildTarget).relativize(f.toPath())
-      f.renameTo(project.rootDir.toPath().resolve(rel).toFile())
+      def target = project.rootDir.toPath().resolve(rel).toFile()
+      target.parentFile.mkdirs()
+      f.renameTo(target)
     }
   }
 
