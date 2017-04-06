@@ -15,17 +15,22 @@ import javax.servlet.http.HttpServletResponse;
 import jp.co.freemind.calico.core.config.SystemSetting;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
 import jp.co.freemind.calico.core.zone.Zone;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @WebFilter(filterName="CacheControlFilter", urlPatterns = {"/*"}, asyncSupported = true)
 public class CacheControlFilter implements Filter {
 
-  private AssetsSetting assetsSetting;
+  @Getter(value = AccessLevel.PRIVATE, lazy = true)
+  private final AssetsSetting assetsSetting = buildAssetsSetting();
+  private static AssetsSetting buildAssetsSetting() {
+    return Zone.getCurrent().getInstance(AssetsSetting.class);
+  }
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
-    this.assetsSetting = Zone.getCurrent().getInstance(AssetsSetting.class);
   }
 
   @Override
@@ -41,7 +46,7 @@ public class CacheControlFilter implements Filter {
     long lastModified = getLastModified();
 
     long ifModifiedSince = req.getDateHeader("If-Modified-Since");
-    if (assetsSetting.cacheEnabled() && ifModifiedSince >= lastModified) {
+    if (getAssetsSetting().cacheEnabled() && ifModifiedSince >= lastModified) {
       log.trace("304 Not Modified: " + req.getRequestURL());
       res.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
       res.setDateHeader("Last-Modified", lastModified);
