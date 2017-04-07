@@ -1,4 +1,3 @@
-import java.nio.file.Paths
 import java.util.function.BinaryOperator
 
 def loadConfig(path) {
@@ -25,13 +24,19 @@ def loadConfig(path) {
   }).get()
 }
 
-task expandConfig(type: Copy, group: 'develop', description: 'expand config files from config/template') {
-  def configParams = loadConfig('config/')
+def printConfig(config) {
+  println "\n##### config values #####"
+  config.each {e -> println e}
+}
+
+def configDir = file('config')
+def templateDir = file('config/template')
+def buildTarget = file("${project.buildDir}/config/")
+
+task expandConfig(type: Copy, group: 'develop', description: 'expand default config files from config/template') {
+  def configParams = loadConfig(configDir.path)
   configParams.merge(loadConfig("${System.properties['user.home']}/.calico/${project.name}/"))
   configParams.putAll(project: project, generated: new Date())
-
-  def templateDir = file('config/template')
-  def buildTarget = "${project.buildDir}/config/"
 
   from templateDir
   into buildTarget
@@ -39,8 +44,9 @@ task expandConfig(type: Copy, group: 'develop', description: 'expand config file
   expand(configParams)
 
   doLast {
+    printConfig(configParams)
     fileTree(buildTarget).files.each {f ->
-      def rel = Paths.get(buildTarget).relativize(f.toPath())
+      def rel = buildTarget.toPath().relativize(f.toPath())
       def target = project.rootDir.toPath().resolve(rel).toFile()
       target.parentFile.mkdirs()
       f.renameTo(target)
@@ -50,3 +56,30 @@ task expandConfig(type: Copy, group: 'develop', description: 'expand config file
   outputs.upToDateWhen { false }
 }
 
+configDir.toPath().resolve("env").toFile().listFiles().each {env ->
+  if (!env.isFile()) return
+  def envName = env.name.split('[.]')[0]
+
+  task "expand${envName.capitalize()}Config"(type: Copy, group: 'develop', description: "expand config as ${envName} files from config/template") {
+    def configParams = loadConfig('config/')
+    configParams.merge(loadConfig(env.path))
+    configParams.putAll(project: project, generated: new Date())
+
+    from templateDir
+    into buildTarget
+    rename '[.]tpl$', ''
+    expand(configParams)
+
+    doLast {
+      printConfig(configParams)
+      fileTree(buildTarget).files.each {f ->
+        def rel = buildTarget.toPath().relativize(f.toPath())
+        def target = project.rootDir.toPath().resolve(rel).toFile()
+        target.parentFile.mkdirs()
+        f.renameTo(target)
+      }
+    }
+
+    outputs.upToDateWhen { false }
+  }
+}
