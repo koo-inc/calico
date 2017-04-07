@@ -13,7 +13,6 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -106,7 +105,7 @@ public class CalicoServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    String path = Paths.get(req.getPathInfo()).normalize().toString();
+    String path = URI.create(req.getPathInfo()).normalize().toString();
     if (INDEX_PATTERN.matcher(path).matches()) {
       sendIndex(req, res);
     }
