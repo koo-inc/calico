@@ -13,7 +13,7 @@ def loadConfig(path) {
     })
     .sort { it.name }
     .each {
-      configs.add(new ConfigSlurper().parse(it.toURI().toURL()));
+      configs.add(new ConfigSlurper().parse(it.getText("UTF-8")))
     }
 
   return configs.stream().reduce(new BinaryOperator() {
@@ -43,12 +43,19 @@ task expandConfig(type: Copy, group: 'develop', description: 'expand default con
   rename '[.]tpl$', ''
   expand(configParams)
 
+  filteringCharset = 'UTF-8'
+
   doLast {
     printConfig(configParams)
     fileTree(buildTarget).files.each {f ->
       def rel = buildTarget.toPath().relativize(f.toPath())
       def target = project.rootDir.toPath().resolve(rel).toFile()
-      target.parentFile.mkdirs()
+      if (target.exists()) {
+        target.delete()
+      }
+      else {
+        target.parentFile.mkdirs()
+      }
       f.renameTo(target)
     }
   }
@@ -70,12 +77,19 @@ configDir.toPath().resolve("env").toFile().listFiles().each {env ->
     rename '[.]tpl$', ''
     expand(configParams)
 
+    filteringCharset = 'UTF-8'
+
     doLast {
       printConfig(configParams)
       fileTree(buildTarget).files.each {f ->
         def rel = buildTarget.toPath().relativize(f.toPath())
         def target = project.rootDir.toPath().resolve(rel).toFile()
-        target.parentFile.mkdirs()
+        if (target.exists()) {
+          target.delete()
+        }
+        else {
+          target.parentFile.mkdirs()
+        }
         f.renameTo(target)
       }
     }
