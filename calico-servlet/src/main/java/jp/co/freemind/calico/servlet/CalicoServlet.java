@@ -88,15 +88,15 @@ public class CalicoServlet extends HttpServlet {
       .provide(Keys.SERVLET_RESPONSE, res)
       .onError(e -> {
         e.printStackTrace();
-        new DefaultRenderer(500).render(null);
+        Zone.getCurrent().getInstance(Keys.SERVER_ERROR_RENDERER).render(null);
       })
     ).run(()-> {
       Object output = new Dispatcher(resolver).dispatch(path, req.getInputStream(), interceptionHandlers);
       if (output instanceof Result) {
-        new ResultRenderer().render((Result) output);
+        Zone.getCurrent().getInstance(Keys.RESULT_RENDERER).render((Result) output);
       }
       else {
-        new DefaultRenderer(200).render(output);
+        Zone.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(output);
       }
     });
   }

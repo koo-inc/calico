@@ -13,7 +13,11 @@ import jp.co.freemind.calico.core.zone.Zone;
 public class DefaultRenderer implements Renderer<Object> {
   private final int status;
 
-  DefaultRenderer(int status) {
+  public DefaultRenderer() {
+    this(200);
+  }
+
+  public DefaultRenderer(int status) {
     this.status = status;
   }
 

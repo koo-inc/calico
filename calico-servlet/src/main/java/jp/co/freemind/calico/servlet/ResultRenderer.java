@@ -16,26 +16,37 @@ import jp.co.freemind.calico.servlet.util.CookieUtil;
 public class ResultRenderer implements Renderer<Result> {
   @Override
   public void render(Result result) {
-    Zone current = Zone.getCurrent();
-    HttpServletResponse res = current.getInstance(Keys.SERVLET_RESPONSE);
+    HttpServletResponse res = Zone.getCurrent().getInstance(Keys.SERVLET_RESPONSE);
     if (res.isCommitted()) return;
 
-    ServletContext servletContext = current.getInstance(Keys.SERVLET_REQUEST).getServletContext();
-
-    res.setStatus(result.getResultType().getStatus());
-    res.setHeader("Content-Type", result.getResultType().getMimeType());
-    res.setCharacterEncoding("utf-8");
-    result.getContext().getAuthInfo()
-      .map(AuthInfo::getAuthToken)
-      .ifPresent(token -> {
-        CookieUtil.setSessionToken(servletContext, res, token);
-        CookieUtil.setXsrfToken(servletContext, res, token);
-      });
+    setStatus(result, res);
+    setHeader(result, res);
+    setCookie(result, res);
 
     try (PrintWriter writer = res.getWriter()) {
       Zone.getCurrent().getInstance(ObjectMapper.class).writeValue(writer, result.getOutput());
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
+  }
+
+  protected void setStatus(Result result, HttpServletResponse res) {
+    res.setStatus(result.getResultType().getStatus());
+  }
+
+  protected void setHeader(Result result, HttpServletResponse res) {
+    res.setHeader("Content-Type", result.getResultType().getMimeType());
+    res.setCharacterEncoding("utf-8");
+  }
+
+  protected void setCookie(Result result, HttpServletResponse res) {
+    ServletContext servletContext = Zone.getCurrent().getInstance(Keys.SERVLET_REQUEST).getServletContext();
+
+    result.getContext().getAuthInfo()
+      .map(AuthInfo::getAuthToken)
+      .ifPresent(token -> {
+        CookieUtil.setSessionToken(servletContext, res, token);
+        CookieUtil.setXsrfToken(servletContext, res, token);
+      });
   }
 }

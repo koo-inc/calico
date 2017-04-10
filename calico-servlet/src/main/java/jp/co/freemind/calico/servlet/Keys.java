@@ -16,4 +16,8 @@ final public class Keys {
   public static final Key<LocalDateTime> PROCESS_DATETIME = Key.get(LocalDateTime.class, Names.named("processDatetime"));
   public static final Key<HttpServletResponse> SERVLET_RESPONSE = Key.get(HttpServletResponse.class, Names.named("servletResponse"));
   public static final Key<HttpServletRequest> SERVLET_REQUEST = Key.get(HttpServletRequest.class, Names.named("servletRequest"));
+
+  public static final Key<ServerErrorRenderer> SERVER_ERROR_RENDERER = Key.get(ServerErrorRenderer.class);
+  public static final Key<DefaultRenderer> DEFAULT_RENDERER = Key.get(DefaultRenderer.class);
+  public static final Key<ResultRenderer> RESULT_RENDERER = Key.get(ResultRenderer.class);
 }
