@@ -2,6 +2,10 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
+task sourceJar(type: Jar) {
+  from sourceSets.main.allSource
+}
+
 publishing {
   publications {
     mavenJava(MavenPublication) {
@@ -9,6 +13,10 @@ publishing {
       groupId project.group
       artifactId project.name
       version project.version
+      artifact sourceJar {
+        classifier = 'sources'
+        extension = 'jar'
+      }
     }
   }
 }
