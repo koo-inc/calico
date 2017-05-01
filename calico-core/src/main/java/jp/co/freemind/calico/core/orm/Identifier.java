@@ -22,6 +22,13 @@ public abstract class Identifier<T> {
     return (Class<T>) resolver.resolve(this.getClass()).typeParametersFor(Identifier.class).get(0).getErasedType();
   }
 
+  public boolean isPresent() {
+    return value != null;
+  }
+  public boolean isAbsent() {
+    return value == null;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
