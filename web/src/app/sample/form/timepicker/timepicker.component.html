@@ -28,6 +28,12 @@
       <div inspect="val4"></div>
     </div>
 
+    <div *ngIf="form.get('val5')">
+      <h3>サーバー取得値</h3>
+      <c-timepicker formControlName="val5"></c-timepicker>
+      <div inspect="val5"></div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

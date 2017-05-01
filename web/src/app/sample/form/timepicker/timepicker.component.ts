@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs/Observable";
 import { AlertService, ExtEnumService } from "calico";
+import { Api } from "../../../../calico/core/api.service";
 
 @Component({
   selector: 'app-timepicker',
@@ -18,11 +19,15 @@ export class TimepickerComponent extends DefaultFormComponent {
     alert: AlertService,
     extEnumService: ExtEnumService,
     private fb: FormBuilder,
+    private api: Api,
   ) {
     super(alert, extEnumService);
   }
 
   createForm(): Observable<FormGroup> {
+    this.api.submit("endpoint/sample/form/time_value").subscribe((data: any) => {
+      this.form.addControl("val5", this.fb.control(data.value, []))
+    });
     return Observable.of(this.fb.group({
       val1: [null],
       val2: [Date.create().toISOString()],

@@ -3,7 +3,9 @@
   <ng-template #parentTemplate>
     <button type="button" cBtn="danger" [cPopover]="childTemplate" #cPopover2="cPopover" (click)="cPopover2.toggle()">child popover</button>
     <p>This is parent</p>
+    <p><c-textfield [(ngModel)]="value"></c-textfield></p>
     <ng-template #childTemplate>
+      <ng-container *ngIf="value">
       <p>This is child</p>
       <p>This is child</p>
       <p>This is child</p>
@@ -12,6 +14,8 @@
       <p>This is child</p>
       <p>This is child</p>
       <p>This is child</p>
+        <p><button cBtn="primary">test</button></p>
+      </ng-container>
     </ng-template>
   </ng-template>
 
