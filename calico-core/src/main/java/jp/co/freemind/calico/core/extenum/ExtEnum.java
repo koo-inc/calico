@@ -1,7 +1,6 @@
 package jp.co.freemind.calico.core.extenum;
 
 import java.util.Map;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,17 +20,18 @@ public interface ExtEnum<T> {
   @JsonProperty("NAME")
   String name();
 
+  @Deprecated
   @SuppressWarnings("unchecked")
   static <T, E extends ExtEnum<T>> E of(Object id, E... e) {
-    return of(id, (Class<E>) e.getClass().getComponentType());
-  }
-
-  static <T, E extends ExtEnum<T>> E of(Object id, Class<E> enumClass) {
     if(id instanceof Map){
       id = ((Map)id).get("id");
     }
+    return of((T) id, (Class<E>) e.getClass().getComponentType());
+  }
+
+  static <T, E extends ExtEnum<T>> E of(T id, Class<E> enumClass) {
     for (E ee : values(enumClass)) {
-      if (Objects.equals(ee.getId(), id)) {
+      if (String.valueOf(ee.getId()).equals(String.valueOf(id))) {
         return ee;
       }
     }

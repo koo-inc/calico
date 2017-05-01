@@ -1,10 +1,7 @@
 package jp.co.freemind.calico.jackson
 
-import com.fasterxml.jackson.annotation.JsonCreator
 import groovy.transform.EqualsAndHashCode
 import jp.co.freemind.calico.core.extenum.ExtEnum
-import jp.co.freemind.calico.jackson.JsonObject
-import jp.co.freemind.calico.jackson.ObjectMapperProvider
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -133,8 +130,8 @@ class JsonObjectTest extends Specification {
     private final Integer id
     private final String name
     FamilyType(Integer id, String name) { this.id = id; this.name = name }
-    @JsonCreator public static FamilyType of(Integer id){
-      return of(id, new FamilyType[0])
+    public static FamilyType of(Integer id){
+      return of(id, FamilyType.class)
     }
     @Override Integer getId() { return id }
     @Override String getName() { return name }

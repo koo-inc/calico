@@ -1,6 +1,5 @@
 package calicosample.extenum;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import jp.co.freemind.calico.core.auth.Authority;
 import jp.co.freemind.calico.core.extenum.ExtEnum;
 import org.seasar.doma.Domain;
@@ -30,7 +29,6 @@ public enum CalicoSampleAuthority implements Authority {
     return getId();
   }
 
-  @JsonCreator
   public static CalicoSampleAuthority of(String id) {
     return ExtEnum.of(id, CalicoSampleAuthority.class);
   }

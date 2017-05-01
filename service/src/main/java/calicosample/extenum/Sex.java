@@ -1,6 +1,5 @@
 package calicosample.extenum;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import jp.co.freemind.calico.core.extenum.ExtEnum;
 import lombok.Getter;
 import org.seasar.doma.Domain;
@@ -16,6 +15,6 @@ public enum Sex implements ExtEnum<Integer> {
   private final String name;
   private final String longName;
   Sex(Integer id, String name, String longName) { this.id = id; this.name = name; this.longName = longName;}
-  @JsonCreator public static Sex of(Object id){ return ExtEnum.of(id); }
+  public static Sex of(Integer id){ return ExtEnum.of(id, Sex.class); }
   public Integer getValue() { return id; }
 }

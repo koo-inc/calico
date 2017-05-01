@@ -15,6 +15,6 @@ public enum InfoSource implements ExtEnum<String> {
   private final String id;
   private final String name;
   InfoSource(String id, String name) { this.id = id; this.name = name; }
-  @JsonCreator public static InfoSource of(Object id){ return ExtEnum.of(id); }
+  @JsonCreator public static InfoSource of(String id){ return ExtEnum.of(id, InfoSource.class); }
   public String getValue() { return id; }
 }

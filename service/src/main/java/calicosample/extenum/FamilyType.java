@@ -1,6 +1,5 @@
 package calicosample.extenum;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import jp.co.freemind.calico.core.extenum.ExtEnum;
 import lombok.Getter;
 import org.seasar.doma.Domain;
@@ -17,6 +16,6 @@ public enum FamilyType implements ExtEnum<Integer> {
   private final Integer id;
   private final String name;
   FamilyType(Integer id, String name) { this.id = id; this.name = name; }
-  @JsonCreator public static FamilyType of(Object id){ return ExtEnum.of(id); }
+  public static FamilyType of(Integer id){ return ExtEnum.of(id, FamilyType.class); }
   public Integer getValue() { return id; }
 }
