@@ -3,7 +3,9 @@ package jp.co.freemind.calico.core.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -27,7 +29,7 @@ public final class ClassFinder {
         for (URL resource : Collections.list(list)) {
           String protocol = resource.getProtocol();
           if ("file".equals(protocol)) {
-            File file = new File(resource.getFile());
+            File file = Paths.get(resource.toURI()).toFile();
             classes.addAll(findClasses(packageName, file));
           } else if ("jar".equals(protocol)) {
             JarURLConnection jarUrlConnection = (JarURLConnection) resource.openConnection();
@@ -35,7 +37,7 @@ public final class ClassFinder {
           }
         }
       }
-    } catch (IOException | ClassNotFoundException e) {
+    } catch (IOException | ClassNotFoundException | URISyntaxException e) {
       e.printStackTrace();
     }
 
@@ -43,8 +45,12 @@ public final class ClassFinder {
   }
 
   private static List<Class<?>> findClasses(String packageName, File directory) throws ClassNotFoundException {
-    List<Class<?>> classes = new ArrayList<Class<?>>();
-    for (File child : directory.listFiles()) {
+    List<Class<?>> classes = new ArrayList<>();
+    File[] listFiles = directory.listFiles();
+    if (listFiles == null) {
+      throw new IllegalStateException("invalid directory " + directory);
+    }
+    for (File child : listFiles) {
       if (child.isDirectory()) {
         classes.addAll(findClasses(packageName + "." + child.getName(), child));
       } else if (child.isFile()) {
@@ -82,7 +88,6 @@ public final class ClassFinder {
 
   private static Class<?> loadClass(String fileName, String packageName) throws ClassNotFoundException {
     String className = packageName + "." + fileName.substring(0, fileName.length() - ".class".length()).replace('/', '.');
-    Class<?> clazz = Class.forName(className);
-    return clazz;
+    return Class.forName(className);
   }
 }
