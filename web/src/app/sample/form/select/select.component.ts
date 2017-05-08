@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs";
 import { AlertService, ExtEnumService, ExtEnumData } from "calico";
+import { ExtEnum } from "../../../../calico/core/ext-enum.service";
 
 @Component({
   selector: 'app-select',
@@ -22,6 +23,14 @@ export class SelectComponent extends DefaultFormComponent {
     super(alert, extEnumService);
   }
 
+  private observable$: Observable<ExtEnum[]>;
+
+  ngOnInit(): void {
+    super.ngOnInit();
+
+    this.observable$ = this.extEnumService.values('sex').map(data => data['sex']);
+  }
+
   createForm(): Observable<FormGroup> {
     return this.extEnumService.values('sex', 'familyType').map((data: ExtEnumData) => {
       return this.fb.group({
@@ -32,6 +41,7 @@ export class SelectComponent extends DefaultFormComponent {
         val5: [null],
         val6: [data['familyType'][0]['NAME']],
         val7: [3],
+        val8: [data['sex'][0]],
       });
     });
   }
