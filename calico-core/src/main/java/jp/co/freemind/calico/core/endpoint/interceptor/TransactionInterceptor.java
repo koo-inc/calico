@@ -12,7 +12,7 @@ public class TransactionInterceptor implements EndpointInterceptor {
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
     TransactionManager tm = Zone.getCurrent().getInstance(Config.class).getTransactionManager();
-    return tm.requiresNew(TransactionIsolationLevel.SERIALIZABLE, () -> proceed(invocation));
+    return tm.requiresNew(TransactionIsolationLevel.READ_COMMITTED, () -> proceed(invocation));
   }
 
   @SneakyThrows
