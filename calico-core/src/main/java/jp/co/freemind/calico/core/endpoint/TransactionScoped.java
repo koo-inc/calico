@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.ScopeAnnotation;
 
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @BindingAnnotation
 @ScopeAnnotation
