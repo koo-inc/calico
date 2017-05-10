@@ -67,13 +67,14 @@ public class ServiceModule extends AbstractModule {
     bindScope(TransactionScoped.class, new ZoneScope(TransactionScoped.class));
   }
 
-  private <T> void bindSetting(Class<T> clazz) {
-    bind(clazz).toProvider(new Provider<T>() {
+  @SuppressWarnings("unchecked")
+  private void bindSetting(Class<?> clazz) {
+    bind((Class<Object>) clazz).toProvider(new Provider<Object>() {
       @Inject
       private Registry registry;
 
       @Override
-      public T get() {
+      public Object get() {
         return registry.loadSetting(clazz);
       }
     }).in(Singleton.class);

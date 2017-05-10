@@ -4,15 +4,13 @@ import java.util.stream.Stream;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
+import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.google.inject.name.Names;
 import jp.co.freemind.calico.core.util.ClassFinder;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.tx.LocalTransactionDataSource;
 
-/**
- * Created by tasuku on 15/03/09.
- */
 public class DomaModule extends AbstractModule {
   @Override
   public void configure() {
@@ -25,17 +23,13 @@ public class DomaModule extends AbstractModule {
       .filter(c -> !c.isInterface())
       .forEach(c ->
           Stream.of(c.getInterfaces()).forEach(i ->
-              bind(stupidCast(i)).to(uglyStupidCast(c)).in(Scopes.SINGLETON)
+              bindAnyway(i).to(c).in(Scopes.SINGLETON)
           )
       );
   }
 
   @SuppressWarnings("unchecked")
-  private <T> Class<T> stupidCast(Class<?> clazz) {
-    return (Class<T>) clazz;
-  }
-  @SuppressWarnings("unchecked")
-  private <T, U extends T> Class<U> uglyStupidCast(Class<?> clazz) {
-    return (Class<U>) clazz;
+  private AnnotatedBindingBuilder<Object> bindAnyway(Class<?> iface) {
+    return bind((Class<Object>) iface);
   }
 }
