@@ -4,6 +4,8 @@
     <button type="button" cBtn="danger" [cPopover]="childTemplate" #cPopover2="cPopover" (click)="cPopover2.toggle()">child popover</button>
     <p>This is parent</p>
     <p><c-textfield [(ngModel)]="value"></c-textfield></p>
+    <p><c-datepicker [(ngModel)]="date"></c-datepicker></p>
+    <p><c-timepicker [(ngModel)]="time"></c-timepicker></p>
     <ng-template #childTemplate>
       <ng-container *ngIf="value">
       <p>This is child</p>
