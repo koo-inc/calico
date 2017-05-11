@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { ModalModule, PopoverModule } from 'ng2-bootstrap';
+import { ModalModule, PopoverModule } from 'ngx-bootstrap';
 
 import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule } from 'calico';
 import { LayoutModule} from './layout/layout.module';

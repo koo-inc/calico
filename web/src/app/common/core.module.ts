@@ -1,11 +1,17 @@
 import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core';
-import { ModalModule, PopoverModule, BsDropdownModule, DatepickerModule, TimepickerModule } from 'ng2-bootstrap';
+import { ModalModule, PopoverModule, BsDropdownModule, DatepickerModule, TimepickerModule } from 'ngx-bootstrap';
 
 import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule, MESSAGE_CONFIG } from "calico";
 import { AppConfig } from "app/app.config";
 import { AuthService } from "app/common/api/auth.service";
 import { REQUEST_HOOK } from "calico/core/api.service";
 import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
+
+import { ALERT_CONFIG } from "calico/ui/alert.service";
+import { EXT_ENUM_SERVICE_CONFIG } from "calico/core/ext-enum.service";
+import { SESSION_STORAGE_SERVICE_CONFIG } from "calico/core/session-storage.service";
+import { LOCAL_STORAGE_SERVICE_CONFIG } from "calico/core/local-storage.service";
+
 
 @NgModule({
   imports: [
@@ -23,10 +29,10 @@ import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
   ],
   providers: [
     AuthService,
-    {provide: 'LocalStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
-    {provide: 'SessionStorageServiceConfig', useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
-    {provide: 'ExtEnumServiceConfig', useValue: {apiPath: 'endpoint/system/ext_enum'}},
-    {provide: 'AlertConfig', useValue: {
+    {provide: LOCAL_STORAGE_SERVICE_CONFIG, useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
+    {provide: SESSION_STORAGE_SERVICE_CONFIG, useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
+    {provide: EXT_ENUM_SERVICE_CONFIG, useValue: {apiPath: 'endpoint/system/ext_enum'}},
+    {provide: ALERT_CONFIG, useValue: {
       common: {position: 'top-right', lifetime: 3000},
       warning: {position: 'top-right', lifetime: null},
       danger: {position: 'top-left', lifetime: null},
