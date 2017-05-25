@@ -1,0 +1,32 @@
+<tabs></tabs>
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
+  <c-panel>
+    <div><button cBtn="primary">submit</button></div>
+
+    <div>
+      <h3>PLAIN</h3>
+      <c-enum-select formControlName="val1" enumName="familyType"></c-enum-select>
+      <div inspect="val1"></div>
+    </div>
+
+    <div>
+      <h3>PLAIN(値あり)</h3>
+      <c-enum-select formControlName="val2" enumName="sex"></c-enum-select>
+      <div inspect="val2"></div>
+    </div>
+
+    <div>
+      <h3>必須</h3>
+      <c-enum-select formControlName="val3" enumName="familyType"></c-enum-select>
+      <div inspect="val3"></div>
+    </div>
+
+    <div *ngIf="val4Shown">
+      <h3>時間差</h3>
+      <c-enum-select formControlName="val4" enumName="familyType"></c-enum-select>
+      <div inspect="val4"></div>
+    </div>
+
+    <div><button cBtn="primary">submit</button></div>
+  </c-panel>
+</form>

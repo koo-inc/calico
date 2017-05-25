@@ -42,6 +42,7 @@ export class FormTabsComponent {
     { name: 'c-integer', path: 'integer', },
     { name: 'c-currency', path: 'currency', },
     { name: 'c-float', path: 'float', },
+    { name: 'c-enum-select', path: 'enum-select', },
   ];
 
   select(tab: any): void {
