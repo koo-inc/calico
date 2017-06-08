@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs/Observable";
 import { AlertService, ExtEnumService } from "calico";
-import { Api } from "../../../../calico/core/api.service";
+import { Api } from "calico/core/api.service";
 
 @Component({
   selector: 'app-timepicker',
