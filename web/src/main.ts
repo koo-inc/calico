@@ -1,5 +1,4 @@
 import './polyfills.ts';
-import './extension.ts';
 
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

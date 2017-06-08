@@ -21,7 +21,7 @@ $fa-font-path: "~font-awesome/fonts" !default;
 @import '~font-awesome/scss/font-awesome';
 
 // calico-ng
-@import './calico/resources/styles/all';
+@import '../../calico-ng/src/calico/resources/styles/all';
 //@import '../node_modules/calico/resources/styles/all';
 
 // app

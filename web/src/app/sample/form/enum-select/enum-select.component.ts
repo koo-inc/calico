@@ -2,8 +2,7 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs";
-import { AlertService, ExtEnumService, ExtEnumData } from "calico";
-import { ExtEnum } from "../../../../calico/core/ext-enum.service";
+import { AlertService, ExtEnumService } from "calico";
 
 @Component({
   selector: 'app-enum-select',

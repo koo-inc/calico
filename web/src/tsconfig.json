@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "",
+    "baseUrl": ".",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -15,6 +15,19 @@
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"
-    ]
+    ],
+    "paths": {
+      "calico": ["../../calico-ng/src/calico"],
+      "calico/*": ["../../calico-ng/src/calico/*"],
+      "sugar": ["../node_modules/sugar"],
+      "sugar/*": ["../node_modules/sugar/*"],
+      "sugar-language/*": ["../node_modules/sugar-language/*"],
+      "@angular/*": ["../node_modules/@angular/*"],
+      "rxjs": ["../node_modules/rxjs"],
+      "rxjs/*": ["../node_modules/rxjs/*"],
+      "ngx-bootstrap": ["../node_modules/ngx-bootstrap"],
+      "ngx-bootstrap/*": ["../node_modules/ngx-bootstrap/*"],
+      "moment": ["../node_modules/moment"]
+    }
   }
 }
