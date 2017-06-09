@@ -23,6 +23,7 @@ export class EnumSelectComponent extends DefaultFormComponent {
   }
 
   private val4Shown = false;
+  private val5Changed: Date;
 
   ngOnInit(): void {
     localStorage.clear();
@@ -39,8 +40,12 @@ export class EnumSelectComponent extends DefaultFormComponent {
         val2: [{id: 1}],
         val3: [null, Validators.required],
         val4: [{id: 1}],
+        val5: [null],
       })
     );
   }
 
+  val5Change() {
+    this.val5Changed = new Date();
+  }
 }

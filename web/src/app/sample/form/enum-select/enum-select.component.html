@@ -27,6 +27,14 @@
       <div inspect="val4"></div>
     </div>
 
+
+    <div>
+      <h3>change</h3>
+      <c-enum-select formControlName="val5" enumName="familyType" (cChange)="val5Change()"></c-enum-select>
+      <div inspect="val5"></div>
+      <div>{{val5Changed}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>
