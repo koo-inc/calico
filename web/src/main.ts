@@ -1,3 +1,5 @@
+/// <reference path="../../calico-ng/src/calico/lib.d.ts"/>
+
 import './polyfills.ts';
 
 
