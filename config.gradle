@@ -2,6 +2,9 @@ import java.util.function.BinaryOperator
 
 def loadConfig(path) {
   def file = file(path)
+  if (!file.exists()) {
+    return new ConfigObject()
+  }
   if (!file.directory) {
     return new ConfigSlurper().parse(file.getText("UTF-8"))
   }
