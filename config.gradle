@@ -3,7 +3,7 @@ import java.util.function.BinaryOperator
 def loadConfig(path) {
   def file = file(path)
   if (!file.directory) {
-    return new ConfigObject()
+    return new ConfigSlurper().parse(file.getText("UTF-8"))
   }
 
   def configs = []
