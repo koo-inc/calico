@@ -7,9 +7,11 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.KeyDeserializer;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.deser.Deserializers;
+import com.fasterxml.jackson.databind.deser.std.StdKeyDeserializers;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.fasterxml.jackson.datatype.jdk8.PackageVersion;
 import jp.co.freemind.calico.core.orm.Identifier;
@@ -38,6 +40,17 @@ public class IdentifierModule extends Module {
           return new IdentifierDeserializer(type);
         }
         return super.findBeanDeserializer(type, config, beanDesc);
+      }
+    });
+
+    context.addKeyDeserializers(new StdKeyDeserializers() {
+      @Override
+      public KeyDeserializer findKeyDeserializer(JavaType type, DeserializationConfig config, BeanDescription beanDesc) throws JsonMappingException {
+        Class<?> raw = type.getRawClass();
+        if (Identifier.class.isAssignableFrom(raw)) {
+          return new IdentifierDeserializer.Key(type);
+        }
+        return super.findKeyDeserializer(type, config, beanDesc);
       }
     });
   }

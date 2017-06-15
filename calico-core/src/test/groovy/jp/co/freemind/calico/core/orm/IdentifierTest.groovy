@@ -6,7 +6,7 @@ import spock.lang.Specification
 class IdentifierTest extends Specification {
   def "test getValueClass"() {
     given:
-    def id = new IntegerIdentifier(null)
+    def id = new IntegerIdentifier(1)
 
     expect:
     assert id.getValueClass() == Integer

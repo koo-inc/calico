@@ -1,9 +1,9 @@
 package jp.co.freemind.calico.core.orm;
 
-import javax.annotation.Nullable;
+import com.sun.istack.internal.NotNull;
 
 public class SerialIdentifier extends Identifier<Integer> {
-  public SerialIdentifier(@Nullable Integer value) {
+  public SerialIdentifier(@NotNull Integer value) {
     super(value);
   }
 }

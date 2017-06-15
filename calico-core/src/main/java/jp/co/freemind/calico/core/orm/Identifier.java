@@ -2,31 +2,24 @@ package jp.co.freemind.calico.core.orm;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import com.fasterxml.classmate.TypeResolver;
+import com.sun.istack.internal.NotNull;
 
 public abstract class Identifier<T> {
   private static final TypeResolver resolver = new TypeResolver();
   private final T value;
 
-  public Identifier(@Nullable T value) {
+  public Identifier(@NotNull T value) {
+    Objects.requireNonNull(value);
     this.value = value;
   }
-  public @Nullable T getValue() {
+  public @NotNull T getValue() {
     return value;
   }
 
   @SuppressWarnings("unchecked")
   public Class<T> getValueClass() {
     return (Class<T>) resolver.resolve(this.getClass()).typeParametersFor(Identifier.class).get(0).getErasedType();
-  }
-
-  public boolean isPresent() {
-    return value != null;
-  }
-  public boolean isAbsent() {
-    return value == null;
   }
 
   @Override
