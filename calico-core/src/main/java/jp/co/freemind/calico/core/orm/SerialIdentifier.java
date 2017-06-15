@@ -1,9 +1,10 @@
 package jp.co.freemind.calico.core.orm;
 
-import com.sun.istack.internal.NotNull;
+
+import javax.annotation.Nonnull;
 
 public class SerialIdentifier extends Identifier<Integer> {
-  public SerialIdentifier(@NotNull Integer value) {
+  public SerialIdentifier(@Nonnull Integer value) {
     super(value);
   }
 }

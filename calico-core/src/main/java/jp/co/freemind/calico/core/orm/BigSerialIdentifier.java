@@ -1,9 +1,9 @@
 package jp.co.freemind.calico.core.orm;
 
-import com.sun.istack.internal.NotNull;
+import javax.annotation.Nonnull;
 
 public class BigSerialIdentifier extends Identifier<Long> {
-  public BigSerialIdentifier(@NotNull Long value) {
+  public BigSerialIdentifier(@Nonnull Long value) {
     super(value);
   }
 }
