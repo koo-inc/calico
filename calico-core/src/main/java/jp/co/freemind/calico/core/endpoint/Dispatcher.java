@@ -2,12 +2,14 @@ package jp.co.freemind.calico.core.endpoint;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
 import jp.co.freemind.calico.core.endpoint.exception.UnknownEndpointException;
+import jp.co.freemind.calico.core.exception.InvalidUserDataException;
 
 public class Dispatcher {
   private static ObjectMapper mapper;
@@ -36,13 +38,14 @@ public class Dispatcher {
       return mapper.readValue(is, inputType);
     } catch (IOException e) {
       try {
-        return mapper.readValue("{}", inputType);
-      } catch (IOException e2) {
-        try {
+        if (Collection.class.isAssignableFrom(inputType)) {
           return mapper.readValue("[]", inputType);
-        } catch (IOException e3) {
-          return null;
+        } else {
+          return mapper.readValue("{}", inputType);
         }
+      } catch (Exception e2) {
+        e.printStackTrace();
+        throw new InvalidUserDataException("Internal Server Error");
       }
     }
   }
