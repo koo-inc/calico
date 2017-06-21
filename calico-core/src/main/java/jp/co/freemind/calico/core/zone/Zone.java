@@ -3,6 +3,7 @@ package jp.co.freemind.calico.core.zone;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -75,8 +76,12 @@ public class Zone {
   }
 
   public void run(Processable processable) {
+    call(processable.toExecutable());
+  }
+
+  public <T> Optional<T> call(Executable<T> executable) {
     try {
-      doInZone(processable);
+      return Optional.ofNullable(doInZone(executable));
     }
     catch (Throwable t) {
       try {
@@ -89,6 +94,7 @@ public class Zone {
         throw new UnhandledException(t);
       }
     }
+    return Optional.empty();
   }
 
   Optional<Class<? extends Annotation>> getScope() {
@@ -106,7 +112,8 @@ public class Zone {
 
   private void propagateThrowable(Throwable t) throws Throwable {
     try {
-      if (spec.doOnError(t)) {
+      Throwable target = t;
+      if (doInZone(() -> spec.doOnError(target))) {
         return;
       }
     }
@@ -123,11 +130,15 @@ public class Zone {
   }
 
   private void doInZone(Processable processable) throws Throwable {
+    doInZone(processable.toExecutable());
+  }
+
+  private <T> T doInZone(Executable<T> executable) throws Throwable {
     Zone prev = null;
     try {
       prev = getCurrent();
       currentRef.set(this);
-      processable.proceed();
+      return executable.execute();
     }
     finally {
       if (prev != root) {
@@ -141,6 +152,10 @@ public class Zone {
 
   public Runnable bind(Processable processable) {
     return new ZoneRunnable(this, processable);
+  }
+
+  public <V> Callable<Optional<V>> bindWithCallable(Executable<V> executable) {
+    return new ZoneCallable<>(this, executable);
   }
 
   public Injector getInjector() {

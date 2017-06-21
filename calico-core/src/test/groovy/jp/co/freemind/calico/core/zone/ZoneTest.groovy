@@ -6,6 +6,8 @@ import groovy.transform.EqualsAndHashCode
 import jp.co.freemind.calico.core.endpoint.TransactionScoped
 import spock.lang.Specification
 
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -188,14 +190,18 @@ class ZoneTest extends Specification {
 
   def "例外処理中は該当の Zone が currentZone に"() {
     when:
-    def actual
-    def parent = root.fork({s -> s.onError({e -> actual = Zone.current})})
+    def contexts = []
+    def parent = root.fork({s -> s.onError({e -> contexts << Zone.current})})
+    parent.run() {
+      throw new RuntimeException("parent")
+    }
     parent.fork({s -> s}).run() {
       throw new RuntimeException("child")
     }
 
     then:
-    assert actual == parent
+    assert contexts[0] == parent
+    assert contexts[1] == parent
   }
 
   def "別スレッドでも currentZone が正しく設定される"() {
@@ -235,3 +241,9 @@ class ZoneTest extends Specification {
     String name
   }
 }
+
+@Retention(RetentionPolicy.RUNTIME)
+@interface ParentScope {}
+
+@Retention(RetentionPolicy.RUNTIME)
+@interface ChildScope {}
