@@ -13,6 +13,7 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.util.Modules;
 import jp.co.freemind.calico.core.config.Registry;
+import jp.co.freemind.calico.core.util.Throwables;
 
 public class Zone {
 
@@ -79,19 +80,29 @@ public class Zone {
     call(processable.toExecutable());
   }
 
+  @SuppressWarnings("ThrowFromFinallyBlock")
   public <T> Optional<T> call(Executable<T> executable) {
+    Zone context = Zone.getCurrent();
     try {
       return Optional.ofNullable(doInZone(executable));
     }
     catch (Throwable t) {
       try {
-        propagateThrowable(t);
+        propagateThrowable(t, context);
       }
       catch (UnhandledException t2) {
         throw t2;
       }
       catch (Throwable t2) {
         throw new UnhandledException(t);
+      }
+    }
+    finally {
+      try {
+        doInZone(spec::doFinish);
+      } catch (Throwable t) {
+        // spec.onFinish は Runnable のため例外を発生しないはず
+        throw Throwables.sneakyThrow(t);
       }
     }
     return Optional.empty();
@@ -110,7 +121,7 @@ public class Zone {
     return parent != null ? parent.getProvider(scope, key, unscoped) : unscoped;
   }
 
-  private void propagateThrowable(Throwable t) throws Throwable {
+  private void propagateThrowable(Throwable t, Zone context) throws Throwable {
     try {
       Throwable target = t;
       if (doInZone(() -> spec.doOnError(target))) {
@@ -120,9 +131,9 @@ public class Zone {
     catch (Throwable t2) {
       t = t2;
     }
-    if (parent != null) {
+    if (parent != null && parent != context) {
       Throwable target = t;
-      parent.doInZone(() -> parent.propagateThrowable(target));
+      parent.doInZone(() -> parent.propagateThrowable(target, context));
     }
     else {
       throw new UnhandledException(t);

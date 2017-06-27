@@ -10,7 +10,9 @@ public class ServerErrorRenderer extends DefaultRenderer {
   }
 
   @Override
-  public void render(@Nullable Object output) {
-    super.render(output != null ? output : Collections.emptyMap());
+  public void render(@Nullable Object obj) {
+    super.render(Collections.singletonMap(
+      "message", obj instanceof Throwable ? ((Throwable) obj).getMessage() : null)
+    );
   }
 }

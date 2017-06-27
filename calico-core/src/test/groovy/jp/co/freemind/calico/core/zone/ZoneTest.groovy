@@ -204,6 +204,35 @@ class ZoneTest extends Specification {
     assert contexts[1] == parent
   }
 
+  def "スコープを抜けるときに終了処理がよばれる"() {
+    when:
+    def process = []
+    try {
+      root.fork({s -> s
+        .onFinish({->
+          process << 1
+        })
+        .onError({e ->
+          process << 2
+          throw e
+        })
+      }).run({->
+        Zone.current.fork({s -> s
+          .onFinish({->
+            process << 3
+          })
+          .onError({e ->
+            process << 4
+            throw e
+          })
+        }).run({-> throw new RuntimeException()})
+      })
+    } catch (Exception ignored) {}
+
+    then:
+    assert process == [4, 3, 2, 1]
+  }
+
   def "別スレッドでも currentZone が正しく設定される"() {
     when:
     def zone = root.fork({s -> s})

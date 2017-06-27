@@ -19,31 +19,36 @@ import com.google.inject.util.Modules;
 public class ZoneSpec {
   private final Class<? extends Annotation> scope;
   private final Consumer<Throwable> onError;
+  private final Runnable onFinish;
   private final Module[] modules;
   private final Map<Key<?>, Provider<?>> providers;
 
   ZoneSpec() {
-    this(null, null, new Module[0], Collections.emptyMap());
+    this(null, null, null, new Module[0], Collections.emptyMap());
   }
-  private ZoneSpec(@Nullable Class<? extends Annotation> scope, @Nullable Consumer<Throwable> onError, @Nonnull Module[] modules, @Nonnull Map<Key<?>, Provider<?>> providers) {
+  private ZoneSpec(@Nullable Class<? extends Annotation> scope, @Nullable Consumer<Throwable> onError, @Nullable Runnable onFinish, @Nonnull Module[] modules, @Nonnull Map<Key<?>, Provider<?>> providers) {
     this.scope = scope;
     this.onError = onError;
+    this.onFinish = onFinish;
     this.modules = modules;
     this.providers = providers;
   }
 
   public ZoneSpec scope(@Nonnull Class<? extends Annotation> scope) {
-    return new ZoneSpec(scope, onError, modules, providers);
+    return new ZoneSpec(scope, onError, onFinish, modules, providers);
   }
   public ZoneSpec onError(@Nonnull Consumer<Throwable> onError) {
-    return new ZoneSpec(scope, onError, modules, providers);
+    return new ZoneSpec(scope, onError, onFinish, modules, providers);
+  }
+  public ZoneSpec onFinish(@Nonnull Runnable onFinish) {
+    return new ZoneSpec(scope, onError, onFinish, modules, providers);
   }
   public ZoneSpec modules(@Nonnull Module... modules) {
-    return new ZoneSpec(scope, onError, modules, providers);
+    return new ZoneSpec(scope, onError, onFinish, modules, providers);
   }
   public <T> ZoneSpec provide(Key<T> key, Provider<? extends T> provider) {
     Map<Key<?>, Provider<?>> newProviders = ImmutableMap.<Key<?>, Provider<?>>builder().putAll(providers).put(key, provider).build();
-    return new ZoneSpec(scope, onError, modules, newProviders);
+    return new ZoneSpec(scope, onError, onFinish, modules, newProviders);
   }
   public <T> ZoneSpec provide(Class<T> type, Provider<? extends T> provider) {
     return provide(Key.get(type), provider);
@@ -81,5 +86,11 @@ public class ZoneSpec {
       return true;
     }
     return false;
+  }
+
+  void doFinish() {
+    if (this.onFinish != null) {
+      this.onFinish.run();
+    }
   }
 }
