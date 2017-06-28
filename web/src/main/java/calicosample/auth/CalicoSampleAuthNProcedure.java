@@ -13,7 +13,7 @@ public class CalicoSampleAuthNProcedure implements AuthenticationProcedure {
   @Nonnull
   @Override
   public CalicoSampleAuthInfo proceed(@Nonnull AuthToken authToken) {
-    if (authToken.getId() == null) return CalicoSampleAuthInfo.ofNull(authToken.getRemoteAddress(), authToken.getCreatedAt());
+    if (authToken.getId().isEmpty()) return CalicoSampleAuthInfo.ofNull(authToken.getRemoteAddress(), authToken.getCreatedAt());
     return CalicoSampleAuthInfo.of(authToken, token ->
       Zone.getCurrent().getInstance(UserInfoDao.class).findByLoginId(token.getId()));
   }
