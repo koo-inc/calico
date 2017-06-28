@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.servlet;
+package jp.co.freemind.calico.servlet.renderer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.servlet.Keys;
 
 public class DefaultRenderer implements Renderer<Object> {
   private final int status;

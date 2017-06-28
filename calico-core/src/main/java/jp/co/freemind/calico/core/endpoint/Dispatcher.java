@@ -25,7 +25,7 @@ public class Dispatcher {
   }
 
   @SuppressWarnings("unchecked")
-  public Object dispatch(String path, InputStream is, InterceptionHandler... handlers) throws Throwable {
+  public Object dispatch(String path, InputStream is, InterceptionHandler... handlers) throws UnknownEndpointException, Throwable {
     Class<? extends Endpoint<?, ?>> endpointClass = resolver.getEndpointClass(path)
       .orElseThrow(() -> new UnknownEndpointException(path));
 

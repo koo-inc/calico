@@ -2,6 +2,7 @@ package jp.co.freemind.calico.servlet;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,11 @@ import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
+import jp.co.freemind.calico.core.endpoint.exception.UnknownEndpointException;
 import jp.co.freemind.calico.core.endpoint.result.Result;
+import jp.co.freemind.calico.core.log.LoggingSession;
+import jp.co.freemind.calico.core.log.LoggingSessionStarter;
+import jp.co.freemind.calico.core.util.FileBackedInputStream;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
@@ -78,6 +83,15 @@ public class CalicoServlet extends HttpServlet {
       .map(AuthToken::of)
       .orElseGet(() -> AuthToken.createEmpty(remoteAddress, processDatetime));
 
+    InputStream inputStream = new FileBackedInputStream(() -> {
+      try {
+        return req.getInputStream();
+      } catch (IOException e) {
+        e.printStackTrace();
+        return new ByteArrayInputStream(new byte[0]);
+      }
+    }, 1024 * 1024);
+
     Zone.getCurrent().fork(s -> s
       .scope(TransactionScoped.class)
       .provide(Keys.AUTH_TOKEN, authToken)
@@ -86,18 +100,32 @@ public class CalicoServlet extends HttpServlet {
       .provide(Keys.PROCESS_DATETIME, processDatetime)
       .provide(Keys.SERVLET_REQUEST, req)
       .provide(Keys.SERVLET_RESPONSE, res)
-      .onError(e -> {
-        e.printStackTrace();
-        Zone.getCurrent().getInstance(Keys.SERVER_ERROR_RENDERER).render(null);
-      })
+      .provide(Keys.INPUT, inputStream)
     ).run(()-> {
-      Object output = new Dispatcher(resolver).dispatch(path, req.getInputStream(), interceptionHandlers);
-      if (output instanceof Result) {
-        Zone.getCurrent().getInstance(Keys.RESULT_RENDERER).render((Result) output);
-      }
-      else {
-        Zone.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(output);
-      }
+      LoggingSession loggingSession = Zone.getCurrent().getInstance(LoggingSessionStarter.class).start();
+      Zone.getCurrent().fork(s -> s
+        .scope(TransactionScoped.class)
+        .provide(Keys.LOGGING_SESSION, loggingSession)
+        .onError(e -> {
+          if (e instanceof UnknownEndpointException) {
+            Zone.getCurrent().getInstance(Keys.NOT_FOUND_RENDERER).render(e);
+          }
+          else {
+            e.printStackTrace();
+            Zone.getCurrent().getInstance(Keys.SERVER_ERROR_RENDERER).render(e);
+          }
+        })
+        .onFinish(() -> loggingSession.finish(res.getStatus()))
+      ).run(()-> {
+        InputStream is = Zone.getCurrent().getInstance(Keys.INPUT);
+        Object output = new Dispatcher(resolver).dispatch(path, is, interceptionHandlers);
+        if (output instanceof Result) {
+          Zone.getCurrent().getInstance(Keys.RESULT_RENDERER).render((Result) output);
+        }
+        else {
+          Zone.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(output);
+        }
+      });
     });
   }
 

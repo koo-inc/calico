@@ -25,7 +25,7 @@ public class CalicoServletPlugin extends CalicoPlugin {
         .in(TransactionScoped.class);
 
       binder.bind(Keys.AUTH_TOKEN)
-        .toProvider(needsBinding("AuthToken"))
+        .toProvider(needsBinding("AUTH_TOKEN"))
         .in(TransactionScoped.class);
 
       binder.bind(Keys.SERVLET_REQUEST)
@@ -34,6 +34,14 @@ public class CalicoServletPlugin extends CalicoPlugin {
 
       binder.bind(Keys.SERVLET_RESPONSE)
         .toProvider(needsBinding("HTTP_SERVLET_RESPONSE"))
+        .in(TransactionScoped.class);
+
+      binder.bind(Keys.INPUT)
+        .toProvider(needsBinding("INPUT"))
+        .in(TransactionScoped.class);
+
+      binder.bind(Keys.LOGGING_SESSION)
+        .toProvider(needsBinding("LOGGING_SESSION"))
         .in(TransactionScoped.class);
 
       binder.bind(Context.class).toProvider(() -> {

@@ -1,5 +1,7 @@
 package calicosample.entity.log;
 
+import javax.annotation.Nullable;
+
 import org.seasar.doma.Entity;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +12,18 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 public class AccessStartLog extends LogEntity implements StartLog {
-  private Integer userId;
+  @Nullable
   private String loginId;
+  @Nullable
   private String requestUri;
-  private String requestMethod;
+  @Nullable
+  private String refererPath;
+  @Nullable
   private String cookies;
+  @Nullable
   private String params;
+  @Nullable
   private String remoteAddr;
+  @Nullable
   private String hostAddr;
 }

@@ -60,7 +60,6 @@ public class LoggingService {
     log.setUserAgent(form.getUserAgent());
     log.setException(form.getException());
     log.setLoginId(authInfo.map(AuthInfo::getLoginId).orElse(null));
-    log.setUserId(authInfo.map(AuthInfo::getUserId).orElse(null));
     log.setRemoteAddr(authToken.map(AuthToken::getRemoteAddress).orElse(null));
     log.setSessionId(authToken.map(AuthToken::getValue).orElse(null));
     log.setException(form.getException());

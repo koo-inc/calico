@@ -14,7 +14,7 @@ public interface Log {
   String getKey();
 
 
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuuMM");
   default void preInsert() {
     setKey(getTs().format(formatter));
   }

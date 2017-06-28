@@ -21,6 +21,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
@@ -87,7 +89,7 @@ public class Registry {
       if (cache.containsKey(method)) return cache.get(method);
 
       PropertyDescriptor descriptor = descriptorMap.get(method);
-      Object property = descriptor != null ? Registry.this.getValue(settingPath + "." + descriptor.getName()) : null;
+      Object property = getValue(settingPath, descriptor, method);
       if (property == null && method.isDefault()) {
         // default メソッドの実行
         // https://rmannibucau.wordpress.com/2014/03/27/java-8-default-interface-methods-and-jdk-dynamic-proxies/
@@ -99,6 +101,17 @@ public class Registry {
       cache.put(method, property);
       return property;
     });
+  }
+
+  protected Object getValue(String settingPath, PropertyDescriptor descriptor, Method method) {
+    if (descriptor == null ) return null;
+
+    if (method.isAnnotationPresent(Nullable.class)) {
+      return Registry.this.getValue(settingPath + "." + descriptor.getName(), null);
+    }
+    else {
+      return Registry.this.getValue(settingPath + "." + descriptor.getName());
+    }
   }
 
   private Constructor<MethodHandles.Lookup> getConstructor() {

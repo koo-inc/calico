@@ -15,7 +15,7 @@ public interface EndLog extends Log {
   default void preInsert() {
     StartLog startLog = getStartLog();
     setStartLogId(startLog.getId());
-    setInterval(startLog.getTs().until(LocalDateTime.now(), ChronoUnit.MILLIS));
+    setInterval(ChronoUnit.MILLIS.between(startLog.getTs(), LocalDateTime.now()));
     setKey(startLog.getKey());
   }
 }

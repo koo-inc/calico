@@ -11,10 +11,9 @@ CREATE UNLOGGED TABLE log (
 CREATE INDEX log_idx1 ON log (key);
 
 CREATE UNLOGGED TABLE access_start_log (
-  user_id INTEGER,
   login_id TEXT,
   request_uri TEXT,
-  request_method TEXT,
+  referer_path TEXT,
   cookies TEXT,
   params TEXT,
   remote_addr TEXT,
@@ -57,7 +56,6 @@ CREATE UNIQUE INDEX error_log_uniq1 ON error_log (id);
 CREATE INDEX error_log_idx1 ON error_log (key);
 
 CREATE UNLOGGED TABLE js_log (
-  user_id INTEGER,
   login_id TEXT,
   session_id TEXT,
   remote_addr TEXT,

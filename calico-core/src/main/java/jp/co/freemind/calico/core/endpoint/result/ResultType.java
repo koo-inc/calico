@@ -12,6 +12,9 @@ public interface ResultType {
   static ResultType forbidden(ResultType resultType) {
     return new AbnormalResultType(403, resultType);
   }
+  static ResultType notFound(ResultType resultType) {
+    return new AbnormalResultType(404, resultType);
+  }
   static ResultType conflict(ResultType resultType) {
     return new AbnormalResultType(409, resultType);
   }

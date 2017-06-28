@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.servlet;
+package jp.co.freemind.calico.servlet.renderer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.servlet.Keys;
 import jp.co.freemind.calico.servlet.util.CookieUtil;
 
 public class ResultRenderer implements Renderer<Result> {

@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.servlet;
+package jp.co.freemind.calico.servlet.renderer;
 
 import java.util.Collections;
 

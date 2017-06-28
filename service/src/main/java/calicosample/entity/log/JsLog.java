@@ -12,7 +12,6 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 public class JsLog extends LogEntity {
-  private Integer userId;
   @Nullable
   private String loginId;
   @Nullable
