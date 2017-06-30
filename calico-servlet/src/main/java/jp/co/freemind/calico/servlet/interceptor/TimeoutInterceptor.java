@@ -2,7 +2,6 @@ package jp.co.freemind.calico.servlet.interceptor;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -39,13 +38,14 @@ public class TimeoutInterceptor implements EndpointInterceptor {
           .authInfo(authInfo)
         );
 
-        AtomicReference<Object> ref = new AtomicReference<>();
-        Zone.getCurrent().fork(s -> s
-          .scope(TransactionScoped.class)
-          .provide(newContext)
-        ).run(()-> ref.set(invocation.proceed()));
+        Object result = Zone.getCurrent()
+          .fork(s -> s
+            .scope(TransactionScoped.class)
+            .provide(newContext)
+          )
+          .call(invocation::proceed)
+          .orElse(null);
 
-        Object result = ref.get();
         if (result instanceof Result) {
           return result;
         }

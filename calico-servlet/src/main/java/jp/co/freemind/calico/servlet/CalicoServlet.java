@@ -1,8 +1,5 @@
 package jp.co.freemind.calico.servlet;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +11,6 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -29,22 +25,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
-import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.endpoint.Dispatcher;
-import jp.co.freemind.calico.core.endpoint.EndpointResolver;
-import jp.co.freemind.calico.core.endpoint.TransactionScoped;
-import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
-import jp.co.freemind.calico.core.endpoint.exception.UnknownEndpointException;
-import jp.co.freemind.calico.core.endpoint.result.Result;
-import jp.co.freemind.calico.core.log.LoggingSession;
-import jp.co.freemind.calico.core.log.LoggingSessionStarter;
-import jp.co.freemind.calico.core.util.FileBackedInputStream;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
-import jp.co.freemind.calico.servlet.util.CookieUtil;
-import jp.co.freemind.calico.servlet.util.NetworkUtil;
 import nu.validator.htmlparser.dom.Dom2Sax;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import nu.validator.htmlparser.sax.HtmlSerializer;
@@ -56,18 +41,13 @@ import org.xml.sax.SAXException;
 @WebServlet(name = "CalicoServlet", urlPatterns = "/*", asyncSupported = true)
 public class CalicoServlet extends HttpServlet {
 
-  private EndpointResolver resolver;
   private AssetsSetting assetsSetting;
-  private InterceptionHandler[] interceptionHandlers;
 
   @Override
   public void init(ServletConfig servletConfig) throws ServletException {
     super.init(servletConfig);
     Zone root = Zone.getCurrent();
-    this.resolver = root.getInstance(EndpointResolver.class);
     this.assetsSetting = root.getInstance(AssetsSetting.class);
-    this.interceptionHandlers = (InterceptionHandler[]) servletConfig.getServletContext()
-      .getAttribute(CalicoServletConfig.INTERCEPTOR_HANDLERS);
 
     ObjectMapper mapper = root.getInstance(ObjectMapper.class)
       .copy().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -76,57 +56,8 @@ public class CalicoServlet extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    String path = req.getPathInfo();
-    String remoteAddress = firstNonNull(NetworkUtil.getRemoteAddrWithConsiderForwarded(req), "(unknown)");
-    LocalDateTime processDatetime = LocalDateTime.now();
-    AuthToken authToken = CookieUtil.getSessionToken(req)
-      .map(AuthToken::of)
-      .orElseGet(() -> AuthToken.createEmpty(remoteAddress, processDatetime));
-
-    InputStream inputStream = new FileBackedInputStream(() -> {
-      try {
-        return req.getInputStream();
-      } catch (IOException e) {
-        e.printStackTrace();
-        return new ByteArrayInputStream(new byte[0]);
-      }
-    }, 1024 * 1024);
-
-    Zone.getCurrent().fork(s -> s
-      .scope(TransactionScoped.class)
-      .provide(Keys.AUTH_TOKEN, authToken)
-      .provide(Keys.PATH, path)
-      .provide(Keys.REMOTE_ADDRESS, remoteAddress)
-      .provide(Keys.PROCESS_DATETIME, processDatetime)
-      .provide(Keys.SERVLET_REQUEST, req)
-      .provide(Keys.SERVLET_RESPONSE, res)
-      .provide(Keys.INPUT, inputStream)
-    ).run(()-> {
-      LoggingSession loggingSession = Zone.getCurrent().getInstance(LoggingSessionStarter.class).start();
-      Zone.getCurrent().fork(s -> s
-        .scope(TransactionScoped.class)
-        .provide(Keys.LOGGING_SESSION, loggingSession)
-        .onError(e -> {
-          if (e instanceof UnknownEndpointException) {
-            Zone.getCurrent().getInstance(Keys.NOT_FOUND_RENDERER).render(e);
-          }
-          else {
-            e.printStackTrace();
-            Zone.getCurrent().getInstance(Keys.SERVER_ERROR_RENDERER).render(e);
-          }
-        })
-        .onFinish(() -> loggingSession.finish(res.getStatus()))
-      ).run(()-> {
-        InputStream is = Zone.getCurrent().getInstance(Keys.INPUT);
-        Object output = new Dispatcher(resolver).dispatch(path, is, interceptionHandlers);
-        if (output instanceof Result) {
-          Zone.getCurrent().getInstance(Keys.RESULT_RENDERER).render((Result) output);
-        }
-        else {
-          Zone.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(output);
-        }
-      });
-    });
+    RequestSession dispatcher = Zone.getCurrent().getInstance(RequestSession.class);
+    dispatcher.execute(getServletConfig(), req, res);
   }
 
   private static Pattern INDEX_PATTERN = Pattern.compile("^(?:/[^./]*)+$");

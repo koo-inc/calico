@@ -9,7 +9,6 @@ import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.interceptor.ResultMapper;
-import jp.co.freemind.calico.core.endpoint.interceptor.TransactionInterceptor;
 import jp.co.freemind.calico.core.log.LoggingSession;
 import jp.co.freemind.calico.core.log.LoggingSessionStarter;
 import jp.co.freemind.calico.core.zone.Context;
@@ -28,13 +27,12 @@ public class WebPlugin extends CalicoServletPlugin {
 
     install(new ServicePlugin());
 
-    interceptBefore(TransactionInterceptor.class,
+    interceptBefore(null,
       Matchers.inSubpackage(ROOT_PACKAGE),
       new VersioningInterceptor()
     );
 
-    interceptAfter(
-      TransactionInterceptor.class,
+    interceptAfter(null,
       Matchers.inSubpackage(ROOT_PACKAGE),
       new TimeoutInterceptor(WebPlugin::getNullAuthInfo),
       new ResultMapper()

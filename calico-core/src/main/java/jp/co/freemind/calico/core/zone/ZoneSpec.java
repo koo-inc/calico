@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,7 +17,7 @@ import com.google.inject.util.Modules;
 
 public class ZoneSpec {
   private final Class<? extends Annotation> scope;
-  private final Consumer<Throwable> onError;
+  private final Consumable<Throwable> onError;
   private final Runnable onFinish;
   private final Module[] modules;
   private final Map<Key<?>, Provider<?>> providers;
@@ -26,7 +25,7 @@ public class ZoneSpec {
   ZoneSpec() {
     this(null, null, null, new Module[0], Collections.emptyMap());
   }
-  private ZoneSpec(@Nullable Class<? extends Annotation> scope, @Nullable Consumer<Throwable> onError, @Nullable Runnable onFinish, @Nonnull Module[] modules, @Nonnull Map<Key<?>, Provider<?>> providers) {
+  private ZoneSpec(@Nullable Class<? extends Annotation> scope, @Nullable Consumable<Throwable> onError, @Nullable Runnable onFinish, @Nonnull Module[] modules, @Nonnull Map<Key<?>, Provider<?>> providers) {
     this.scope = scope;
     this.onError = onError;
     this.onFinish = onFinish;
@@ -37,7 +36,7 @@ public class ZoneSpec {
   public ZoneSpec scope(@Nonnull Class<? extends Annotation> scope) {
     return new ZoneSpec(scope, onError, onFinish, modules, providers);
   }
-  public ZoneSpec onError(@Nonnull Consumer<Throwable> onError) {
+  public ZoneSpec onError(@Nonnull Consumable<Throwable> onError) {
     return new ZoneSpec(scope, onError, onFinish, modules, providers);
   }
   public ZoneSpec onFinish(@Nonnull Runnable onFinish) {
@@ -80,9 +79,9 @@ public class ZoneSpec {
     return providers;
   }
 
-  boolean doOnError(Throwable t) {
+  boolean doOnError(Throwable t) throws Throwable {
     if(onError != null) {
-      onError.accept(t);
+      onError.consume(t);
       return true;
     }
     return false;

@@ -1,11 +1,9 @@
 package jp.co.freemind.calico.servlet;
 
 import com.google.inject.Provider;
-import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.config.CalicoPlugin;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.zone.Context;
-import jp.co.freemind.calico.core.zone.Zone;
 
 public class CalicoServletPlugin extends CalicoPlugin {
 
@@ -44,17 +42,9 @@ public class CalicoServletPlugin extends CalicoPlugin {
         .toProvider(needsBinding("LOGGING_SESSION"))
         .in(TransactionScoped.class);
 
-      binder.bind(Context.class).toProvider(() -> {
-        Zone current = Zone.getCurrent();
-        AuthenticationProcedure authority = current.getInstance(AuthenticationProcedure.class);
-        AuthToken token = current.getInstance(Keys.AUTH_TOKEN);
-        return new Context(s -> s
-          .authInfo(authority.proceed(token))
-          .processDateTime(current.getInstance(Keys.PROCESS_DATETIME))
-          .remoteAddress(current.getInstance(Keys.REMOTE_ADDRESS))
-          .path(current.getInstance(Keys.PATH))
-        );
-      }).in(TransactionScoped.class);
+      binder.bind(Context.class)
+        .toProvider(needsBinding("CONTEXT"))
+        .in(TransactionScoped.class);
     });
   }
 

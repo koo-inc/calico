@@ -217,15 +217,18 @@ class ZoneTest extends Specification {
           throw e
         })
       }).run({->
-        Zone.current.fork({s -> s
-          .onFinish({->
-            process << 3
-          })
-          .onError({e ->
-            process << 4
-            throw e
-          })
-        }).run({-> throw new RuntimeException()})
+        Zone.current.fork({s -> s})
+          .run({->
+            Zone.current.fork({s -> s
+              .onFinish({->
+              process << 3
+            })
+            .onError({e ->
+              process << 4
+              throw e
+            })
+          }).run({-> throw new RuntimeException()})
+        })
       })
     } catch (Exception ignored) {}
 

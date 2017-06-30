@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import calicosample.entity.Customer;
 import calicosample.entity.CustomerFamily;
 import calicosample.service.CustomerService;
+import jp.co.freemind.calico.core.exception.InconsistentDataException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,8 +32,9 @@ public class UpdateEndpoint extends CustomerEndpoint<UpdateEndpoint.Input, Custo
   @Override
   public IdOutput execute(Input input) {
     Customer customer = customerService.update(input);
-    return new IdOutput(){{
-      setId(customer.getId());
-    }};
+    throw new InconsistentDataException("no update");
+//    return new IdOutput(){{
+//      setId(customer.getId());
+//    }};
   }
 }
