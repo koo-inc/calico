@@ -55,14 +55,17 @@ export class SessionComponent implements OnInit, OnDestroy {
         actingStream
       )
         .filter(x => x)
-        .flatMap(() => this.authService.keep())
-        .subscribe((authInfo: AuthInfo) => {
-          this.initialized = true;
-          if (!authInfo.authenticated) {
-            this.zone.run(() => {
-              this.modal.show();
+        .subscribe(() => {
+          this.zone.run(() => {
+            this.authService.keep().subscribe((authInfo: AuthInfo) => {
+              this.initialized = true;
+              if (!authInfo.authenticated) {
+                this.zone.run(() => {
+                  this.modal.show();
+                });
+              }
             });
-          }
+          });
         });
     });
   }
