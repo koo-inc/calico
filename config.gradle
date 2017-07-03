@@ -1,6 +1,8 @@
+import groovy.text.StreamingTemplateEngine
+
 import java.util.function.BinaryOperator
 
-def loadConfig(path) {
+Map<String, ?> loadConfig(path) {
   def file = file(path)
   if (!file.exists()) {
     return new ConfigObject()
@@ -27,6 +29,42 @@ def loadConfig(path) {
   }).get()
 }
 
+class ExpandConfigReader extends Reader {
+  private Reader original
+  @Delegate
+  private Reader output
+
+  ExpandConfigReader(Reader original) {
+    this.original = new BufferedReader(original)
+  }
+
+  void setProperties(Map<String, ?> properties) {
+    try {
+      this.output = new StringReader(
+        new StreamingTemplateEngine()
+          .createTemplate(this.original)
+          .make(properties)
+          .writeTo(new StringWriter())
+          .toString()
+          .replace('\\$', '$')
+      )
+    }
+    finally {
+      this.original.close()
+    }
+  }
+}
+
+class ExpandConfigFilterReader extends FilterReader {
+  ExpandConfigFilterReader(Reader reader) {
+    super(new ExpandConfigReader(reader))
+  }
+
+  void setProperties(Map<String, ?> properties) {
+    this.in.properties = properties
+  }
+}
+
 def printConfig(config) {
   println "\n##### config values #####"
   config.each {e -> println e}
@@ -36,7 +74,7 @@ def configDir = file('config')
 def templateDir = file('config/template')
 def buildTarget = file("${project.buildDir}/config/")
 
-task expandConfig(type: Copy, group: 'develop', description: 'expand default config files from config/template') {
+task expandConfig(type: Copy, group: 'build', description: 'expand default config files from config/template') {
   def configParams = loadConfig(configDir.path)
   configParams.merge(loadConfig("${System.properties['user.home']}/.calico/${project.name}/"))
   configParams.putAll(project: project, generated: new Date())
@@ -44,7 +82,7 @@ task expandConfig(type: Copy, group: 'develop', description: 'expand default con
   from templateDir
   into buildTarget
   rename '[.]tpl$', ''
-  expand(configParams)
+  filter([properties: configParams], ExpandConfigFilterReader)
 
   filteringCharset = 'UTF-8'
 
@@ -70,7 +108,7 @@ configDir.toPath().resolve("env").toFile().listFiles().each {env ->
   if (!env.isFile()) return
   def envName = env.name.split('[.]')[0]
 
-  task "expand${envName.capitalize()}Config"(type: Copy, group: 'develop', description: "expand config as ${envName} files from config/template") {
+  task "expand${envName.capitalize()}Config"(type: Copy, group: 'build', description: "expand config as ${envName} files from config/template") {
     def configParams = loadConfig('config/')
     configParams.merge(loadConfig(env.path))
     configParams.putAll(project: project, generated: new Date())
@@ -78,7 +116,7 @@ configDir.toPath().resolve("env").toFile().listFiles().each {env ->
     from templateDir
     into buildTarget
     rename '[.]tpl$', ''
-    expand(configParams)
+    filter([properties: configParams], ExpandConfigFilterReader)
 
     filteringCharset = 'UTF-8'
 
