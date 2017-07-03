@@ -32,7 +32,7 @@ import org.seasar.doma.jdbc.tx.TransactionIsolationLevel;
 public class RequestSession {
   public void execute(ServletConfig servletConfig, HttpServletRequest req, HttpServletResponse res) {
     try {
-      doInTransaction(() -> {
+      doInTransaction(servletConfig, req, res, () -> {
         RequestParam param = getRequestParam(servletConfig, req, res);
         Context context = getContext(param);
 
@@ -60,12 +60,12 @@ public class RequestSession {
     }
   }
 
-  protected void doInTransaction(Runnable block) {
+  protected void doInTransaction(ServletConfig servletConfig, HttpServletRequest req, HttpServletResponse res, Runnable block) {
     Zone.getCurrent().getInstance(Config.class).getTransactionManager()
       .requiresNew(TransactionIsolationLevel.READ_COMMITTED, block);
   }
 
-  private Context getContext(RequestParam param) {
+  protected Context getContext(RequestParam param) {
     AuthenticationProcedure authority = Zone.getCurrent().getInstance(AuthenticationProcedure.class);
     return new Context(s -> s
       .authInfo(authority.proceed(param.getAuthToken()))
