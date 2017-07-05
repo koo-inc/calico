@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core';
 import { ModalModule, PopoverModule, BsDropdownModule, DatepickerModule, TimepickerModule } from 'ngx-bootstrap';
 
-import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule, MESSAGE_CONFIG } from "calico";
+import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule, MESSAGE_CONFIG, REMOTE_DATA_TYPE } from "calico";
 import { AppConfig } from "app/app.config";
 import { AuthService } from "app/common/api/auth.service";
 import { REQUEST_HOOK } from "calico/core/api.service";
@@ -11,6 +11,7 @@ import { ALERT_CONFIG } from "calico/ui/alert.service";
 import { EXT_ENUM_SERVICE_CONFIG } from "calico/core/ext-enum.service";
 import { SESSION_STORAGE_SERVICE_CONFIG } from "calico/core/session-storage.service";
 import { LOCAL_STORAGE_SERVICE_CONFIG } from "calico/core/local-storage.service";
+import { EXT_ENUMS } from "app/common/remote-data.config";
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { LOCAL_STORAGE_SERVICE_CONFIG } from "calico/core/local-storage.service"
     {provide: MESSAGE_CONFIG, useValue: AppConfig.messages},
     {provide: VERSION_INFO, useValue: {key: AppConfig.versionTag, currentVersion: AppConfig.version}},
     VersionCheckHook,
-    {provide: REQUEST_HOOK, useExisting: VersionCheckHook, multi: true}
+    {provide: REQUEST_HOOK, useExisting: VersionCheckHook, multi: true},
+    {provide: REMOTE_DATA_TYPE, useValue: EXT_ENUMS, multi: true},
   ]
 })
 export class CoreModule {

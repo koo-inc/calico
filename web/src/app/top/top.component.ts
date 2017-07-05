@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RemoteDataService } from 'calico';
+import { EXT_ENUMS } from "app/common/remote-data.config";
 
 @Component({
   selector: 'app-top',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private remoteDataService: RemoteDataService,
+  ) { }
 
   ngOnInit() {
+    console.log(this.remoteDataService.get(EXT_ENUMS));
   }
 
 }
