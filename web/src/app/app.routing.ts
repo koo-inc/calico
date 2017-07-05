@@ -1,14 +1,7 @@
 import { Route, RouterModule } from '@angular/router';
 import { EnsureRemoteData } from 'calico';
 
-export function addRemoteDataSupport(route: Route): Route {
-  if(route.loadChildren){
-    route.canActivateChild = [EnsureRemoteData];
-  }
-  return route;
-}
-
-const routes = [
+let routes: Route[] = [
   { path: '', redirectTo: '/top', pathMatch: 'full' },
   { path: 'login', loadChildren: 'app/login/login.module#LoginModule' },
   { path: 'top', loadChildren: 'app/top/top.module#TopModule' },
@@ -16,4 +9,15 @@ const routes = [
   { path: 'customer', loadChildren: 'app/customer/main.module#MainModule' },
   { path: 'sample', loadChildren: 'app/sample/main.module#MainModule' },
 ];
-export const routing = RouterModule.forRoot(routes.map((r: Route) => addRemoteDataSupport(r)));
+routes = addRemoteDataSupport(routes);
+
+export const routing = RouterModule.forRoot(routes);
+
+function addRemoteDataSupport(routes: Route[]): Route[] {
+  routes.forEach((route) => {
+    if(route.loadChildren){
+      route.canActivateChild = [EnsureRemoteData];
+    }
+  });
+  return routes;
+}
