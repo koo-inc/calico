@@ -45,6 +45,8 @@ export class CheckboxesComponent extends DefaultFormComponent {
         val7: [[2,5]],
         val8: [[data['Sex'][0]]],
         val9: [[data['FamilyType'][1], data['FamilyType'][3]]],
+        val10: [[data['FamilyType'][0], data['FamilyType'][2]]],
+        val11: [[data['FamilyType'][0], data['FamilyType'][1]]],
       })
     );
   }

@@ -17,7 +17,7 @@ import { REQUEST_HOOK } from "calico/core/api.service";
 
 import { AppConfig } from "app/app.config";
 import { AuthService } from "app/common/api/auth.service";
-import { AppExtEnumDataProvider, EXT_ENUMS } from "app/common/remote-data.config";
+import { AppExtEnumDataProvider, EXT_ENUM, FAMILY_TYPE, NOT_ENSURED_FAMILY_TYPE } from "app/common/remote-data.config";
 import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
 
 @NgModule({
@@ -47,7 +47,9 @@ import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
     {provide: VERSION_INFO, useValue: {key: AppConfig.versionTag, currentVersion: AppConfig.version}},
     VersionCheckHook,
     {provide: REQUEST_HOOK, useExisting: VersionCheckHook, multi: true},
-    {provide: REMOTE_DATA_TYPE, useValue: EXT_ENUMS, multi: true},
+    {provide: REMOTE_DATA_TYPE, useValue: EXT_ENUM, multi: true},
+    {provide: REMOTE_DATA_TYPE, useValue: FAMILY_TYPE, multi: true},
+    {provide: REMOTE_DATA_TYPE, useValue: NOT_ENSURED_FAMILY_TYPE, multi: true},
     {provide: EXT_ENUM_DATA_PROVIDER, useClass: AppExtEnumDataProvider},
   ]
 })

@@ -45,6 +45,8 @@ export class RadiosComponent extends DefaultFormComponent {
         val7: [3],
         val8: [data['Sex'][0]],
         val9: [data['FamilyType'][1]],
+        val10: [data['FamilyType'][1]],
+        val11: [data['FamilyType'][2]],
       })
     );
   }
