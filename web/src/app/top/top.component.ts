@@ -1,6 +1,5 @@
 import { ApplicationInitStatus, Component, OnInit } from '@angular/core';
 import { Api, RemoteDataService, ExtEnumService } from 'calico';
-import { EXT_ENUMS } from "app/common/remote-data.config";
 
 @Component({
   selector: 'app-top',
