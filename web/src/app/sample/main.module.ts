@@ -20,7 +20,6 @@ import { TimepickerComponent } from "./form/timepicker/timepicker.component";
 import { IntegerComponent } from "./form/integer/integer.component";
 import { CurrencyComponent } from "./form/currency/currency.component";
 import { FloatComponent } from "./form/float/float.component";
-import { EnumSelectComponent } from "./form/enum-select/enum-select.component";
 
 const routes: Routes = [
   {
@@ -43,7 +42,6 @@ const routes: Routes = [
       {path: "form/integer", component: IntegerComponent},
       {path: "form/currency", component: CurrencyComponent},
       {path: "form/float", component: FloatComponent},
-      {path: "form/enum-select", component: EnumSelectComponent},
     ]
   },
 ];
@@ -72,7 +70,6 @@ const routes: Routes = [
     IntegerComponent,
     CurrencyComponent,
     FloatComponent,
-    EnumSelectComponent,
   ],
   providers: [
     ValidationService,
