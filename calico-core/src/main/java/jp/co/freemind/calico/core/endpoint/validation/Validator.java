@@ -55,7 +55,7 @@ public class Validator {
     for (Validation validation : validations) {
       if (!validation.matches(field)) continue;
       if (!validation.validate(field, value)) {
-        violation.mark(field.getName(), validation.getErrorMessage(field));
+        violation.mark(field.getName(), validation.getErrorMessage(field, value));
       }
     }
 

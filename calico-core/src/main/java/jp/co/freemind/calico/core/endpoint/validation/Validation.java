@@ -6,7 +6,11 @@ import java.util.function.Function;
 public interface Validation<T> {
   boolean matches(FieldAccessor field);
   boolean validate(FieldAccessor field, T object);
+  @Deprecated
   String getErrorMessage(FieldAccessor field);
+  default String getErrorMessage(FieldAccessor field, T object) {
+    return getErrorMessage(field);
+  }
 
   static ValidatorFactory factory() {
     return new ValidatorFactory();
