@@ -13,8 +13,7 @@ public class ValidatorFactory {
     return new Context<>(predicate::test);
   }
 
-  private <U> ValidatorFactory add(FieldAccessorMatcher matcher, BiFunction<FieldAccessor, U, Boolean> validateMethod, Function<FieldAccessor, Message> messageMapper) {
-    Validation<U> validation = new Validation.SelectiveValidation<>(matcher, validateMethod, messageMapper);
+  public <U> ValidatorFactory expected(Validation<U> validation) {
     validations.add(validation);
     return this;
   }
@@ -31,10 +30,14 @@ public class ValidatorFactory {
     }
 
     public ValidatorFactory then(BiFunction<FieldAccessor, T, Boolean> validateMethod, Function<FieldAccessor, Message> messageMapper) {
-      return ValidatorFactory.this.add(matcher, validateMethod, messageMapper);
+      return then(validateMethod, (f, t)-> messageMapper.apply(f));
     }
     public ValidatorFactory then(BiFunction<FieldAccessor, T, Boolean> validateMethod, Message message) {
       return then(validateMethod, f -> message);
+    }
+    public ValidatorFactory then(BiFunction<FieldAccessor, T, Boolean> validateMethod, BiFunction<FieldAccessor, T, Message> messageMapper) {
+      Validation<T> validation = new Validation.SelectiveValidation<>(matcher, validateMethod, messageMapper);
+      return expected(validation);
     }
   }
 }

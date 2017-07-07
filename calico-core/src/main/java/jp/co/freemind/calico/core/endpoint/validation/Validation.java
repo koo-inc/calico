@@ -1,16 +1,11 @@
 package jp.co.freemind.calico.core.endpoint.validation;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public interface Validation<T> {
   boolean matches(FieldAccessor field);
   boolean validate(FieldAccessor field, T object);
-  @Deprecated
-  String getErrorMessage(FieldAccessor field);
-  default String getErrorMessage(FieldAccessor field, T object) {
-    return getErrorMessage(field);
-  }
+  String getErrorMessage(FieldAccessor field, T object);
 
   static ValidatorFactory factory() {
     return new ValidatorFactory();
@@ -19,9 +14,9 @@ public interface Validation<T> {
   class SelectiveValidation<U> implements Validation<U> {
     private final FieldAccessorMatcher matcher;
     private final BiFunction<FieldAccessor, U, Boolean> validateMethod;
-    private final Function<FieldAccessor, Message> messageMapper;
+    private final BiFunction<FieldAccessor, U, Message> messageMapper;
 
-    SelectiveValidation(FieldAccessorMatcher matcher, BiFunction<FieldAccessor, U, Boolean> validateMethod, Function<FieldAccessor, Message> messageMapper) {
+    SelectiveValidation(FieldAccessorMatcher matcher, BiFunction<FieldAccessor, U, Boolean> validateMethod, BiFunction<FieldAccessor, U, Message> messageMapper) {
       this.matcher = matcher;
       this.validateMethod = validateMethod;
       this.messageMapper = messageMapper;
@@ -38,8 +33,8 @@ public interface Validation<T> {
     }
 
     @Override
-    public String getErrorMessage(FieldAccessor field) {
-      return messageMapper.apply(field).value(field);
+    public String getErrorMessage(FieldAccessor field, U object) {
+      return messageMapper.apply(field, object).value(field);
     }
   }
 
@@ -63,7 +58,7 @@ public interface Validation<T> {
     }
 
     @Override
-    public String getErrorMessage(FieldAccessor field) {
+    public String getErrorMessage(FieldAccessor field, T object) {
       return message;
     }
   }
