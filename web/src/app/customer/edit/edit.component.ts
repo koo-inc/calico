@@ -16,12 +16,10 @@ export class EditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private alert: AlertService,
-    private extEnumService: ExtEnumService,
   ) { }
 
   id: number;
   form: FormGroup;
-  options = {};
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -30,7 +28,6 @@ export class EditComponent implements OnInit {
         this.form = form;
       });
     });
-    this.extEnumService.setValues(this.options, 'sex', 'familyType');
   }
 
   addFamily(): void {

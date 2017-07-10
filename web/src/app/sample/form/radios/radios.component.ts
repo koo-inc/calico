@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs";
-import { AlertService, ExtEnumService, ExtEnumData } from "calico";
+import { AlertService, ExtEnumService, ExtEnum } from "calico";
 
 @Component({
   selector: 'app-radios',
@@ -22,18 +22,33 @@ export class RadiosComponent extends DefaultFormComponent {
     super(alert, extEnumService);
   }
 
+  private observable$: Observable<ExtEnum[]>;
+
+  ngOnInit(): void {
+    super.ngOnInit();
+
+    this.observable$ = Observable.of(
+      this.extEnumService.getValues('Sex')
+    );
+  }
+
   createForm(): Observable<FormGroup> {
-    return this.extEnumService.values('sex', 'familyType').map((data: ExtEnumData) => {
-      return this.fb.group({
+    let data = this.extEnumService.getAll();
+    return Observable.of(
+      this.fb.group({
         val1: [null],
-        val2: [data['sex'][0]],
+        val2: [data['Sex'][0]],
         val3: [null, Validators.required],
-        val4: [data['familyType'][0]],
+        val4: [data['FamilyType'][0]],
         val5: [null],
-        val6: [data['familyType'][0]['NAME']],
+        val6: [data['FamilyType'][0]['NAME']],
         val7: [3],
-      });
-    });
+        val8: [data['Sex'][0]],
+        val9: [data['FamilyType'][1]],
+        val10: [data['FamilyType'][1]],
+        val11: [data['FamilyType'][2]],
+      })
+    );
   }
 
 }

@@ -5,32 +5,32 @@
 
     <div>
       <h3>PLAIN</h3>
-      <c-radios formControlName="val1" [options]="options.familyType"></c-radios>
+      <c-radios formControlName="val1" [options]="options.FamilyType"></c-radios>
       <div inspect="val1"></div>
     </div>
 
     <div>
       <h3>PLAIN(値あり)</h3>
-      <c-radios formControlName="val2" [options]="options.sex"></c-radios>
+      <c-radios formControlName="val2" [options]="options.Sex"></c-radios>
       <div inspect="val2"></div>
     </div>
 
     <div>
       <h3>必須</h3>
-      <c-radios formControlName="val3" [options]="options.familyType"></c-radios>
+      <c-radios formControlName="val3" [options]="options.FamilyType"></c-radios>
       <div inspect="val3"></div>
     </div>
 
     <div>
       <h3>nullOptionあり</h3>
-      <c-radios formControlName="val4" [options]="options.familyType"
+      <c-radios formControlName="val4" [options]="options.FamilyType"
         [nullOption]="true"></c-radios>
       <div inspect="val4"></div>
     </div>
 
     <div>
       <h3>nullOptionLabel, optionLabel</h3>
-      <c-radios formControlName="val5" [options]="options.familyType"
+      <c-radios formControlName="val5" [options]="options.FamilyType"
         [nullOption]="true"
         nullOptionLabel="不明"
         optionLabel="NAME"></c-radios>
@@ -39,7 +39,7 @@
 
     <div>
       <h3>optionValue, optionKey</h3>
-      <c-radios formControlName="val6" [options]="options.familyType"
+      <c-radios formControlName="val6" [options]="options.FamilyType"
         optionValue="NAME"
         optionKey="NAME"></c-radios>
       <div inspect="val6"></div>
@@ -49,6 +49,30 @@
       <h3>オブジェクト配列以外のoptions</h3>
       <c-radios formControlName="val7" [options]="[1,2,3,4,5]"></c-radios>
       <div inspect="val7"></div>
+    </div>
+
+    <div>
+      <h3>Observableのoptions</h3>
+      <c-radios formControlName="val8" [options]="observable$"></c-radios>
+      <div inspect="val8"></div>
+    </div>
+
+    <div>
+      <h3>extEnum</h3>
+      <c-radios formControlName="val9" extEnum="FamilyType"></c-radios>
+      <div inspect="val9"></div>
+    </div>
+
+    <div>
+      <h3>remoteData</h3>
+      <c-radios formControlName="val10" remoteData="FamilyType"></c-radios>
+      <div inspect="val10"></div>
+    </div>
+
+    <div>
+      <h3>remoteData(not ensured)</h3>
+      <c-radios formControlName="val11" remoteData="NotEnsuredFamilyType"></c-radios>
+      <div inspect="val11"></div>
     </div>
 
     <div><button cBtn="primary">submit</button></div>

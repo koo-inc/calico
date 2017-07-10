@@ -17,11 +17,8 @@ export class IndexComponent implements OnInit, OnDestroy {
     private mainService: MainService,
     private route: ActivatedRoute,
     private router: Router,
-    private extEnumService: ExtEnumService,
     private searchContext: SearchContext,
   ) { }
-
-  options = {};
 
   ngOnInit() {
     this.searchContext.init({
@@ -30,7 +27,6 @@ export class IndexComponent implements OnInit, OnDestroy {
       toForm: (form: any) => { return this.mainService.toSearchForm(form); },
       initialSearch: true,
     });
-    this.extEnumService.setValues(this.options, 'sex');
   }
   ngOnDestroy(): void {
     this.searchContext.onDestroy();

@@ -1,18 +1,24 @@
 import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core';
 import { ModalModule, PopoverModule, BsDropdownModule, DatepickerModule, TimepickerModule } from 'ngx-bootstrap';
 
-import { CalicoCoreModule, CalicoUiModule, CalicoFormModule, CalicoSearchModule, MESSAGE_CONFIG, REMOTE_DATA_TYPE } from "calico";
+import {
+  CalicoCoreModule,
+  CalicoUiModule,
+  CalicoFormModule,
+  CalicoSearchModule,
+  MESSAGE_CONFIG,
+  REMOTE_DATA_TYPE,
+  EXT_ENUM_DATA_PROVIDER,
+} from "calico";
+import { LOCAL_STORAGE_SERVICE_CONFIG } from "calico/core/local-storage.service";
+import { SESSION_STORAGE_SERVICE_CONFIG } from "calico/core/session-storage.service";
+import { ALERT_CONFIG } from "calico/ui/alert.service";
+import { REQUEST_HOOK } from "calico/core/api.service";
+
 import { AppConfig } from "app/app.config";
 import { AuthService } from "app/common/api/auth.service";
-import { REQUEST_HOOK } from "calico/core/api.service";
+import { AppExtEnumDataProvider, EXT_ENUM, FAMILY_TYPE, NOT_ENSURED_FAMILY_TYPE } from "app/common/remote-data.config";
 import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
-
-import { ALERT_CONFIG } from "calico/ui/alert.service";
-import { EXT_ENUM_SERVICE_CONFIG } from "calico/core/ext-enum.service";
-import { SESSION_STORAGE_SERVICE_CONFIG } from "calico/core/session-storage.service";
-import { LOCAL_STORAGE_SERVICE_CONFIG } from "calico/core/local-storage.service";
-import { EXT_ENUMS } from "app/common/remote-data.config";
-
 
 @NgModule({
   imports: [
@@ -32,7 +38,6 @@ import { EXT_ENUMS } from "app/common/remote-data.config";
     AuthService,
     {provide: LOCAL_STORAGE_SERVICE_CONFIG, useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
     {provide: SESSION_STORAGE_SERVICE_CONFIG, useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
-    {provide: EXT_ENUM_SERVICE_CONFIG, useValue: {apiPath: 'endpoint/system/ext_enum'}},
     {provide: ALERT_CONFIG, useValue: {
       common: {position: 'top-right', lifetime: 3000},
       warning: {position: 'top-right', lifetime: null},
@@ -42,7 +47,10 @@ import { EXT_ENUMS } from "app/common/remote-data.config";
     {provide: VERSION_INFO, useValue: {key: AppConfig.versionTag, currentVersion: AppConfig.version}},
     VersionCheckHook,
     {provide: REQUEST_HOOK, useExisting: VersionCheckHook, multi: true},
-    {provide: REMOTE_DATA_TYPE, useValue: EXT_ENUMS, multi: true},
+    {provide: REMOTE_DATA_TYPE, useValue: EXT_ENUM, multi: true},
+    {provide: REMOTE_DATA_TYPE, useValue: FAMILY_TYPE, multi: true},
+    {provide: REMOTE_DATA_TYPE, useValue: NOT_ENSURED_FAMILY_TYPE, multi: true},
+    {provide: EXT_ENUM_DATA_PROVIDER, useClass: AppExtEnumDataProvider},
   ]
 })
 export class CoreModule {

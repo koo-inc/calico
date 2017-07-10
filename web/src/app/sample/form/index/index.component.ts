@@ -42,7 +42,6 @@ export class FormTabsComponent {
     { name: 'c-integer', path: 'integer', },
     { name: 'c-currency', path: 'currency', },
     { name: 'c-float', path: 'float', },
-    { name: 'c-enum-select', path: 'enum-select', },
   ];
 
   select(tab: any): void {
@@ -91,10 +90,9 @@ export abstract class DefaultFormComponent implements OnInit {
   form: FormGroup;
   @ViewChild(FormGroupDirective) formGroupDirective: FormGroupDirective;
 
-  options = {};
+  options = this.extEnumService.getValuesMap('Sex', 'FamilyType');
 
   ngOnInit(): void {
-    this.extEnumService.setValues(this.options, 'sex', 'familyType');
     this.createForm().subscribe(form => {
       this.form = form;
     });
