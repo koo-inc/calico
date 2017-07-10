@@ -10,7 +10,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaMeta;
-import jp.co.freemind.calico.core.util.type.Pair;
+import jp.co.freemind.calico.core.util.type.Tuple;
+import jp.co.freemind.calico.core.util.type.Tuple2;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -19,7 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class PrintPostMan implements PostMan {
 
-  private List<Pair<String, List<String>>> pairs = Lists.newArrayList();
+  private List<Tuple2<String, List<String>>> pairs = Lists.newArrayList();
 
   @Override
   public void accept(String envelopeJson) {
@@ -31,7 +32,7 @@ public class PrintPostMan implements PostMan {
       .map(Media::getMeta)
       .map(MediaMeta::getName)
       .collect(toList());
-    pairs.add(Pair.of(envelopeJson, mediaNames));
+    pairs.add(Tuple.of(envelopeJson, mediaNames));
   }
 
   @Override
@@ -39,8 +40,8 @@ public class PrintPostMan implements PostMan {
     mail.visit(this);
 
     pairs.forEach(pair -> {
-      List<String> attachements = pair.getRight();
-      Object[] args = Stream.concat(Stream.of(pair.getLeft()), attachements.stream())
+      List<String> attachements = pair.getValue2();
+      Object[] args = Stream.concat(Stream.of(pair.getValue1()), attachements.stream())
         .collect(toList()).toArray();
       log.info("POST mail: {}" + Strings.repeat("\n\t{}", attachements.size()), args);
     });

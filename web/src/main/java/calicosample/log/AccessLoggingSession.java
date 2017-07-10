@@ -119,7 +119,7 @@ public class AccessLoggingSession implements LoggingSession {
     Stream<String> name = StreamUtil.of(request.getHeaderNames());
     Stream<Stream<String>> values = StreamUtil.of(request.getHeaderNames()).map(request::getHeaders).map(StreamUtil::of);
     return StreamUtil.zip(name, values)
-      .flatMap(pair -> pair.getRight().map(v -> pair.getLeft() + ": " + v))
+      .flatMap(tuple -> tuple.getValue2().map(v -> tuple.getValue1() + ": " + v))
       .collect(Collectors.joining("\n"));
   }
 

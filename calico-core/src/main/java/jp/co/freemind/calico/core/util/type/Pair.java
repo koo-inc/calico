@@ -1,12 +1,9 @@
 package jp.co.freemind.calico.core.util.type;
 
-public class Pair<L, R> {
-  private final L left;
-  private final R right;
-
+@Deprecated
+public class Pair<L, R> extends Tuple2<L, R>{
   private Pair(L left, R right) {
-    this.left = left;
-    this.right = right;
+    super(left, right);
   }
 
   public static <LEFT, RIGHT> Pair<LEFT, RIGHT> of (LEFT left, RIGHT right) {
@@ -14,9 +11,9 @@ public class Pair<L, R> {
   }
 
   public L getLeft() {
-    return left;
+    return getValue1();
   }
   public R getRight() {
-    return right;
+    return getValue2();
   }
 }
