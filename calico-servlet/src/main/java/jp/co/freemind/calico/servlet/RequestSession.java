@@ -16,10 +16,12 @@ import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
+import jp.co.freemind.calico.core.exception.VerificationException;
 import jp.co.freemind.calico.core.log.LoggingSession;
 import jp.co.freemind.calico.core.log.LoggingSessionStarter;
 import jp.co.freemind.calico.core.util.FileBackedInputStream;
 import jp.co.freemind.calico.core.zone.Context;
+import jp.co.freemind.calico.core.zone.UnhandledException;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.util.CookieUtil;
 import jp.co.freemind.calico.servlet.util.NetworkUtil;
@@ -56,7 +58,10 @@ public class RequestSession {
       });
     }
     catch (Exception e) {
-      log.catching(e);
+      Throwable t = e instanceof UnhandledException ? e.getCause() : e;
+      if (!isDesignedException(t)) {
+        log.catching(e);
+      }
     }
   }
 
@@ -112,6 +117,10 @@ public class RequestSession {
 
   protected void renderError(Context context, RequestParam param, Throwable t) {
     Zone.getCurrent().getInstance(Keys.EXCEPTION_RENDERER).render(param.getConfig(), param.getResponse(), t);
+  }
+
+  protected boolean isDesignedException(Throwable t) {
+    return t instanceof VerificationException;
   }
 
   @Getter

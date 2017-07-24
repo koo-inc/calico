@@ -94,7 +94,7 @@ public class Zone {
         throw t2;
       }
       catch (Throwable t2) {
-        throw new UnhandledException(t);
+        throw UnhandledException.of(t);
       }
     }
     finally {
@@ -136,7 +136,7 @@ public class Zone {
       parent.doInZone(() -> parent.propagateThrowable(target, context));
     }
     else {
-      throw new UnhandledException(t);
+      throw UnhandledException.of(t);
     }
   }
 
