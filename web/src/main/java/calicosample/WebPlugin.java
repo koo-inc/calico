@@ -15,6 +15,7 @@ import jp.co.freemind.calico.core.zone.Context;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.AuthenticationProcedure;
 import jp.co.freemind.calico.servlet.CalicoServletPlugin;
+import jp.co.freemind.calico.servlet.interceptor.CsrfInterceptor;
 import jp.co.freemind.calico.servlet.interceptor.TimeoutInterceptor;
 import jp.co.freemind.calico.servlet.interceptor.VersioningInterceptor;
 
@@ -34,6 +35,7 @@ public class WebPlugin extends CalicoServletPlugin {
 
     interceptAfter(null,
       Matchers.inSubpackage(ROOT_PACKAGE),
+      new CsrfInterceptor(Messages.CSRF),
       new TimeoutInterceptor(WebPlugin::getNullAuthInfo),
       new ResultMapper()
     );

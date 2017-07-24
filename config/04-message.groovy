@@ -4,6 +4,7 @@ message = [
   [key: "existsEntity", value: "指定されたレコードが存在しません。"],
   [key: "scriptAssert", value: "{script}による評価が不正です。"],
   [key: "safeHtml", value: "安全ではないHTMLが含まれています。"],
+  [key: "csrf", value: "CSRFが検出されました。"],
 
   [key: "required", value: "必須項目です。"],
   [key: "notBlank", value: "ブランクは許可されていません。"],

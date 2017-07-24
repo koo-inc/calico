@@ -25,24 +25,25 @@ import lombok.Value;
   private Set<Authority> authorities;
   @JsonIgnore
   private AuthToken authToken;
+  private boolean isSystemUsed;
 
   /**
    * create
    */
   public static CalicoSampleAuthInfo of(@NonNull UserInfo.WithAdditionalData userInfo, String remoteAddress, LocalDateTime processDateTime){
     AuthToken authToken = AuthToken.create(userInfo.getLoginId(), remoteAddress, processDateTime);
-    return new CalicoSampleAuthInfo(userInfo.getId(), userInfo.getLoginId(), userInfo.getAuthorities(), authToken);
+    return new CalicoSampleAuthInfo(userInfo.getId(), userInfo.getLoginId(), userInfo.getAuthorities(), authToken, userInfo.isSystemUsed());
   }
 
   public static CalicoSampleAuthInfo of(@NonNull AuthToken authToken, Function<AuthToken, Optional<UserInfo.WithAdditionalData>> authenticator){
     return authenticator.apply(authToken)
-      .map(ui -> new CalicoSampleAuthInfo(ui.getId(), ui.getLoginId(), ui.getAuthorities(), authToken))
-      .orElseGet(() -> new CalicoSampleAuthInfo(null, null, emptySet(), authToken));
+      .map(ui -> new CalicoSampleAuthInfo(ui.getId(), ui.getLoginId(), ui.getAuthorities(), authToken, ui.isSystemUsed()))
+      .orElseGet(() -> new CalicoSampleAuthInfo(null, null, emptySet(), authToken, false));
   }
 
   public static CalicoSampleAuthInfo ofNull(String remoteAddress, LocalDateTime processDateTime) {
     AuthToken authToken = AuthToken.createEmpty(remoteAddress, processDateTime);
-    return new CalicoSampleAuthInfo(null, null, emptySet(), authToken);
+    return new CalicoSampleAuthInfo(null, null, emptySet(), authToken, false);
   }
 
   @Override

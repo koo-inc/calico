@@ -24,6 +24,8 @@ public final class Messages {
       
       public static final Message SAFE_HTML = new Message("安全ではないHTMLが含まれています。");
       
+      public static final Message CSRF = new Message("CSRFが検出されました。");
+      
       public static final Message REQUIRED = new Message("必須項目です。");
       
       public static final Message NOT_BLANK = new Message("ブランクは許可されていません。");
