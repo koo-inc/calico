@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import calicosample.core.auth.AllowAll;
 import calicosample.endpoint.userinfo.UserInfoEndpoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.endpoint.dto.EmptyInput;
@@ -14,6 +15,7 @@ import jp.co.freemind.calico.core.extenum.ExtEnum;
 import jp.co.freemind.calico.core.util.ClassFinder;
 import lombok.SneakyThrows;
 
+@AllowAll
 public class GetExtEnumsEndpoint extends UserInfoEndpoint<EmptyInput, Map<String, Object>> {
   private static Map<String, Object> CACHE;
 
