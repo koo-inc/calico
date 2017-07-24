@@ -10,8 +10,8 @@ description = 'service'
 
 // for Doma
 idea.module {
-  compileJava.dependsOn processResources
-  processResources.destinationDir = compileJava.destinationDir
+  inheritOutputDirs = true
+  outputDir = compileJava.destinationDir
 }
 configurations {
   processResources.destinationDir = compileJava.destinationDir
