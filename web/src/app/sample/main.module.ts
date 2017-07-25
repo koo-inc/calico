@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { EnsureRemoteData } from 'calico';
 
 import { SharedModule } from "../common/shared.module";
 import { ValidationService } from "./validation/validation.service";
@@ -42,7 +43,8 @@ const routes: Routes = [
       {path: "form/integer", component: IntegerComponent},
       {path: "form/currency", component: CurrencyComponent},
       {path: "form/float", component: FloatComponent},
-    ]
+    ],
+    canActivateChild: [EnsureRemoteData]
   },
 ];
 

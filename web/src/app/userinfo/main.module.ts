@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { EnsureRemoteData } from 'calico';
 
 import { SharedModule } from "../common/shared.module";
 import { MainService } from "./main.service";
@@ -13,7 +14,8 @@ const routes: Routes = [
     component: LayoutNormal,
     children: [
       {path: "index", component: IndexComponent},
-    ]
+    ],
+    canActivateChild: [EnsureRemoteData]
   },
 ];
 
