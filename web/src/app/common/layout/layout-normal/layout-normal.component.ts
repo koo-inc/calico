@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SessionComponent } from "app/common/session/session.component";
 
 @Component({
   selector: 'layout-normal',
   template: `
-    <app-session></app-session>
     <app-header></app-header>
     <div class="container-fluid">
       <div class="main">

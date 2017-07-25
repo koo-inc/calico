@@ -16,7 +16,7 @@ import { ALERT_CONFIG } from "calico/ui/alert.service";
 import { REQUEST_HOOK } from "calico/core/api.service";
 
 import { AppConfig } from "app/app.config";
-import { AuthService } from "app/common/api/auth.service";
+import { AuthService, SessionSupport } from "app/common/api/auth.service";
 import { AppExtEnumDataProvider, EXT_ENUM, FAMILY_TYPE, NOT_ENSURED_FAMILY_TYPE } from "app/common/remote-data.config";
 import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
 
@@ -36,6 +36,7 @@ import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
   ],
   providers: [
     AuthService,
+    SessionSupport,
     {provide: LOCAL_STORAGE_SERVICE_CONFIG, useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
     {provide: SESSION_STORAGE_SERVICE_CONFIG, useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
     {provide: ALERT_CONFIG, useValue: {

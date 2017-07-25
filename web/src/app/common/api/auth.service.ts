@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl } from "@angular/forms";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 
 import { Api } from "calico";
+import {
+  ActivatedRouteSnapshot, CanActivate, CanActivateChild, Resolve, Router,
+  RouterStateSnapshot
+} from "@angular/router";
 
 export interface AuthInfo {
   userId: number;
@@ -10,24 +14,28 @@ export interface AuthInfo {
   authenticated: boolean;
 }
 
-const _authState: Subject<AuthInfo> = new Subject();
-export const authState: Observable<AuthInfo> = _authState;
-
 @Injectable()
 export class AuthService {
   constructor(private api: Api) { }
 
+  private _authInfo: AuthInfo;
+
+  get authInfo() {
+    if (this._authInfo == null) throw new Error("権限情報が取得されていません");
+    return this._authInfo;
+  }
+
   login(form: FormGroup) {
     return this.api.submit("endpoint/auth/login", form)
-      .do((authInfo: AuthInfo) => _authState.next(authInfo));
+      .do((authInfo: AuthInfo) => this._authInfo = authInfo);
   }
   logout() {
     return this.api.submit("endpoint/auth/logout")
-      .do((authInfo: AuthInfo) => _authState.next(authInfo));
+      .do((authInfo: AuthInfo) => this._authInfo = authInfo);
   }
   keep(): Observable<AuthInfo> {
     return this.api.submit("endpoint/auth/keep")
-      .do((authInfo: AuthInfo) => _authState.next(authInfo));
+      .do((authInfo: AuthInfo) => this._authInfo = authInfo);
   }
 
   getForm(): Promise<FormGroup> {
@@ -47,3 +55,25 @@ export const loginForm = (loginId: string, password: string): FormGroup => {
     password: new FormControl(password, Validators.required)
   });
 };
+
+@Injectable()
+export class SessionSupport implements CanActivate {
+  constructor(private authService: AuthService, private router: Router) {
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    return this.authService.keep().map(authInfo => this.checkAuthenticatedIfNeeded(authInfo, state));
+  }
+
+  private checkAuthenticatedIfNeeded(authInfo: AuthInfo, state: RouterStateSnapshot) {
+    if (state.url == '/login') {
+      return true;
+    }
+    if (!authInfo.authenticated) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+
+    return true;
+  }
+}

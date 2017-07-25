@@ -1,4 +1,5 @@
 import { Route, RouterModule } from '@angular/router';
+import { SessionSupport } from "./common/api/auth.service";
 
 let routes: Route[] = [
   { path: '', redirectTo: '/top', pathMatch: 'full' },
@@ -8,4 +9,17 @@ let routes: Route[] = [
   { path: 'customer', loadChildren: 'app/customer/main.module#MainModule' },
   { path: 'sample', loadChildren: 'app/sample/main.module#MainModule' },
 ];
+
+routes = addCanActivate(routes, SessionSupport);
+
 export const routing = RouterModule.forRoot(routes);
+
+function addCanActivate(routes: Route[], canActivate: any) {
+  routes.forEach(route => {
+    if (route.canActivate == null) {
+      route.canActivate = [];
+    }
+    route.canActivate.push(canActivate);
+  });
+  return routes;
+}
