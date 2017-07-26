@@ -27,7 +27,8 @@
       "rxjs/*": ["../node_modules/rxjs/*"],
       "ngx-bootstrap": ["../node_modules/ngx-bootstrap"],
       "ngx-bootstrap/*": ["../node_modules/ngx-bootstrap/*"],
-      "moment": ["../node_modules/moment"]
+      "moment": ["../node_modules/moment"],
+      "lz-string": ["../node_modules/lz-string"]
     }
   }
 }
