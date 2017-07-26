@@ -32,3 +32,4 @@ service/migration/db/environments/test.properties
 service/migration/log/environments/development.properties
 service/migration/log/environments/test.properties
 web/src/app/app.config.ts
+web/package-lock.json
