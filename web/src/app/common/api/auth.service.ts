@@ -3,10 +3,7 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 
 import { Api } from "calico";
-import {
-  ActivatedRouteSnapshot, CanActivate, CanActivateChild, Resolve, Router,
-  RouterStateSnapshot
-} from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
 
 export interface AuthInfo {
   userId: number;

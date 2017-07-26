@@ -57,4 +57,7 @@ export class HeaderComponent {
     });
   }
 
+  get authInfo() {
+    return this.auth.authInfo;
+  }
 }
