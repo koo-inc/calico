@@ -32,12 +32,12 @@ import lombok.Value;
    */
   public static CalicoSampleAuthInfo of(@NonNull UserInfo.WithAdditionalData userInfo, String remoteAddress, LocalDateTime processDateTime){
     AuthToken authToken = AuthToken.create(userInfo.getLoginId(), remoteAddress, processDateTime);
-    return new CalicoSampleAuthInfo(userInfo.getId(), userInfo.getLoginId(), userInfo.getAuthorities(), authToken, userInfo.isSystemUsed());
+    return new CalicoSampleAuthInfo(userInfo.getId(), userInfo.getLoginId(), userInfo.getAuthorities(), authToken, userInfo.isUsedBySystem());
   }
 
   public static CalicoSampleAuthInfo of(@NonNull AuthToken authToken, Function<AuthToken, Optional<UserInfo.WithAdditionalData>> authenticator){
     return authenticator.apply(authToken)
-      .map(ui -> new CalicoSampleAuthInfo(ui.getId(), ui.getLoginId(), ui.getAuthorities(), authToken, ui.isSystemUsed()))
+      .map(ui -> new CalicoSampleAuthInfo(ui.getId(), ui.getLoginId(), ui.getAuthorities(), authToken, ui.isUsedBySystem()))
       .orElseGet(() -> new CalicoSampleAuthInfo(null, null, emptySet(), authToken, false));
   }
 

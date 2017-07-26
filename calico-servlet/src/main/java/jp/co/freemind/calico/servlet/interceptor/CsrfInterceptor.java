@@ -1,6 +1,7 @@
 package jp.co.freemind.calico.servlet.interceptor;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,34 +16,40 @@ import jp.co.freemind.calico.servlet.SessionSetting;
 
 public class CsrfInterceptor implements EndpointInterceptor {
   private final Message insecureMessage;
+  private final boolean permitWhenAuthInfoIsNull;
 
   public CsrfInterceptor(Message insecureMessage) {
+    this(insecureMessage, false);
+  }
+  public CsrfInterceptor(Message insecureMessage, boolean permitWhenAuthInfoIsNull) {
     this.insecureMessage = insecureMessage;
+    this.permitWhenAuthInfoIsNull = permitWhenAuthInfoIsNull;
   }
 
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
     HttpServletRequest req = Zone.getCurrent().getInstance(Keys.SERVLET_REQUEST);
-    AuthInfo authInfo = Zone.getContext().getAuthInfo().orElse(null);
-    if (authInfo == null || !authInfo.isAuthenticated()) {
-      return invocation.proceed();
-    }
-    if (authInfo.isSystemUsed()) {
+    Optional<AuthInfo> authInfo = Zone.getContext().getAuthInfo();
+    if (authInfo.map(ai -> false).orElse(permitWhenAuthInfoIsNull)) {
       return invocation.proceed();
     }
 
-    if (Objects.equals(getHeaderCsrfToken(req), getCsrfToken(authInfo))) {
+    if (authInfo.map(AuthInfo::isUsedBySystem).orElse(false)) {
       return invocation.proceed();
+    }
+
+    verifyCsrfToken(req, authInfo.orElse(null));
+
+    return invocation.proceed();
+  }
+
+  private void verifyCsrfToken(HttpServletRequest req, AuthInfo authInfo) {
+    String headerCsrfToken = req.getHeader(Zone.getCurrent().getInstance(SessionSetting.class).getCsrfTokenHeader());
+    String sessionCsrfToken = authInfo.getAuthToken().getCsrfToken();
+    if (headerCsrfToken != null && Objects.equals(headerCsrfToken, sessionCsrfToken)) {
+      return;
     }
 
     throw new AuthorizationException(insecureMessage);
-  }
-
-  private String getHeaderCsrfToken(HttpServletRequest req) {
-    return req.getHeader(Zone.getCurrent().getInstance(SessionSetting.class).getCsrfTokenHeader());
-  }
-
-  private String getCsrfToken(AuthInfo authInfo) {
-    return authInfo.getAuthToken().getCsrfToken();
   }
 }

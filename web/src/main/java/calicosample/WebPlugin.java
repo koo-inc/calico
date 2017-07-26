@@ -3,9 +3,13 @@ package calicosample;
 import calicosample.auth.CalicoSampleAuthNProcedure;
 import calicosample.core.ServicePlugin;
 import calicosample.core.auth.CalicoSampleAuthInfo;
+import calicosample.endpoint.auth.KeepEndpoint;
+import calicosample.endpoint.system.GetExtEnumsEndpoint;
 import calicosample.log.AccessLoggingSession;
 import calicosample.log.AccessLoggingSessionStarter;
 import com.google.inject.Singleton;
+import com.google.inject.matcher.AbstractMatcher;
+import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.interceptor.ResultMapper;
@@ -35,9 +39,12 @@ public class WebPlugin extends CalicoServletPlugin {
 
     interceptAfter(null,
       Matchers.inSubpackage(ROOT_PACKAGE),
-      new CsrfInterceptor(Messages.CSRF),
       new TimeoutInterceptor(WebPlugin::getNullAuthInfo),
       new ResultMapper()
+    );
+    interceptAfter(null,
+      whenCsrfTarget(),
+      new CsrfInterceptor(Messages.CSRF)
     );
 
     bind(binder -> {
@@ -53,5 +60,16 @@ public class WebPlugin extends CalicoServletPlugin {
   private static CalicoSampleAuthInfo getNullAuthInfo() {
     Context context = Zone.getContext();
     return CalicoSampleAuthInfo.ofNull(context.getRemoteAddress(), context.getProcessDateTime());
+  }
+
+  private static Matcher<Class> whenCsrfTarget() {
+    return Matchers.inSubpackage(ROOT_PACKAGE).and(new AbstractMatcher<Class>() {
+      @Override
+      public boolean matches(Class aClass) {
+        if (KeepEndpoint.class.isAssignableFrom(aClass)) return false;
+        if (GetExtEnumsEndpoint.class.isAssignableFrom(aClass)) return false;
+        return true;
+      }
+    });
   }
 }

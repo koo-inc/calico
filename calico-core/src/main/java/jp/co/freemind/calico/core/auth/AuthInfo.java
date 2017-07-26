@@ -7,8 +7,11 @@ public interface AuthInfo extends Serializable {
   Integer getUserId();
   String getLoginId();
   boolean isAuthenticated();
-  boolean isSystemUsed();
   Set<Authority> getAuthorities();
 
   AuthToken getAuthToken();
+
+  default boolean isUsedBySystem() {
+    return false;
+  }
 }

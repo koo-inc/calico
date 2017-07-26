@@ -47,8 +47,8 @@ public class UserInfo extends CalicoSampleEntity {
         .collect(toSet());
     }
 
-    public boolean isSystemUsed() {
-      return this.getId() <= 0;
+    public boolean isUsedBySystem() {
+      return this == BATCH_USER;
     }
   }
 
