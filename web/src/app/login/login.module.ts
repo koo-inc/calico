@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from "@angular/router";
-import { EnsureRemoteData } from 'calico';
 
 import { SharedModule } from "app/common/shared.module";
 import { LayoutLogin } from 'app/common/layout/layout-login/layout-login.component';
 
 import { LoginComponent } from "./login.component";
+import { buildRoute } from "app/app.routing";
+import { SessionSupport } from "app/common/api/auth.service";
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutLogin,
+  buildRoute({
+    layout: LayoutLogin,
     children: [
       {path: "", component: LoginComponent},
     ],
-    canActivateChild: [EnsureRemoteData]
-  },
+    canActivateChild: [SessionSupport]
+  }),
 ];
 
 @NgModule({

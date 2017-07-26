@@ -1,5 +1,9 @@
-import { Route, RouterModule } from '@angular/router';
+import { Type } from "@angular/core";
+import { Route, RouterModule, Routes } from '@angular/router';
+import { EnsureRemoteData } from 'calico';
+
 import { SessionSupport } from "./common/api/auth.service";
+import { LayoutNormal } from "app/common/layout/layout-normal/layout-normal.component";
 
 let routes: Route[] = [
   { path: '', redirectTo: '/top', pathMatch: 'full' },
@@ -9,17 +13,14 @@ let routes: Route[] = [
   { path: 'customer', loadChildren: 'app/customer/main.module#MainModule' },
   { path: 'sample', loadChildren: 'app/sample/main.module#MainModule' },
 ];
-
-routes = addCanActivate(routes, SessionSupport);
-
 export const routing = RouterModule.forRoot(routes);
 
-function addCanActivate(routes: Route[], canActivate: any) {
-  routes.forEach(route => {
-    if (route.canActivate == null) {
-      route.canActivate = [];
-    }
-    route.canActivate.push(canActivate);
-  });
-  return routes;
+export function buildRoute(params: {layout?: Type<any>, children: Routes, canActivateChild?: any[]}): Route {
+  return {
+    path: '',
+    component: params.layout || LayoutNormal,
+    children: params.children,
+    canActivateChild: params.canActivateChild || [SessionSupport, EnsureRemoteData]
+  };
 }
+

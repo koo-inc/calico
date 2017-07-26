@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { EnsureRemoteData } from 'calico';
 
 import { SharedModule } from "../common/shared.module";
 import { MainService } from "./main.service";
-import { LayoutNormal } from '../common/layout/layout-normal/layout-normal.component';
 import { IndexComponent } from './index/index.component';
 import { EditModalComponent } from "./edit-modal/edit-modal.component";
+import { buildRoute } from "app/app.routing";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutNormal,
+  buildRoute({
     children: [
       {path: "index", component: IndexComponent},
     ],
-    canActivateChild: [EnsureRemoteData]
-  },
+  }),
 ];
 
 @NgModule({

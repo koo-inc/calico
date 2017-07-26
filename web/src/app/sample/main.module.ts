@@ -21,11 +21,10 @@ import { TimepickerComponent } from "./form/timepicker/timepicker.component";
 import { IntegerComponent } from "./form/integer/integer.component";
 import { CurrencyComponent } from "./form/currency/currency.component";
 import { FloatComponent } from "./form/float/float.component";
+import { buildRoute } from "app/app.routing";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutNormal,
+  buildRoute({
     children: [
       {path: "", component: IndexComponent},
       {path: "validation", component: ValidationComponent},
@@ -44,8 +43,7 @@ const routes: Routes = [
       {path: "form/currency", component: CurrencyComponent},
       {path: "form/float", component: FloatComponent},
     ],
-    canActivateChild: [EnsureRemoteData]
-  },
+    }),
 ];
 
 @NgModule({

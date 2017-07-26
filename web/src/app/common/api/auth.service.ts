@@ -3,7 +3,7 @@ import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
 
 import { Api } from "calico";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from "@angular/router";
 
 export interface AuthInfo {
   userId: number;
@@ -54,11 +54,11 @@ export const loginForm = (loginId: string, password: string): FormGroup => {
 };
 
 @Injectable()
-export class SessionSupport implements CanActivate {
+export class SessionSupport implements CanActivateChild {
   constructor(private authService: AuthService, private router: Router) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     return this.authService.keep().map(authInfo => this.checkAuthenticatedIfNeeded(authInfo, state));
   }
 
