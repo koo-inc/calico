@@ -2,8 +2,6 @@ language: java
 jdk:
   - oraclejdk8
 install: true
-before_script:
-  - ln -s "$(pwd)/calico-ng/src/calico" "$(pwd)/web/src/calico"
 script:
   - ./gradlew clean build --info
 deploy:
