@@ -6,6 +6,7 @@ import jp.co.freemind.calico.core.config.Setting;
 public interface SessionSetting {
   String getTokenKey();
   String getCsrfTokenKey();
+  String getCsrfTokenHeader();
   String getTimeoutMinutes();
 
   default long timeoutSecond() {

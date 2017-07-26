@@ -35,7 +35,7 @@ public class DefaultRenderer implements Renderer<Result> {
       .map(AuthInfo::getAuthToken)
       .ifPresent(token -> {
         CookieUtil.setSessionToken(servletContext, res, token);
-        CookieUtil.setXsrfToken(servletContext, res, token);
+        CookieUtil.setCsrfToken(servletContext, res, token);
       });
   }
 

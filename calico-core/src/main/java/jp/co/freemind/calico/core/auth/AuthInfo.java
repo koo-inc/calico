@@ -10,4 +10,8 @@ public interface AuthInfo extends Serializable {
   Set<Authority> getAuthorities();
 
   AuthToken getAuthToken();
+
+  default boolean isUsedBySystem() {
+    return false;
+  }
 }

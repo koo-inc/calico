@@ -46,6 +46,10 @@ public class UserInfo extends CalicoSampleEntity {
         .map(r -> (Authority) r)
         .collect(toSet());
     }
+
+    public boolean isUsedBySystem() {
+      return this == BATCH_USER;
+    }
   }
 
   @Domain(valueType = String.class)

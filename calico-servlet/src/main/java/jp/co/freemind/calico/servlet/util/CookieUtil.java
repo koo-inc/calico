@@ -27,11 +27,21 @@ public final class CookieUtil {
     return Optional.empty();
   }
 
+  public static Optional<String> getCsrfToken(HttpServletRequest req) {
+    if(req.getCookies() == null) return Optional.empty();
+    for (Cookie cookie : req.getCookies()) {
+      if (cookie.getName().equals(getSetting().getCsrfTokenKey())) {
+        return Optional.ofNullable(cookie.getValue());
+      }
+    }
+    return Optional.empty();
+  }
+
   public static void setSessionToken(ServletContext context, HttpServletResponse res, AuthToken token) {
     res.addCookie(generateCookie(context, getSetting().getTokenKey(), token.getValue(), true));
   }
 
-  public static void setXsrfToken(ServletContext context, HttpServletResponse res, AuthToken token) {
+  public static void setCsrfToken(ServletContext context, HttpServletResponse res, AuthToken token) {
     res.addCookie(generateCookie(context, getSetting().getCsrfTokenKey(), token.getCsrfToken(), false));
   }
 
