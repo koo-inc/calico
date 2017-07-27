@@ -16,7 +16,7 @@ import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
-import jp.co.freemind.calico.core.exception.VerificationException;
+import jp.co.freemind.calico.core.exception.ViolationException;
 import jp.co.freemind.calico.core.log.LoggingSession;
 import jp.co.freemind.calico.core.log.LoggingSessionStarter;
 import jp.co.freemind.calico.core.util.FileBackedInputStream;
@@ -120,7 +120,7 @@ public class RequestSession {
   }
 
   protected boolean isDesignedException(Throwable t) {
-    return t instanceof VerificationException;
+    return t instanceof ViolationException;
   }
 
   @Getter

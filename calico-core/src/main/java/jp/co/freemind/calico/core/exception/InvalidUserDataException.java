@@ -2,7 +2,7 @@ package jp.co.freemind.calico.core.exception;
 
 import jp.co.freemind.calico.core.validation.Violation;
 
-public class InvalidUserDataException extends VerificationException {
+public class InvalidUserDataException extends ViolationException {
   public InvalidUserDataException(String message) {
     super(message);
   }

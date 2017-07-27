@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import jp.co.freemind.calico.core.exception.InconsistentDataException;
+import jp.co.freemind.calico.core.exception.ApplicationException;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaStorage;
 import jp.co.freemind.calico.jackson.media.WithPayload;
@@ -30,7 +30,7 @@ public class DownloadEndpoint extends CustomerEndpoint<DownloadEndpoint.Input, D
     Output output = new Output();
     Optional<Media> media = mediaStorage.get(input.getId());
     if (!media.isPresent()) {
-      throw new InconsistentDataException("id", "存在しないファイルです");
+      throw new ApplicationException("id", "存在しないファイルです");
     }
     media.ifPresent(output::setPhoto);
     return output;

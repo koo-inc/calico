@@ -2,7 +2,7 @@ package jp.co.freemind.calico.core.exception;
 
 import jp.co.freemind.calico.core.endpoint.validation.Message;
 
-public class AuthorizationException extends VerificationException {
+public class AuthorizationException extends ViolationException {
   public AuthorizationException(String message) {
     super(message);
   }

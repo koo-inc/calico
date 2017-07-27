@@ -3,17 +3,17 @@ package jp.co.freemind.calico.core.exception;
 import jp.co.freemind.calico.core.validation.Violation;
 import lombok.Getter;
 
-public abstract class VerificationException extends RuntimeException {
+public abstract class ViolationException extends RuntimeException {
   @Getter
   private final Violation violation;
 
-  public VerificationException(String message){
+  public ViolationException(String message){
     this(new Violation(message));
   }
-  public VerificationException(String key, String message){
+  public ViolationException(String key, String message){
     this(new Violation(key, message));
   }
-  public VerificationException(Violation violation) {
+  public ViolationException(Violation violation) {
     this.violation = violation;
   }
 }

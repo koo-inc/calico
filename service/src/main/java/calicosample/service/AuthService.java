@@ -6,7 +6,7 @@ import calicosample.core.auth.CalicoSampleAuthInfo;
 import calicosample.dao.UserInfoDao;
 import calicosample.entity.UserInfo;
 import com.google.inject.Inject;
-import jp.co.freemind.calico.core.exception.InconsistentDataException;
+import jp.co.freemind.calico.core.exception.ApplicationException;
 import jp.co.freemind.calico.core.zone.Context;
 
 public class AuthService {
@@ -15,7 +15,7 @@ public class AuthService {
 
   public CalicoSampleAuthInfo login(String loginId, String password) {
     UserInfo.WithAdditionalData userInfo = userInfoDao.findForLogin(loginId, password).orElseThrow(() ->
-      new InconsistentDataException("loginId", "IDまたはパスワードが間違っています。"));
+      new ApplicationException("loginId", "IDまたはパスワードが間違っています。"));
     return CalicoSampleAuthInfo.of(userInfo, context.getRemoteAddress(), context.getProcessDateTime());
   }
 

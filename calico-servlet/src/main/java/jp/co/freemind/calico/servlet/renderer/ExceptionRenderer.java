@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import jp.co.freemind.calico.core.endpoint.exception.UnknownEndpointException;
 import jp.co.freemind.calico.core.exception.AuthorizationException;
-import jp.co.freemind.calico.core.exception.InconsistentDataException;
-import jp.co.freemind.calico.core.exception.VerificationException;
+import jp.co.freemind.calico.core.exception.ApplicationException;
+import jp.co.freemind.calico.core.exception.ViolationException;
 import jp.co.freemind.calico.core.validation.Violation;
 
 public class ExceptionRenderer implements Renderer<Object> {
@@ -16,10 +16,10 @@ public class ExceptionRenderer implements Renderer<Object> {
     if (t instanceof UnknownEndpointException) {
       render(conf, res, notFound(JSON), t);
     }
-    else if (t instanceof VerificationException) {
-      Violation violation = ((VerificationException) t).getViolation();
+    else if (t instanceof ViolationException) {
+      Violation violation = ((ViolationException) t).getViolation();
 
-      if (t instanceof InconsistentDataException) {
+      if (t instanceof ApplicationException) {
         render(conf, res, conflict(JSON), violation);
       } else if (t instanceof AuthorizationException) {
         render(conf, res, forbidden(JSON), violation);
