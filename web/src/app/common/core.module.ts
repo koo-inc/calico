@@ -41,7 +41,7 @@ import { VersionCheckHook, VERSION_INFO } from "./versioning/versioncheck.hook";
     {provide: SESSION_STORAGE_SERVICE_CONFIG, useValue: {prefix: AppConfig.appName + '-', version: AppConfig.version}},
     {provide: ALERT_CONFIG, useValue: {
       common: {position: 'top-right', lifetime: 3000},
-      warning: {position: 'top-right', lifetime: null},
+      warning: {position: 'top-left', lifetime: null},
       danger: {position: 'top-left', lifetime: null},
     }},
     {provide: MESSAGE_CONFIG, useValue: AppConfig.messages},
