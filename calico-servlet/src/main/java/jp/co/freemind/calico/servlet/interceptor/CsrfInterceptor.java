@@ -13,6 +13,7 @@ import jp.co.freemind.calico.core.exception.AuthorizationException;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.Keys;
 import jp.co.freemind.calico.servlet.SessionSetting;
+import jp.co.freemind.calico.servlet.util.CookieUtil;
 
 public class CsrfInterceptor implements EndpointInterceptor {
   private final Message insecureMessage;
@@ -38,15 +39,15 @@ public class CsrfInterceptor implements EndpointInterceptor {
       return invocation.proceed();
     }
 
-    verifyCsrfToken(req, authInfo.orElse(null));
+    verifyCsrfToken(req);
 
     return invocation.proceed();
   }
 
-  private void verifyCsrfToken(HttpServletRequest req, AuthInfo authInfo) {
+  private void verifyCsrfToken(HttpServletRequest req) {
     String headerCsrfToken = req.getHeader(Zone.getCurrent().getInstance(SessionSetting.class).getCsrfTokenHeader());
-    String sessionCsrfToken = authInfo.getAuthToken().getCsrfToken();
-    if (headerCsrfToken != null && Objects.equals(headerCsrfToken, sessionCsrfToken)) {
+    String cookieCsrfToken = CookieUtil.getCsrfToken(req).orElse(null);
+    if (headerCsrfToken != null && Objects.equals(headerCsrfToken, cookieCsrfToken)) {
       return;
     }
 

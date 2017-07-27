@@ -37,14 +37,15 @@ public class WebPlugin extends CalicoServletPlugin {
       new VersioningInterceptor()
     );
 
+    interceptBefore(null,
+      whenCsrfTarget(),
+      new CsrfInterceptor(Messages.CSRF)
+    );
+
     interceptAfter(null,
       Matchers.inSubpackage(ROOT_PACKAGE),
       new TimeoutInterceptor(WebPlugin::getNullAuthInfo),
       new ResultMapper()
-    );
-    interceptAfter(null,
-      whenCsrfTarget(),
-      new CsrfInterceptor(Messages.CSRF)
     );
 
     bind(binder -> {

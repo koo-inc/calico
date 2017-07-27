@@ -56,8 +56,8 @@ public class CalicoServlet extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    RequestSession dispatcher = Zone.getCurrent().getInstance(RequestSession.class);
-    dispatcher.execute(getServletConfig(), req, res);
+    RequestSession requestSession = Zone.getCurrent().getInstance(RequestSession.class);
+    requestSession.execute(getServletConfig(), req, res);
   }
 
   private static Pattern INDEX_PATTERN = Pattern.compile("^(?:/[^./]*)+$");
