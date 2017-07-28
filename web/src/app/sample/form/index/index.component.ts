@@ -102,7 +102,7 @@ export abstract class DefaultFormComponent implements OnInit {
 
   submit(): void {
     if(this.form.invalid) {
-      this.alert.warning('invalid', {lifetime: 3000});
+      this.alert.warning('invalid', null, {lifetime: 3000});
       return;
     }else{
       this.createForm().subscribe(form => {
