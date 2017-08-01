@@ -10,7 +10,9 @@ import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
 import jp.co.freemind.calico.core.endpoint.exception.UnknownEndpointException;
 import jp.co.freemind.calico.core.exception.InvalidUserDataException;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class Dispatcher {
   private static ObjectMapper mapper;
 
@@ -44,8 +46,8 @@ public class Dispatcher {
           return mapper.readValue("{}", inputType);
         }
       } catch (Exception e2) {
-        e.printStackTrace();
-        throw new InvalidUserDataException("Internal Server Error");
+        log.info(e);
+        throw new InvalidUserDataException("Internal Server Error", e);
       }
     }
   }

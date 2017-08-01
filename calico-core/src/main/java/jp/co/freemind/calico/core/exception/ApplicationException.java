@@ -14,4 +14,16 @@ public class ApplicationException extends ViolationException {
   public ApplicationException(Violation violation) {
     super(violation);
   }
+
+  public ApplicationException(String message, Throwable e) {
+    super(message, e);
+  }
+
+  public ApplicationException(String key, String message, Throwable e) {
+    super(key, message, e);
+  }
+
+  public ApplicationException(Violation violation, Throwable e) {
+    super(violation, e);
+  }
 }
