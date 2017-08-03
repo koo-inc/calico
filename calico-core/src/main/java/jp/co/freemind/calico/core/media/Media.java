@@ -1,12 +1,12 @@
 package jp.co.freemind.calico.core.media;
 
+import javax.annotation.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-/**
- * Created by tasuku on 15/04/28.
- */
 @Data public class Media {
+  @Nullable
   private String id;
   private MediaMeta meta = new MediaMeta();
   @JsonIgnore

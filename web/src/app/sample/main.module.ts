@@ -21,6 +21,7 @@ import { TimepickerComponent } from "./form/timepicker/timepicker.component";
 import { IntegerComponent } from "./form/integer/integer.component";
 import { CurrencyComponent } from "./form/currency/currency.component";
 import { FloatComponent } from "./form/float/float.component";
+import { FileComponent } from "./form/file/file.component";
 import { buildRoute } from "app/app.routing";
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
       {path: "form/integer", component: IntegerComponent},
       {path: "form/currency", component: CurrencyComponent},
       {path: "form/float", component: FloatComponent},
+      {path: "form/file", component: FileComponent},
     ],
     }),
 ];
@@ -70,6 +72,7 @@ const routes: Routes = [
     IntegerComponent,
     CurrencyComponent,
     FloatComponent,
+    FileComponent,
   ],
   providers: [
     ValidationService,
