@@ -28,7 +28,8 @@ export class IntegerComponent extends DefaultFormComponent {
       val2: [12345],
       val3: [null],
       val4: [null, Validators.required],
-      val5: [-12345]
+      val5: [-12345],
+      val6: [12345],
     }));
   }
 
