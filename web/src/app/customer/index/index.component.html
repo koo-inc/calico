@@ -18,6 +18,7 @@
         <tr>
           <td colspan="4">
             <button cBtn="primary" cGlyphicon="search" [disabled]="searchContext.form | submitting">検索</button>
+            <button cBtn="primary" cGlyphicon="search" [disabled]="searchContext.form | submitting" (click)="$event.stopPropagation(); download()">CSVダウンロード</button>
           </td>
         </tr>
       </tfoot>
@@ -26,6 +27,13 @@
 </c-panel>
 
 <c-panel heading="顧客一覧" *ngIf="searchContext.result">
+  <div>
+    <form [formGroup]="uploadForm">
+      <c-file formControlName="csv"></c-file>
+      <button cBtn="primary" (click)="upload()" [disabled]="uploadForm.value.csv == null || uploadForm | submitting">CSVアップロード</button>
+      <button cBtn="primary" [(cDownload)]="errorCsv">エラーファイル</button>
+    </form>
+  </div>
   <div>
     <div class="pull-right" cPager></div>
     <a cBtn="primary" cGlyphicon="plus" [routerLink]="['../edit']">新規登録</a>

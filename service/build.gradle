@@ -29,6 +29,7 @@ dependencies {
   compile project(':calico-core')
   compile project(':calico-jackson')
   compile project(':calico-fmmail')
+  compile project(':calico-csv')
   compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.1.4'
   compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
   compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.14.8'

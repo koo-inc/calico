@@ -4,6 +4,7 @@ include ':calico-core'
 include 'calico-mail'
 include 'calico-fmmail'
 include 'calico-jackson'
+include 'calico-csv'
 include ':service'
 include ':web'
 
@@ -12,6 +13,7 @@ project(':calico-core').projectDir = "$rootDir/calico-core" as File
 project(':calico-jackson').projectDir = "$rootDir/calico-jackson" as File
 project(':calico-mail').projectDir = "$rootDir/calico-mail" as File
 project(':calico-fmmail').projectDir = "$rootDir/calico-fmmail" as File
+project(':calico-csv').projectDir = "$rootDir/calico-csv" as File
 project(':service').projectDir = "$rootDir/service" as File
 project(':web').projectDir = "$rootDir/web" as File
 
