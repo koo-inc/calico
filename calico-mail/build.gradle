@@ -4,7 +4,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-description = 'Calico Framework Fmmail Plugin'
+description = 'Calico Framework Mail Plugin'
 
 apply from: '../bintray.gradle'
 
@@ -15,7 +15,6 @@ repositories {
 
 dependencies {
   compile project(':calico-core')
-  compile project(':calico-mail')
   compile(group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.4.1') {
     exclude module: 'commons-logging'
   }

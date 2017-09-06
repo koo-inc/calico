@@ -1,51 +1,48 @@
 package jp.co.freemind.calico.mail;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import jp.co.freemind.calico.core.media.Media;
-import jp.co.freemind.calico.core.util.RandomUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
 
-/**
- * Created by kakusuke on 15/07/06.
- */
 @Value
 @Getter(AccessLevel.PRIVATE)
 public class Mail {
   private static final ObjectMapper mapper = new ObjectMapper();
 
-  private MailInfo mailInfo;
+  private Envelope envelope;
   private List<Media> attachments;
 
   @SneakyThrows
   public void visit(PostMan dispatcher) {
-    dispatcher.accept(mapper.writeValueAsString(mailInfo), attachments);
+    dispatcher.accept(envelope, attachments);
   }
 
   public static Builder builder() {
     return new Builder();
   }
 
-  @Value private static class Recipient {
+  @Value public static class Recipient {
     private String id;
     private String to;
     private Map<String, String> params;
   }
 
-  @Value private static class MailInfo {
+  @Value public static class Envelope {
     private String id;
-    private String sendAt;
+    private LocalDateTime reservedAt;
     private String fromAddress;
     private String fromName;
     private String subject;
@@ -55,8 +52,6 @@ public class Mail {
   }
 
   public static class Builder {
-    private final static DateTimeFormatter SEND_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
-
     private String fromAddress;
     private String fromName;
     private String replyTo;
@@ -64,7 +59,7 @@ public class Mail {
     private String body;
     private LocalDateTime reservedAt;
     private ImmutableList.Builder<Recipient> recipients = ImmutableList.builder();
-    private ImmutableList.Builder<Media> attachements = ImmutableList.builder();
+    private ImmutableList.Builder<Media> attachments = ImmutableList.builder();
 
     public Builder from(String address) {
       return from(address, address);
@@ -75,19 +70,16 @@ public class Mail {
       return this;
     }
 
-    public Builder to(String address) {
-      return to(RandomUtil.randomAlphanumeric(20), address, Collections.emptyMap());
-    }
-    public Builder to(String address, Map<String, String> params) {
-      return to(RandomUtil.randomAlphanumeric(20), address, params);
-    }
-    public Builder to(String id, String address) {
+    public <ID> Builder to(@Nonnull ID id, String address) {
       return to(id, address, Collections.emptyMap());
     }
-    public Builder to(String id, String address, Map<String, String> params) {
+    public <ID> Builder to(@Nonnull ID id, String address, Map<String, String> params) {
       ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
       builder.putAll(params);
-      this.recipients.add(new Recipient(normalizeId(id), address, builder.build()));
+      return to(new Recipient(String.valueOf(id), address, builder.build()));
+    }
+    public Builder to(Recipient recipient) {
+      this.recipients.add(recipient);
       return this;
     }
 
@@ -106,22 +98,17 @@ public class Mail {
       return this;
     }
 
-    public Builder reserveAt(LocalDateTime reservedAt) {
+    public Builder reservedAt(LocalDateTime reservedAt) {
       this.reservedAt = reservedAt;
       return this;
     }
 
     public Builder attach(Media media) {
-      this.attachements.add(media);
+      this.attachments.add(media);
       return this;
     }
 
-    public Mail build() {
-      return build(RandomUtil.randomAlphanumeric(20));
-    }
-    public Mail build(@NonNull String id) {
-      id = normalizeId(id);
-      String sendAt = reservedAt != null ? reservedAt.format(SEND_AT_FORMATTER) : "at once";
+    public <ID> Mail build(@NonNull ID id) {
       fromName = fromName != null ? fromName : fromAddress;
       ensureNotNull("fromAddress", fromAddress);
       ensureNotNull("fromName", fromName);
@@ -131,25 +118,9 @@ public class Mail {
       if (immutableRecipients.size() == 0) {
         throw new IllegalStateException("recipients is empty.");
       }
-      List<Media> immutableAtachements = attachements.build();
-      if (immutableAtachements.size() > 5) {
-        throw new IllegalStateException("attachements atached too mach");
-      }
+      List<Media> immutableAttachments = attachments.build();
 
-      MailInfo mailInfo = new MailInfo(id, sendAt, fromAddress, fromName, subject, replyTo, body, immutableRecipients);
-      return new Mail(mailInfo, immutableAtachements);
-    }
-
-
-    private String normalizeId(String id) {
-      if (id == null) return null;
-      id = id.replaceAll("[^a-zA-Z0-9-_]", "");
-      if (id.length() > 20) {
-        return id.substring(0, 20);
-      }
-      else {
-        return id;
-      }
+      return new Mail(new Envelope(String.valueOf(id), reservedAt, fromAddress, fromName, subject, replyTo, body, immutableRecipients), immutableAttachments);
     }
 
     private void ensureNotNull(String name, Object value) {
