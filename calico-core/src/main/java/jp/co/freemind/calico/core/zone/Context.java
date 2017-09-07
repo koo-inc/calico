@@ -6,11 +6,11 @@ import java.util.AbstractMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import jp.co.freemind.calico.core.auth.AuthInfo;
 
@@ -32,6 +32,7 @@ public class Context {
 
   private Context(Spec spec) {
     Objects.requireNonNull(spec.path);
+    Objects.requireNonNull(spec.authInfo);
     Objects.requireNonNull(spec.processDateTime);
     Objects.requireNonNull(spec.remoteAddress);
     Objects.requireNonNull(spec.metaInfo);
@@ -49,8 +50,9 @@ public class Context {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends AuthInfo> Optional<T> getAuthInfo() {
-    return Optional.ofNullable((T) authInfo);
+  @Nonnull
+  public <T extends AuthInfo> T getAuthInfo() {
+    return (T) authInfo;
   }
 
   public LocalDateTime getProcessDateTime() {
@@ -96,16 +98,16 @@ public class Context {
     public Spec path(String path) {
       return new Spec(path, authInfo, processDateTime, remoteAddress, metaInfo);
     }
-    public Spec authInfo(AuthInfo authInfo) {
+    public Spec authInfo(@Nonnull AuthInfo authInfo) {
       return new Spec(path, authInfo, processDateTime, remoteAddress, metaInfo);
     }
-    public Spec processDateTime(LocalDateTime processDateTime) {
+    public Spec processDateTime(@Nonnull LocalDateTime processDateTime) {
       return new Spec(path, authInfo, processDateTime, remoteAddress, metaInfo);
     }
-    public Spec remoteAddress(String remoteAddress) {
+    public Spec remoteAddress(@Nonnull String remoteAddress) {
       return new Spec(path, authInfo, processDateTime, remoteAddress, metaInfo);
     }
-    public Spec entry(String key, String value) {
+    public Spec entry(@Nonnull String key, @Nullable String value) {
       Set<Map.Entry<String, String>> set = new LinkedHashSet<>(metaInfo);
       set.add(new AbstractMap.SimpleEntry<>(key, value));
       return new Spec(path, authInfo, processDateTime, remoteAddress, set);

@@ -2,7 +2,6 @@ package calicosample.service.system;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.inject.Named;
@@ -52,16 +51,16 @@ public class LoggingService {
   public int insert(JsLogForm form) {
     if (!isLoggable()) return 0;
     Context context = Zone.getContext();
-    Optional<AuthInfo> authInfo = context.getAuthInfo();
-    Optional<AuthToken> authToken = context.getAuthInfo().map(AuthInfo::getAuthToken);
+    AuthInfo authInfo = context.getAuthInfo();
+    AuthToken authToken = authInfo.getAuthToken();
 
     JsLog log = new JsLog();
     log.setLocation(form.getLocation());
     log.setUserAgent(form.getUserAgent());
     log.setException(form.getException());
-    log.setLoginId(authInfo.map(AuthInfo::getLoginId).orElse(null));
-    log.setRemoteAddr(authToken.map(AuthToken::getRemoteAddress).orElse(null));
-    log.setSessionId(authToken.map(AuthToken::getValue).orElse(null));
+    log.setLoginId(authInfo.getLoginId());
+    log.setRemoteAddr(authToken.getRemoteAddress());
+    log.setSessionId(authToken.getValue());
     log.setException(form.getException());
     return dao.insert(log);
   }

@@ -10,12 +10,8 @@ public interface AuthorizationRule {
   void apply(Context context, Class<? extends Endpoint<?, ?>> endpointClass, Object input) throws AuthorizationException;
 
   default boolean isAuthorizedWith(Context context, Authority... authorities) {
-    return context.getAuthInfo()
-      .map(AuthInfo::getAuthorities)
-      .flatMap(rs -> Arrays.stream(authorities)
-        .filter(rs::contains)
-        .findFirst())
-      .isPresent();
+    return Arrays.stream(authorities)
+        .anyMatch(context.getAuthInfo().getAuthorities()::contains);
   }
 
 }
