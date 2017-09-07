@@ -28,6 +28,8 @@ public interface CustomerDao {
   Customer findById(Customer.ID id);
   @Select(strategy = SelectType.STREAM)
   List<SearchEndpoint.Record> search(SearchEndpoint.Input form, SelectOptions options, Function<Stream<Customer>, List<SearchEndpoint.Record>> function);
+  @Select
+  Stream<Customer> search(SearchEndpoint.Input form);
   @Insert
   int insert(Customer customer);
   @Update

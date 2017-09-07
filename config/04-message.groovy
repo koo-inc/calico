@@ -29,4 +29,7 @@ message = [
   [key: "allowedExtensions", value: "拡張子は{value}のうちのいずれかでなければなりません。"],
 
   [key: "uniqueLoginId", value: "既に使われているIDです。"],
+
+  [key: "formatError", value: "形式が不正です。"],
 ]
+message.metaClass.findMessage = {key -> delegate.find {it.key == key}.value }

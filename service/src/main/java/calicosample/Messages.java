@@ -84,4 +84,6 @@ public final class Messages {
       
       public static final Message UNIQUE_LOGIN_ID = new Message("既に使われているIDです。");
       
+      public static final Message FORMAT_ERROR = new Message("形式が不正です。");
+      
 }

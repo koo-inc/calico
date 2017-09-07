@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 import { Api, SearchFormBuilder } from "calico";
 
+import { Media } from 'calico/type/media';
+
 @Injectable()
 export class MainService {
 
@@ -112,6 +114,20 @@ export class MainService {
     return this.submit('delete', {id: id});
   }
 
+  getUploadForm(){
+    return this.fb.group({
+      csv: [null, Validators.required]
+    });
+  }
+
+  upload(form: FormGroup): Observable<UploadResult> {
+    return this.submit('upload', form);
+  }
+
+  download(form: FormGroup) {
+    return this.submit('download_customers', form)
+      .map((data: any) => data.csv as Media);
+  }
 }
 
 export interface SearchResult {
@@ -133,4 +149,10 @@ export class Record {
   fname2: string;
   sex: number;
   birthday: string;
+}
+
+export interface UploadResult {
+  count: number;
+  error: boolean;
+  file: Media;
 }
