@@ -5,12 +5,12 @@ import javax.inject.Inject;
 
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.mail.Mail;
-import jp.co.freemind.calico.mail.Mailer;
+import jp.co.freemind.calico.mail.PostMan;
 import lombok.Getter;
 import lombok.Setter;
 
 public class MailService {
-  @Inject Mailer mailer;
+  @Inject PostMan postMan;
 
   @Getter @Setter
   public static class Form {
@@ -27,7 +27,7 @@ public class MailService {
 
   public void send(Form form) {
     Mail.Builder builder = Mail.builder()
-      .to(form.getToAddress())
+      .to(System.currentTimeMillis(), form.getToAddress())
       .from(form.getFromAddress())
       .subject(form.getSubject())
       .body(form.getBody());
@@ -42,6 +42,6 @@ public class MailService {
       builder.attach(form.getAttachment());
     }
 
-    mailer.getPostMan().deliver(builder.build());
+    postMan.deliver(builder.build(System.currentTimeMillis()));
   }
 }

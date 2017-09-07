@@ -2,7 +2,6 @@ package calicosample.service.system;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.stream.Stream;
 
 import javax.inject.Named;
 import javax.sql.DataSource;
@@ -24,7 +23,7 @@ import jp.co.freemind.calico.core.config.SystemSetting;
 import jp.co.freemind.calico.core.zone.Context;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.mail.Mail;
-import jp.co.freemind.calico.mail.Mailer;
+import jp.co.freemind.calico.mail.PostMan;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -37,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 public class LoggingService {
   @Inject private LoggingDao dao;
   @Inject @Named("log") private DataSource ds;
-  @Inject private Mailer mailer;
+  @Inject private PostMan postMan;
   @Inject private SystemSetting systemSetting;
   @Inject private ErrorMailSetting errorMailSetting;
 
@@ -76,7 +75,7 @@ public class LoggingService {
   }
 
   public int insert(ErrorLog log) {
-    if(errorMailSetting.active()) mailer.getPostMan().deliver(buildErrorMail(log));
+    if(errorMailSetting.active()) postMan.deliver(buildErrorMail(log));
     if (!isLoggable()) return 0;
     return dao.insert(log);
   }
@@ -120,8 +119,10 @@ public class LoggingService {
       .subject(String.format("%s(%s) Exception Occured!", systemSetting.getRootPackage(), systemSetting.getEnvName()))
       .body(errorLog.toString());
 
-    Stream.of(errorMailSetting.getReceivers().split("\\s*,\\s*"))
-      .forEach(builder::to);
+    String[] receivers = errorMailSetting.getReceivers().split("\\s*,\\s*");
+    for (int i = 0; i < receivers.length; i++) {
+      builder.to(i, receivers[i]);
+    }
 
     return builder.build(String.valueOf(errorLog.getStartLogId()));
   }

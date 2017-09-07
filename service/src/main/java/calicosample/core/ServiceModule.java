@@ -19,14 +19,14 @@ import calicosample.Messages;
 import calicosample.core.doma.DomaModule;
 import calicosample.core.doma.PgDialect;
 import calicosample.core.fmstorage.FmStorage;
-import calicosample.core.mail.FmMailer;
+import calicosample.core.mail.PostManProvider;
 import calicosample.core.validator.AllowEmpty;
 import calicosample.core.validator.AllowedExtensions;
 import calicosample.core.validator.FileSize;
 import calicosample.core.validator.LetterCount;
-import calicosample.core.validator.Validations;
 import calicosample.core.validator.LowerBound;
 import calicosample.core.validator.UpperBound;
+import calicosample.core.validator.Validations;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
@@ -45,7 +45,7 @@ import jp.co.freemind.calico.core.media.MediaStorage;
 import jp.co.freemind.calico.core.util.ClassFinder;
 import jp.co.freemind.calico.core.zone.ZoneScope;
 import jp.co.freemind.calico.jackson.ObjectMapperProvider;
-import jp.co.freemind.calico.mail.Mailer;
+import jp.co.freemind.calico.mail.PostMan;
 import lombok.SneakyThrows;
 import org.postgresql.jdbc2.optional.SimpleDataSource;
 import org.seasar.doma.jdbc.dialect.Dialect;
@@ -62,7 +62,7 @@ public class ServiceModule extends AbstractModule {
 
     bind(ObjectMapper.class).toProvider(ObjectMapperProvider.class);
     bind(MediaStorage.class).to(FmStorage.class);
-    bind(Mailer.class).to(FmMailer.class);
+    bind(PostMan.class).toProvider(PostManProvider.class);
 
     bindScope(TransactionScoped.class, new ZoneScope(TransactionScoped.class));
   }
