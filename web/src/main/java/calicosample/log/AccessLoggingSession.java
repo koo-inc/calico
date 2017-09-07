@@ -30,7 +30,7 @@ import jp.co.freemind.calico.core.log.LoggingSession;
 import jp.co.freemind.calico.core.util.StreamUtil;
 import jp.co.freemind.calico.servlet.util.NetworkUtil;
 
-public class AccessLoggingSession implements LoggingSession {
+public class AccessLoggingSession implements LoggingSession<Long> {
   private final LoggingDao loggingDao;
   private final LogDbSetting setting;
   private final AccessStartLog startLog;
@@ -78,16 +78,19 @@ public class AccessLoggingSession implements LoggingSession {
   }
 
   @Override
-  public void finish(Throwable t) {
-    if (finished) return;
-    finished = true;
-
+  public void error(Throwable t) {
     if (setting.getJdbcUrl() == null) return;
 
     ErrorLog errorLog = new ErrorLog();
     errorLog.setStartLog(this.startLog);
     errorLog.setException(Throwables.getStackTraceAsString(t));
     errorLog.setHeaders(collectAllHeaders(this.request));
+  }
+
+  @Override
+  public Long getId() {
+    if (this.startLog == null) return null;
+    return this.startLog.getId();
   }
 
   private static Pattern REFERER = Pattern.compile("^(?:https?://[^/]+)(/[^?]*)?$");
