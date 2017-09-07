@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import calicosample.Messages;
 import calicosample.extenum.CalicoSampleAuthority;
-import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.auth.AuthorizationRule;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
 import jp.co.freemind.calico.core.exception.AuthorizationException;
@@ -42,6 +41,6 @@ public class BaseAuthZRule implements AuthorizationRule {
   }
 
   private boolean isAuthenticated(Context context) {
-    return context.getAuthInfo().map(AuthInfo::isAuthenticated).orElse(true);
+    return context.getAuthInfo().isAuthenticated();
   }
 }

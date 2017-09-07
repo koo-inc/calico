@@ -1,7 +1,6 @@
 package jp.co.freemind.calico.servlet.interceptor;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,25 +16,17 @@ import jp.co.freemind.calico.servlet.util.CookieUtil;
 
 public class CsrfInterceptor implements EndpointInterceptor {
   private final Message insecureMessage;
-  private final boolean permitWhenAuthInfoIsNull;
 
   public CsrfInterceptor(Message insecureMessage) {
-    this(insecureMessage, false);
-  }
-  public CsrfInterceptor(Message insecureMessage, boolean permitWhenAuthInfoIsNull) {
     this.insecureMessage = insecureMessage;
-    this.permitWhenAuthInfoIsNull = permitWhenAuthInfoIsNull;
   }
 
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
     HttpServletRequest req = Zone.getCurrent().getInstance(Keys.SERVLET_REQUEST);
-    Optional<AuthInfo> authInfo = Zone.getContext().getAuthInfo();
-    if (authInfo.map(ai -> false).orElse(permitWhenAuthInfoIsNull)) {
-      return invocation.proceed();
-    }
+    AuthInfo authInfo = Zone.getContext().getAuthInfo();
 
-    if (authInfo.map(AuthInfo::isUsedBySystem).orElse(false)) {
+    if (authInfo.isUsedBySystem()) {
       return invocation.proceed();
     }
 

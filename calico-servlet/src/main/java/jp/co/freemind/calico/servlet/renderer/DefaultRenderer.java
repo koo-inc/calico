@@ -9,7 +9,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jp.co.freemind.calico.core.auth.AuthInfo;
+import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.endpoint.result.ResultType;
 import jp.co.freemind.calico.core.zone.Context;
@@ -31,12 +31,9 @@ public class DefaultRenderer implements Renderer<Result> {
     if (o == null) return;
     ServletContext servletContext = conf.getServletContext();
 
-    o.getContext().getAuthInfo()
-      .map(AuthInfo::getAuthToken)
-      .ifPresent(token -> {
-        CookieUtil.setSessionToken(servletContext, res, token);
-        CookieUtil.setCsrfToken(servletContext, res, token);
-      });
+    AuthToken token = o.getContext().getAuthInfo().getAuthToken();
+    CookieUtil.setSessionToken(servletContext, res, token);
+    CookieUtil.setCsrfToken(servletContext, res, token);
   }
 
   @Override

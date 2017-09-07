@@ -44,7 +44,7 @@ public class RequestSession {
             .scope(TransactionScoped.class)
             .provide(Keys.LOGGING_SESSION, loggingSession)
             .onError(e -> {
-              loggingSession.finish(e);
+              loggingSession.error(e);
               renderError(context, param, e);
               throw e;
             })

@@ -3,7 +3,6 @@ package calicosample.entity;
 import java.time.LocalDateTime;
 
 import calicosample.core.doma.InjectConfig;
-import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.zone.Zone;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,9 +34,8 @@ public abstract class CalicoSampleEntity {
     }
 
     private String getLoginId() {
-      return Zone.getContext().getAuthInfo()
-        .map(AuthInfo::getLoginId)
-        .orElse("");
+      String id = Zone.getContext().getAuthInfo().getLoginId();
+      return id != null ? id : "";
     }
   }
 }

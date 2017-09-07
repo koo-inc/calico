@@ -14,7 +14,7 @@ public class KeepEndpoint implements Endpoint<EmptyInput, Result> {
 
   @Override
   public Result execute(EmptyInput input) {
-    CalicoSampleAuthInfo authInfo = authService.keep(context.<CalicoSampleAuthInfo>getAuthInfo().orElse(null));
+    CalicoSampleAuthInfo authInfo = authService.keep(context.getAuthInfo());
     return new Result(context.extend(s -> s.authInfo(authInfo)), authInfo);
   }
 }
