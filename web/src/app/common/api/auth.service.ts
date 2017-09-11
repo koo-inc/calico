@@ -32,6 +32,7 @@ export class AuthService {
   }
   keep(): Observable<AuthInfo> {
     return this.api.submit("endpoint/auth/keep")
+      .map(ai => ai as AuthInfo)
       .do((authInfo: AuthInfo) => this._authInfo = authInfo);
   }
 
