@@ -63,7 +63,7 @@ public class EndpointResolver {
       for (int i = 1, len = fragments.length - 1; i < len; i++) {
         String fragment = fragments[i];
         if (!FRAGMENT.matcher(fragment).matches()) return Optional.empty();
-        builder.append('.').append(fragment);
+        builder.append('.').append(fragment.replace("_", ""));
       }
       String fragment = fragments[fragments.length - 1];
       if (!FRAGMENT.matcher(fragment).matches()) return Optional.empty();
