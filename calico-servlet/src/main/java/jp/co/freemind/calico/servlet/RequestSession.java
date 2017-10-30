@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +38,7 @@ public class RequestSession {
     try {
       doInTransaction(servletConfig, req, res, () -> {
         RequestParam param = getRequestParam(servletConfig, req, res);
-        Context context = getContext(param);
+        Context context = doGetContext(param);
 
         getTransactionScopedZone(context, param).run(() -> {
           LoggingSession loggingSession = getLoggingSessionStarter().start();
@@ -58,10 +60,14 @@ public class RequestSession {
       });
     }
     catch (Exception e) {
-      Throwable t = e instanceof UnhandledException ? e.getCause() : e;
+      Throwable t = UnhandledException.getPeeled(e);
       if (!isDesignedException(t)) {
-        log.catching(e);
+        log.catching(t);
       }
+    }
+    catch (Throwable t) {
+      log.catching(t);
+      throw t;
     }
   }
 
@@ -78,6 +84,16 @@ public class RequestSession {
       .remoteAddress(param.getRemoteAddress())
       .path(param.getPath())
     );
+  }
+
+  private Context doGetContext(RequestParam param) {
+    try {
+      return getContext(param);
+    }
+    catch (Throwable t) {
+      renderError(null, param, t);
+      throw t;
+    }
   }
 
   protected RequestParam getRequestParam(ServletConfig conf, HttpServletRequest req, HttpServletResponse res) {
@@ -111,11 +127,11 @@ public class RequestSession {
     return Zone.getCurrent().getInstance(LoggingSessionStarter.class);
   }
 
-  protected void render(Context context, RequestParam param, Object output) {
+  protected void render(@Nonnull Context context, RequestParam param, Object output) {
     Zone.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(param.getConfig(), param.getResponse(), context, output);
   }
 
-  protected void renderError(Context context, RequestParam param, Throwable t) {
+  protected void renderError(@Nullable Context context, RequestParam param, Throwable t) {
     Zone.getCurrent().getInstance(Keys.EXCEPTION_RENDERER).render(param.getConfig(), param.getResponse(), t);
   }
 

@@ -11,4 +11,11 @@ public class UnhandledException extends RuntimeException {
     }
     return new UnhandledException(e);
   }
+
+  public static Throwable getPeeled(Throwable e) {
+    while(e instanceof UnhandledException) {
+      e = e.getCause();
+    }
+    return e;
+  }
 }

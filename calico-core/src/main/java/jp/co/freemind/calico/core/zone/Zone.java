@@ -90,11 +90,8 @@ public class Zone {
       try {
         propagateThrowable(t, context);
       }
-      catch (UnhandledException t2) {
-        throw t2;
-      }
       catch (Throwable t2) {
-        throw UnhandledException.of(t);
+        throw Throwables.sneakyThrow(t2);
       }
     }
     finally {
