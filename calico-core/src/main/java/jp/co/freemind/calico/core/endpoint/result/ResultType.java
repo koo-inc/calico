@@ -18,4 +18,7 @@ public interface ResultType {
   static ResultType conflict(ResultType resultType) {
     return new AbnormalResultType(409, resultType);
   }
+  static ResultType error(ResultType resultType) {
+    return new AbnormalResultType(500, resultType);
+  }
 }
