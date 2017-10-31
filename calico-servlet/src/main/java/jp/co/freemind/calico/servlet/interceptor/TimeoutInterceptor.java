@@ -26,6 +26,10 @@ public class TimeoutInterceptor implements EndpointInterceptor {
 
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
+    if (!Zone.getContext().getAuthInfo().isAuthenticated()) {
+      return invocation.proceed();
+    }
+
     long timeout = Zone.getCurrent().getInstance(SessionSetting.class).timeoutSecond();
 
     if (timeout > 0) {
