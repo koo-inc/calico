@@ -29,6 +29,14 @@
       <div inspect="val4"></div>
     </div>
 
+    <div>
+      <h3>独立</h3>
+      <c-textfield #ctrl5 value="hoge"
+                   (cChange)="eventValue = 'event:' + $event"
+                   (cEnter)="$event.preventDefault(); eventValue = 'enter!'"></c-textfield>
+      <div>{{ctrl5.value}}<br/>{{eventValue}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

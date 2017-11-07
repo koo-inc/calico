@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs/Observable";
@@ -31,4 +31,5 @@ export class TextfieldComponent extends DefaultFormComponent {
     }));
   }
 
+  eventValue: string;
 }
