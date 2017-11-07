@@ -8,13 +8,15 @@
         <ul class="nav navbar-nav">
           <ng-container *ngFor="let item of items">
             <li *ngIf="item.items == null">
-              <ng-template [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></ng-template>
+              <ng-template *ngTemplateOutlet="linkTpl; context: {item: item}"></ng-template>
             </li>
             <li *ngIf="item.items != null" dropdown container="body">
               <a dropdownToggle>{{item.label}} <span class="caret"></span></a>
               <ul *dropdownMenu  class="dropdown-menu">
                 <li>
-                  <ng-template *ngFor="let item of item.items" [ngTemplateOutlet]="linkTpl" [ngOutletContext]="{item: item}"></ng-template>
+                  <ng-container *ngFor="let item of item.items">
+                    <ng-template *ngTemplateOutlet="linkTpl; context: {item: item}"></ng-template>
+                  </ng-container>
                 </li>
               </ul>
             </li>

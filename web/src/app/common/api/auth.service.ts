@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 import { Api } from "calico";
 import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from "@angular/router";
@@ -23,23 +24,24 @@ export class AuthService {
   }
 
   login(form: FormGroup) {
-    return this.api.submit("endpoint/auth/login", form)
-      .do((authInfo: AuthInfo) => this._authInfo = authInfo);
+    return this.submit("login", form);
   }
   logout() {
-    return this.api.submit("endpoint/auth/logout")
-      .do((authInfo: AuthInfo) => this._authInfo = authInfo);
+    return this.submit("logout");
   }
   keep(): Observable<AuthInfo> {
-    return this.api.submit("endpoint/auth/keep")
-      .map(ai => ai as AuthInfo)
-      .do((authInfo: AuthInfo) => this._authInfo = authInfo);
+    return this.submit("keep");
   }
 
   getForm(): Promise<FormGroup> {
     return new Promise<FormGroup>((resolve, reject) => {
       resolve(loginForm('', ''));
     });
+  }
+
+  private submit(url: string, form?: any) {
+    return tap((authInfo: AuthInfo) => this._authInfo = authInfo)
+      (this.api.submit(`endpoint/auth/${url}`, form));
   }
 }
 

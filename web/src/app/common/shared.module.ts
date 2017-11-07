@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from "@angular/common/http";
 
 import { ModalModule, PopoverModule } from 'ngx-bootstrap';
 
@@ -13,7 +13,7 @@ import { LayoutModule} from './layout/layout.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
+    HttpClientModule,
     CalicoCoreModule,
     CalicoUiModule,
     CalicoFormModule,

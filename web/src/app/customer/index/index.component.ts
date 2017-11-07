@@ -22,8 +22,8 @@ export class IndexComponent implements OnInit, OnDestroy {
     private mainService: MainService,
     private route: ActivatedRoute,
     private router: Router,
-    private searchContext: SearchContext,
     private alertService: AlertService,
+    public searchContext: SearchContext,
   ) { }
 
   ngOnInit() {

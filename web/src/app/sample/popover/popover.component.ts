@@ -5,4 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './popover.component.html',
 })
 export class PopoverComponent {
+  value1: string;
+  value2: string;
 }

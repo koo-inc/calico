@@ -10,7 +10,7 @@ import { Router } from "@angular/router";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private loginForm: FormGroup;
+  public loginForm: FormGroup;
 
   @Output()
   private authRequiredChange: EventEmitter<boolean> = new EventEmitter();
