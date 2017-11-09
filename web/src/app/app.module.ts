@@ -1,5 +1,3 @@
-import 'rxjs/Rx';
-
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CoreModule } from "app/common/core.module";

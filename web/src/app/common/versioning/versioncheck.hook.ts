@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable } from "rxjs/Observable";
 import { filter, map, tap } from 'rxjs/operators';
 import { Injectable, Inject, InjectionToken } from "@angular/core";
 import { Router, NavigationStart } from "@angular/router";

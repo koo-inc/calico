@@ -6,7 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { LayoutNormal } from './layout-normal/layout-normal.component';
 import { LayoutLogin } from './layout-login/layout-login.component';
 import { CalicoUiModule } from 'calico';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   imports: [

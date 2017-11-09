@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl } from "@angular/forms";
-import { Observable } from "rxjs";
+import { Observable } from "rxjs/Observable";
 import { tap } from "rxjs/operators";
 
 import { Api } from "calico";

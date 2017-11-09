@@ -1,5 +1,9 @@
 import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core';
-import { ModalModule, PopoverModule, BsDropdownModule, DatepickerModule, TimepickerModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 
 import {
   CalicoCoreModule,
