@@ -18,7 +18,7 @@ public class Asset {
   }
 
   public ByteBuffer getContent() {
-    return this.content;
+    return this.content.duplicate();
   }
 
   public String getContentType() {
