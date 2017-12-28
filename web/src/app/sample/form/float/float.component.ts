@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs/Observable";
+import { of } from "rxjs/observable/of";
 import { AlertService, ExtEnumService } from "calico";
 
 @Component({
@@ -23,7 +24,7 @@ export class FloatComponent extends DefaultFormComponent {
   }
 
   createForm(): Observable<FormGroup> {
-    return Observable.of(this.fb.group({
+    return of(this.fb.group({
       val1: [null],
       val2: [12345],
       val3: [null],

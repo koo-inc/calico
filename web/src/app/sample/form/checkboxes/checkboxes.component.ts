@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs/Observable";
+import { of } from "rxjs/observable/of";
 import { AlertService, ExtEnumService, ExtEnum } from "calico";
 
 @Component({
@@ -27,14 +28,14 @@ export class CheckboxesComponent extends DefaultFormComponent {
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.observable$ = Observable.of(
+    this.observable$ = of(
       this.extEnumService.getValues('Sex')
     );
   }
 
   createForm(): Observable<FormGroup> {
     let data = this.extEnumService.getAll();
-    return Observable.of(
+    return of(
       this.fb.group({
         val1: [null],
         val2: [[data['Sex'][0]]],

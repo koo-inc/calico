@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs/Observable";
+import { of } from "rxjs/observable/of";
 import { AlertService, ExtEnumService } from "calico";
 import { Api } from "calico/core/api.service";
 
@@ -28,7 +29,7 @@ export class TimepickerComponent extends DefaultFormComponent {
     this.api.submit("endpoint/sample/form/time_value").subscribe((data: any) => {
       this.form.addControl("val5", this.fb.control(data.value, []))
     });
-    return Observable.of(this.fb.group({
+    return of(this.fb.group({
       val1: [null],
       val2: [Date.create().toISOString()],
       val3: [null],

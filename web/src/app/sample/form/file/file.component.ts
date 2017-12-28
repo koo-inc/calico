@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
 import { Observable } from "rxjs/Observable";
+import { of } from "rxjs/observable/of";
 import { AlertService, ExtEnumService, Api } from "calico";
 import { Media } from 'calico/type/media';
 import { download } from 'calico/util/file';
@@ -43,7 +44,7 @@ export class FileComponent extends DefaultFormComponent {
       form.get('val5').patchValue({meta: {name: 'test3', size: 1000, type: 'text/plain'}, payload: null});
     }, 3000);
 
-    return Observable.of(form);
+    return of(form);
   }
 
   private download(media: Media) {
