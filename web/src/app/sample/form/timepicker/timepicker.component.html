@@ -34,6 +34,12 @@
       <div inspect="val5"></div>
     </div>
 
+    <div>
+      <h3>イベント</h3>
+      <c-timepicker (focus)="event = 'focus'" (blur)="event = 'blur'"></c-timepicker>
+      <div>{{event}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

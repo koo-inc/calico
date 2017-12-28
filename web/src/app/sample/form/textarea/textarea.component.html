@@ -29,6 +29,12 @@
       <div inspect="val4"></div>
     </div>
 
+    <div>
+      <h3>イベント</h3>
+      <c-textarea (focus)="event = 'focus'" (blur)="event = 'blur'"></c-textarea>
+      <div>{{event}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

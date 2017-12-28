@@ -37,6 +37,12 @@
       <div>{{ctrl5.value}}<br/>{{eventValue}}</div>
     </div>
 
+    <div>
+      <h3>イベント</h3>
+      <c-textfield (focus)="event = 'focus'" (blur)="event = 'blur'"></c-textfield>
+      <div>{{event}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

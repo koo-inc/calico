@@ -43,6 +43,12 @@
       <div inspect="val6"></div>
     </div>
 
+    <div>
+      <h3>イベント</h3>
+      <c-float (focus)="event = 'focus'" (blur)="event = 'blur'"></c-float>
+      <div>{{event}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

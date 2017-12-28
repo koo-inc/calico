@@ -74,6 +74,12 @@
       <div inspect="val11"></div>
     </div>
 
+    <div>
+      <h3>イベント</h3>
+      <c-select (focus)="event = 'focus'" (blur)="event = 'blur'"></c-select>
+      <div>{{event}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

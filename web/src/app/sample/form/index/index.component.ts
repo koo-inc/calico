@@ -93,6 +93,8 @@ export abstract class DefaultFormComponent implements OnInit {
 
   options = this.extEnumService.getValuesMap('Sex', 'FamilyType');
 
+  event: string;
+
   ngOnInit(): void {
     this.createForm().subscribe(form => {
       this.form = form;

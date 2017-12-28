@@ -42,6 +42,12 @@
       <div inspect="val6"></div>
     </div>
 
+    <div>
+      <h3>イベント</h3>
+      <c-integer (focus)="event = 'focus'" (blur)="event = 'blur'"></c-integer>
+      <div>{{event}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

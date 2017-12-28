@@ -36,6 +36,12 @@
       <div inspect="val5"></div>
     </div>
 
+    <div>
+      <h3>イベント</h3>
+      <c-currency (focus)="event = 'focus'" (blur)="event = 'blur'"></c-currency>
+      <div>{{event}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>
