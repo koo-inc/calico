@@ -26,7 +26,13 @@ export class DatepickerComponent extends DefaultFormComponent {
       val2: [Date.create().toISOString()],
       val3: [null],
       val4: [null, Validators.required],
+      val5: [Date.create()],
+      val6: [Date.create()],
+      val7: [Date.create()]
     }));
   }
 
+  typeOf(data: any) {
+    return typeof data;
+  }
 }
