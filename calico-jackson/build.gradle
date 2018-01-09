@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = rootProject.properties.javaVersion
+targetCompatibility = rootProject.properties.javaVersion
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 description = 'Calico Framework Jackson Plugin'
@@ -15,10 +15,9 @@ repositories {
 
 dependencies {
   compile project(':calico-core')
-  def jacksonVersion = '2.6.0'
-  compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
-  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: jacksonVersion
-  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
-  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.14.8'
-  testCompile group: 'org.spockframework', name: 'spock-core', version: '1.0-groovy-2.4'
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: rootProject.properties.jacksonVersion
+  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: rootProject.properties.jacksonVersion
+  compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: rootProject.properties.jacksonVersion
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: rootProject.properties.lombokVersion
+  testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
 }

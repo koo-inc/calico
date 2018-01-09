@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = rootProject.properties.javaVersion
+targetCompatibility = rootProject.properties.javaVersion
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 description = 'Calico Framework CSV Library'
@@ -18,6 +18,6 @@ dependencies {
   compile project(':calico-core')
   compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.4.0'
 
-  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.14.8'
-  testCompile group: 'org.spockframework', name: 'spock-core', version: '1.0-groovy-2.4'
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: rootProject.properties.lombokVersion
+  testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
 }
