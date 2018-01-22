@@ -9,7 +9,7 @@ MYBATIS Migrations
 
 ![mybatis-migrations](http://mybatis.github.io/images/mybatis-logo.png)
 
-Install MyBatis Migrations 3.2.1 (${implementation.build})
+Install MyBatis Migrations 3.3.1 (${implementation.build})
 
   MyBatis Migrations is a Java tool, so you must have Java installed in order to proceed. Users need at least the
   Java Runtime Environment (JRE), the Java Development Kit (JDK) is a plus.
@@ -20,14 +20,14 @@ Install MyBatis Migrations 3.2.1 (${implementation.build})
 
 * Windows
 
-  [1] Unzip the distribution archive, i.e. mybatis-3.2.1-migrations.zip to the directory you wish
+  [1] Unzip the distribution archive, i.e. mybatis-3.3.1-migrations.zip to the directory you wish
       to install MyBatis Migrations.
       These instructions assume you chose C:\Program Files\mybatis.
-      The subdirectory mybatis-migrations-3.2.1 will be created from the archive.
+      The subdirectory mybatis-migrations-3.3.1 will be created from the archive.
 
   [2] Add the MIGRATIONS_HOME environment variable by opening up the system properties (WinKey + Pause), selecting the
       Advanced tab, and the Environment Variables button, then adding the MIGRATIONS_HOME variable in the user
-      variables with the value C:\Program Files\mybatis\mybatis-migrations-3.2.1.
+      variables with the value C:\Program Files\mybatis\mybatis-migrations-3.3.1.
       Be sure to omit any quotation marks around the path even if it contains spaces.
 
   [3] In the same dialog, add the MIGRATIONS environment variable in the user variables with the
@@ -38,13 +38,13 @@ Install MyBatis Migrations 3.2.1 (${implementation.build})
 
 * Unix-based Operating Systems (Linux, Solaris and Mac OS X)
 
-  [1] Extract the distribution archive, i.e. mybatis-3.2.1-migrations.zip to the directory you wish to
+  [1] Extract the distribution archive, i.e. mybatis-3.3.1-migrations.zip to the directory you wish to
       install MyBatis Migrations. These instructions assume you chose
-      /usr/local/mybatis/mybatis-migrations-3.2.1.
-      The subdirectory mybatis-migrations-3.2.1 will be created from the archive.
+      /usr/local/mybatis/mybatis-migrations-3.3.1.
+      The subdirectory mybatis-migrations-3.3.1 will be created from the archive.
 
   [2] In a command terminal, add the MIGRATIONS_HOME environment variable,
-      e.g. export MIGRATIONS_HOME=/usr/local/mybatis/mybatis-migrations-3.2.1.
+      e.g. export MIGRATIONS_HOME=/usr/local/mybatis/mybatis-migrations-3.3.1.
 
   [3] Add the MIGRATIONS environment variable, e.g. export MIGRATIONS=$MIGRATIONS_HOME/bin.
 
