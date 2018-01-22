@@ -3,7 +3,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'de.undercouch:gradle-download-task:3.2.0'
+    classpath 'de.undercouch:gradle-download-task:3.3.0'
   }
 }
 
@@ -13,8 +13,11 @@ import java.nio.file.Paths
 
 def tmpDir = "${project.buildDir}/tmp/migration"
 
-task migrationDownloadBinary(type: Download, group: 'migration') {
-  src 'https://github.com/mybatis/migrations/releases/download/mybatis-migrations-3.3.1/mybatis-migrations-3.3.1-bundle.zip'
+def mybatisMigrationsVersion = '3.3.1'
+def postgresDriverVersion = '42.2.0'
+
+task migrationDownloadBinary(type: Download, group: 'migrationInit') {
+  src "https://github.com/mybatis/migrations/releases/download/mybatis-migrations-${mybatisMigrationsVersion}/mybatis-migrations-${mybatisMigrationsVersion}-bundle.zip"
   dest "${tmpDir}/mybatis-migration.zip"
   overwrite false
   doLast {
@@ -24,20 +27,20 @@ task migrationDownloadBinary(type: Download, group: 'migration') {
     }
   }
 }
-task migrationExpandBinary(type: Copy, group: 'migration', dependsOn: migrationDownloadBinary) {
-  from "${tmpDir}/mybatis-migration/mybatis-migrations-3.3.1"
+task migrationExpandBinary(type: Copy, group: 'migrationInit', dependsOn: migrationDownloadBinary) {
+  from "${tmpDir}/mybatis-migration/mybatis-migrations-${mybatisMigrationsVersion}"
   into 'migration'
 }
-task migrationInit(type: Download, group: 'migration', dependsOn: migrationExpandBinary) {
-  src 'https://jdbc.postgresql.org/download/postgresql-42.0.0.jar'
-  dest "${tmpDir}/postgresql-42.0.0.jar"
+task migrationInit(type: Download, group: 'migrationInit', dependsOn: migrationExpandBinary) {
+  src "https://jdbc.postgresql.org/download/postgresql-${postgresDriverVersion}.jar"
+  dest "${tmpDir}/postgresql-${postgresDriverVersion}.jar"
   overwrite false
   doLast {
     file("migration").eachDir { dir ->
       if (dir.name.matches(/^(bin|lib)$/)) return
 
       copy {
-        from "${tmpDir}/postgresql-42.0.0.jar"
+        from "${tmpDir}/postgresql-${postgresDriverVersion}.jar"
         into dir.toPath().resolve("drivers").toFile()
       }
     }
