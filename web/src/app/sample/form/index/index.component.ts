@@ -43,6 +43,7 @@ export class FormTabsComponent {
     { name: 'c-currency', path: 'currency', },
     { name: 'c-float', path: 'float', },
     { name: 'c-file', path: 'file', },
+    { name: 'c-error-tip-container', path: 'container', },
   ];
 
   select(tab: any): void {

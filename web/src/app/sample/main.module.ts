@@ -22,6 +22,7 @@ import { IntegerComponent } from "./form/integer/integer.component";
 import { CurrencyComponent } from "./form/currency/currency.component";
 import { FloatComponent } from "./form/float/float.component";
 import { FileComponent } from "./form/file/file.component";
+import { ContainerComponent } from "./form/container/container.component";
 import { buildRoute } from "app/app.routing";
 
 const routes: Routes = [
@@ -44,6 +45,7 @@ const routes: Routes = [
       {path: "form/currency", component: CurrencyComponent},
       {path: "form/float", component: FloatComponent},
       {path: "form/file", component: FileComponent},
+      {path: "form/container", component: ContainerComponent},
     ],
     }),
 ];
@@ -73,6 +75,7 @@ const routes: Routes = [
     CurrencyComponent,
     FloatComponent,
     FileComponent,
+    ContainerComponent,
   ],
   providers: [
     ValidationService,
