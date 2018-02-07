@@ -7,6 +7,7 @@ import calicosample.domain.AdditionalInfoList;
 import calicosample.extenum.Sex;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.orm.SerialIdentifier;
+import jp.co.freemind.calico.core.time.TimePoint;
 import lombok.Getter;
 import lombok.Setter;
 import org.seasar.doma.Domain;
@@ -36,6 +37,7 @@ public class Customer extends CalicoSampleEntity {
   private String email;
   private String homepageUrl;
   private String phoneNumber;
+  private TimePoint sleepTime;
   private Media photo;
   private AdditionalInfoList additionalInfoList;
 

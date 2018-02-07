@@ -39,6 +39,7 @@ export class FormTabsComponent {
     { name: 'c-checkbox', path: 'checkbox', },
     { name: 'c-datepicker', path: 'datepicker', },
     { name: 'c-timepicker', path: 'timepicker', },
+    { name: 'c-timepointpicker', path: 'timepointpicker', },
     { name: 'c-integer', path: 'integer', },
     { name: 'c-currency', path: 'currency', },
     { name: 'c-float', path: 'float', },

@@ -56,6 +56,12 @@
           <span *ngIf="record.claimer">◯</span>
         </td>
       </tr>
+      <tr>
+        <th>就寝時刻</th>
+        <td colspan="3">
+          {{record.sleepTime}}
+        </td>
+      </tr>
     </tbody>
   </table>
   <table cListTable [hover]="false">

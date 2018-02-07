@@ -18,6 +18,7 @@ import { CheckboxesComponent } from "./form/checkboxes/checkboxes.component";
 import { CheckboxComponent } from "./form/checkbox/checkbox.component";
 import { DatepickerComponent } from "./form/datepicker/datepicker.component";
 import { TimepickerComponent } from "./form/timepicker/timepicker.component";
+import { TimePointPickerComponent } from "./form/timepointpicker/timepointpicker.component";
 import { IntegerComponent } from "./form/integer/integer.component";
 import { CurrencyComponent } from "./form/currency/currency.component";
 import { FloatComponent } from "./form/float/float.component";
@@ -41,6 +42,7 @@ const routes: Routes = [
       {path: "form/checkbox", component: CheckboxComponent},
       {path: "form/datepicker", component: DatepickerComponent},
       {path: "form/timepicker", component: TimepickerComponent},
+      {path: "form/timepointpicker", component: TimePointPickerComponent},
       {path: "form/integer", component: IntegerComponent},
       {path: "form/currency", component: CurrencyComponent},
       {path: "form/float", component: FloatComponent},
@@ -71,6 +73,7 @@ const routes: Routes = [
     CheckboxComponent,
     DatepickerComponent,
     TimepickerComponent,
+    TimePointPickerComponent,
     IntegerComponent,
     CurrencyComponent,
     FloatComponent,

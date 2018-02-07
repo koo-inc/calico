@@ -5,17 +5,18 @@ import { Observable } from "rxjs/Observable";
 import { of } from "rxjs/observable/of";
 import { AlertService, ExtEnumService } from "calico";
 import { Api } from "calico/core/api.service";
+import { TimePoint } from "calico/type/time";
 
 @Component({
-  selector: 'app-timepicker',
-  templateUrl: './timepicker.component.html',
+  selector: 'app-timepointpicker',
+  templateUrl: './timepointpicker.component.html',
   styles: [`
     .large {
       width: 250px;
     }
   `]
 })
-export class TimepickerComponent extends DefaultFormComponent {
+export class TimePointPickerComponent extends DefaultFormComponent {
   constructor(
     alert: AlertService,
     extEnumService: ExtEnumService,
@@ -25,20 +26,20 @@ export class TimepickerComponent extends DefaultFormComponent {
     super(alert, extEnumService);
   }
 
+  max = TimePoint.create('11:03');
+  min = TimePoint.create('09:31');
+
   createForm(): Observable<FormGroup> {
-    this.api.submit("endpoint/sample/form/time_value").subscribe((data: any) => {
-      this.form.addControl("val5", this.fb.control(data.value, []))
+    this.api.submit("endpoint/sample/form/time_point_value", {value: TimePoint.create('27:15')}).subscribe((data: any) => {
+      this.form.patchValue({val6: TimePoint.create(data.value)});
     });
     return of(this.fb.group({
       val1: [null],
-      val2: [Date.create().toISOString()],
-      val3: [null],
-      val4: [null, Validators.required],
-      val6: [Date.create()],
+      val2: [TimePoint.create('10:00')],
+      val3: [TimePoint.create('10:00')],
+      val4: [TimePoint.create('10:00'), Validators.required],
+      val5: [TimePoint.create('10:00')],
+      val6: [null],
     }));
-  }
-
-  typeOf(data: any) {
-    return typeof data;
   }
 }

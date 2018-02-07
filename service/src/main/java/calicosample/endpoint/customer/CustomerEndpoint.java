@@ -21,6 +21,7 @@ import calicosample.extenum.Sex;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
 import jp.co.freemind.calico.core.endpoint.validation.Validate;
 import jp.co.freemind.calico.core.media.Media;
+import jp.co.freemind.calico.core.time.TimePoint;
 import jp.co.freemind.calico.core.validation.Violation;
 import jp.co.freemind.calico.core.zone.Zone;
 import lombok.Getter;
@@ -78,6 +79,9 @@ public abstract class CustomerEndpoint<INPUT, OUTPUT> implements Endpoint<INPUT,
     @Nullable
     private String phoneNumber;
 
+    @Nullable
+    private TimePoint sleepTime;
+
     @AllowedExtensions({"jpg", "png", "gif"})
     @FileSize(lowerBound = 1024 * 1024, upperBound = 1)
     @Nullable
@@ -113,6 +117,7 @@ public abstract class CustomerEndpoint<INPUT, OUTPUT> implements Endpoint<INPUT,
       setEmail(customer.getEmail());
       setHomepageUrl(customer.getHomepageUrl());
       setPhoneNumber(customer.getPhoneNumber());
+      setSleepTime(customer.getSleepTime());
       setPhoto(customer.getPhoto());
       setAdditionalInfoList(customer.getAdditionalInfoList());
     }
@@ -131,6 +136,7 @@ public abstract class CustomerEndpoint<INPUT, OUTPUT> implements Endpoint<INPUT,
       customer.setEmail(getEmail());
       customer.setHomepageUrl(getHomepageUrl());
       customer.setPhoneNumber(getPhoneNumber());
+      customer.setSleepTime(getSleepTime());
       customer.setPhoto(getPhoto());
       customer.setAdditionalInfoList(getAdditionalInfoList());
     }

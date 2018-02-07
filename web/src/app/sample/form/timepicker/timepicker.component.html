@@ -40,6 +40,13 @@
       <div>{{event}}</div>
     </div>
 
+    <div>
+      <h3>Date型強制</h3>
+      <c-timepicker formControlName="val6" [strictType]="true" [stepMinute]="5"></c-timepicker>
+      <div inspect="val6"></div>
+      <div>{{typeOf(form.value.val6)}}</div>
+    </div>
+
     <div><button cBtn="primary">submit</button></div>
   </c-panel>
 </form>

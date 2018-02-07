@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 import { Api, SearchFormBuilder } from "calico";
 
 import { Media } from 'calico/type/media';
+import { TimePoint } from 'calico/type/time';
 
 @Injectable()
 export class MainService {
@@ -69,6 +70,7 @@ export class MainService {
       email: [data.email],
       homepageUrl: [data.homepageUrl],
       phoneNumber: [data.phoneNumber],
+      sleepTime: [TimePoint.create(data.sleepTime)],
       // photo: [data.photo],
       families: this.fb.array(
         (<any[]>data.families).map((family: any) => this.toEditFamilyForm(family))
