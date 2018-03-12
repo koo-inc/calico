@@ -37,8 +37,24 @@ public class TimePoint implements Comparable<TimePoint> {
   public int getMinutesAmount() {
     return minutesAmount;
   }
-  public int sub(@Nonnull TimePoint tp) {
-    return this.minutesAmount - tp.minutesAmount;
+
+  public TimePoint addMinutes(int minutes) {
+    return TimePoint.of(this.minutesAmount + minutes);
+  }
+  public TimePoint addHours(int hours) {
+    return TimePoint.of(this.minutesAmount + hours * 60);
+  }
+  public TimePoint subMinutes(int minutes) {
+    return TimePoint.of(this.minutesAmount - minutes);
+  }
+  public TimePoint subHours(int hours) {
+    return TimePoint.of(this.minutesAmount - hours * 60);
+  }
+  public TimePoint add(@Nonnull TimePoint timePoint) {
+    return TimePoint.of(this.minutesAmount + timePoint.minutesAmount);
+  }
+  public TimePoint sub(@Nonnull TimePoint timePoint) {
+    return TimePoint.of(this.minutesAmount - timePoint.minutesAmount);
   }
 
   public LocalTime toLocalTime() {
@@ -72,7 +88,7 @@ public class TimePoint implements Comparable<TimePoint> {
       + ":" + Strings.padStart(String.valueOf(this.getMinutes()), 2, '0');
   }
 
-  private static final Pattern PATTERN = Pattern.compile("^([0-9]{1,2}):([0-9]{1,2})$");
+  private static final Pattern PATTERN = Pattern.compile("^([0-9]{1,2}):([0-5][0-9])(?:[:][0-5][0-9])?$");
   @Nullable
   @JsonCreator
   public static TimePoint of(CharSequence value) {
@@ -89,6 +105,19 @@ public class TimePoint implements Comparable<TimePoint> {
     if (hours < 0 || minutes < 0) {
       throw new IllegalArgumentException("hours or minutes must not be negative, but [" + hours + ":" + minutes + "]");
     }
-    return new TimePoint(hours * 60 + minutes);
+    return of(hours * 60 + minutes);
+  }
+  public static TimePoint of(int minutesAmount) {
+    if (minutesAmount < 0) {
+      throw new IllegalArgumentException("minutesAmount must not be negative, but [" + minutesAmount + "]");
+    }
+    if (minutesAmount > 99 * 60 + 59) {
+      throw new IllegalArgumentException("minutesAmount must be under 100 * 60 hours, but [" + minutesAmount + "]");
+    }
+    return new TimePoint(minutesAmount);
+  }
+
+  public static TimePoint of(LocalTime time) {
+    return of(time.getHour(), time.getMinute());
   }
 }
