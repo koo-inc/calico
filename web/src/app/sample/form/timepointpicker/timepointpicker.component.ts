@@ -35,8 +35,8 @@ export class TimePointPickerComponent extends DefaultFormComponent {
     });
     return of(this.fb.group({
       val1: [null],
-      val2: [TimePoint.create('10:00')],
-      val3: [TimePoint.create('10:00')],
+      val2: [TimePoint.create(100)],
+      val3: [TimePoint.create(12, 0)],
       val4: [TimePoint.create('10:00'), Validators.required],
       val5: [TimePoint.create('10:00')],
       val6: [null],
