@@ -73,7 +73,6 @@ public class EndpointResolver {
         = (Class<? extends Endpoint<?, ?>>) Class.forName(builder.toString(), false, this.getClass().getClassLoader());
 
       if (Modifier.isAbstract(endpointClass.getModifiers())) return Optional.empty();
-      if (Modifier.isInterface(endpointClass.getModifiers())) return Optional.empty();
       return Optional.of(endpointClass);
     } catch (ClassNotFoundException e) {
       return Optional.empty();
