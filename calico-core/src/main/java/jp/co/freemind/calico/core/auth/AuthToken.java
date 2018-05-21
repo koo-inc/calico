@@ -62,8 +62,13 @@ import lombok.Value;
     return create("", remoteAddress, createdAt);
   }
 
+  @Deprecated
   public AuthToken regenerate() {
-    return new AuthToken(id, remoteAddress, csrfToken, LocalDateTime.now());
+    return regenerate(LocalDateTime.now());
+  }
+
+  public AuthToken regenerate(LocalDateTime createdAt) {
+    return new AuthToken(id, remoteAddress, csrfToken, createdAt);
   }
 
   public boolean isValidRemoteAddress(String remoteAddress) {

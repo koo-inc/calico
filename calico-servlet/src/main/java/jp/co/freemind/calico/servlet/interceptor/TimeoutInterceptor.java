@@ -1,6 +1,5 @@
 package jp.co.freemind.calico.servlet.interceptor;
 
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.function.Supplier;
 
@@ -30,8 +29,8 @@ public class TimeoutInterceptor implements EndpointInterceptor {
 
     if (timeout > 0) {
       AuthToken authToken = Zone.getCurrent().getInstance(Keys.AUTH_TOKEN);
-      if (LocalDateTime.now().minus(timeout, ChronoUnit.SECONDS).compareTo(authToken.getCreatedAt()) > 0) {
-        Context context = Zone.getContext();
+      Context context = Zone.getContext();
+      if (context.getProcessDateTime().minus(timeout, ChronoUnit.SECONDS).compareTo(authToken.getCreatedAt()) > 0) {
 
         AuthInfo authInfo = this.nullAuthInfoSupplier.get();
         Context newContext = context.extend(c -> c

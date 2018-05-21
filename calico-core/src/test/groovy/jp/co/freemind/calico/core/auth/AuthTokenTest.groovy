@@ -65,7 +65,7 @@ class AuthTokenTest extends Specification {
     when:
     def token = AuthToken.create("aaa", "127.0.0.1", LocalDateTime.now())
     def decryptedToken = AuthToken.of(token.value)
-    def regeneratedToken = token.regenerate()
+    def regeneratedToken = token.regenerate(LocalDateTime.now())
 
     then:
     token.csrfToken == decryptedToken.csrfToken
