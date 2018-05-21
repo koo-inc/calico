@@ -25,11 +25,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
+import jp.co.freemind.calico.core.config.SystemSetting;
 import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
+import jp.co.freemind.calico.servlet.util.NetworkUtil;
 import nu.validator.htmlparser.dom.Dom2Sax;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import nu.validator.htmlparser.sax.HtmlSerializer;
@@ -52,6 +54,8 @@ public class CalicoServlet extends HttpServlet {
     ObjectMapper mapper = root.getInstance(ObjectMapper.class)
       .copy().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     Dispatcher.init(mapper);
+
+    root.getInstance(SystemSetting.class).proxies().forEach(NetworkUtil::addProxy);
   }
 
   @Override
