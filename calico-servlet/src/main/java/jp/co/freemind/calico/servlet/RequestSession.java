@@ -97,7 +97,11 @@ public class RequestSession {
   }
 
   protected RequestParam getRequestParam(ServletConfig conf, HttpServletRequest req, HttpServletResponse res) {
-    return new RequestParam(conf, req, res);
+    return new RequestParam(conf, req, res, getProcessDateTime());
+  }
+
+  protected LocalDateTime getProcessDateTime() {
+    return LocalDateTime.now();
   }
 
   protected Zone getTransactionScopedZone(Context context, RequestParam param) {
@@ -150,10 +154,10 @@ public class RequestSession {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
 
-    RequestParam(ServletConfig conf, HttpServletRequest req, HttpServletResponse res) {
+    RequestParam(ServletConfig conf, HttpServletRequest req, HttpServletResponse res, LocalDateTime processDateTime) {
       this.path = req.getPathInfo();
-      this.remoteAddress = firstNonNull(NetworkUtil.getRemoteAddrWithConsiderForwarded(req), "(unknown)");
-      this.processDatetime = LocalDateTime.now();
+      this.remoteAddress = firstNonNull(NetworkUtil.getRemoteAddrWithConsiderForwarded(req), "0.0.0.0");
+      this.processDatetime = processDateTime;
       this.authToken = CookieUtil.getSessionToken(req)
         .map(AuthToken::of)
         .orElseGet(() -> AuthToken.createEmpty(remoteAddress, processDatetime));
