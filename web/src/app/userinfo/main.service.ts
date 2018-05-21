@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import {Api} from "calico";
+import { Api } from "calico";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class MainService {
@@ -26,12 +27,12 @@ export class MainService {
 
   private getCreateForm(): Observable<FormGroup>{
     return this.submit('create_form', {})
-      .map(data => this.toEditForm(data));
+      .pipe(map(data => this.toEditForm(data)));
   }
 
   private getUpdateForm(id: number): Observable<FormGroup>{
     return this.submit('update_form', {id: id})
-      .map(data => this.toEditForm(data));
+      .pipe(map(data => this.toEditForm(data)));
   }
 
   private toEditForm(data: any): FormGroup {

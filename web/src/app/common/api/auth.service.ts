@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { Observable } from "rxjs/Observable";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 
 import { Api } from "calico";
 import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from "@angular/router";
@@ -62,7 +62,7 @@ export class SessionSupport implements CanActivateChild {
   }
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.authService.keep().map(authInfo => this.checkAuthenticatedIfNeeded(authInfo, state));
+    return this.authService.keep().pipe(map(authInfo => this.checkAuthenticatedIfNeeded(authInfo, state)));
   }
 
   private checkAuthenticatedIfNeeded(authInfo: AuthInfo, state: RouterStateSnapshot) {

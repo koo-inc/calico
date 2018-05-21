@@ -6,6 +6,7 @@ import { Api, SearchFormBuilder } from "calico";
 
 import { Media } from 'calico/type/media';
 import { TimePoint } from 'calico/type/time';
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class MainService {
@@ -22,7 +23,7 @@ export class MainService {
 
   getSearchForm(): Observable<FormGroup>{
     return this.submit('search_form', {})
-      .map(data => this.toSearchForm(data));
+      .pipe(map(data => this.toSearchForm(data)));
   }
 
   toSearchForm(data: any): FormGroup {
@@ -46,12 +47,12 @@ export class MainService {
 
   private getCreateForm(): Observable<FormGroup>{
     return this.submit('create_form', {})
-      .map(data => this.toEditForm(data));
+      .pipe(map(data => this.toEditForm(data)));
   }
 
   private getUpdateForm(id: number): Observable<FormGroup>{
     return this.submit('update_form', {id: id})
-      .map(data => this.toEditForm(data));
+      .pipe(map(data => this.toEditForm(data)));
   }
 
   private toEditForm(data: any): FormGroup {
@@ -128,7 +129,7 @@ export class MainService {
 
   download(form: FormGroup) {
     return this.submit('download_customers', form)
-      .map((data: any) => data.csv as Media);
+      .pipe(map((data: any) => data.csv as Media));
   }
 }
 
