@@ -46,9 +46,12 @@ public class RequestSession {
             .scope(TransactionScoped.class)
             .provide(Keys.LOGGING_SESSION, loggingSession)
             .onError(e -> {
-              loggingSession.error(e);
-              renderError(context, param, e);
-              throw e;
+              Throwable t = UnhandledException.getPeeled(e);
+              if (!isDesignedException(t)) {
+                loggingSession.error(t);
+              }
+              renderError(context, param, t);
+              throw t;
             })
             .onFinish(() -> loggingSession.finish(res.getStatus()))
           ).run(() -> {
