@@ -48,4 +48,11 @@ public final class RandomUtil {
     }
     return builder.toString();
   }
+
+  public static int randomInt() {
+    return random.nextInt();
+  }
+  public static long randomLong() {
+    return random.nextLong();
+  }
 }

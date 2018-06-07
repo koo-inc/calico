@@ -1,27 +1,28 @@
 package jp.co.freemind.calico.core.util;
 
 import java.io.Serializable;
-import java.util.Base64;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
+import javax.annotation.Nonnull;
 
-import com.google.common.base.Charsets;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import lombok.SneakyThrows;
-import lombok.Value;
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
 
 public class CryptoUtil implements Serializable {
-  private static final String ALGORITHM = "AES";
-  private static final String MODE = "CBC";
-  private static final String PADDING = "PKCS5Padding";
-  private static final String TRANSFORM = ALGORITHM + "/" + MODE + "/" + PADDING;
-  private static final IvParameterSpec IV = new IvParameterSpec("8=QGPUclr^uTA8BZ".getBytes());
+  private static Supplier<Hasher> HASHER = ()-> Hashing.sha256().newHasher();
 
+  /**
+   * 署名のアルゴリズムを変更できます。
+   * @param hasher
+   */
+  public static void init(Supplier<Hasher> hasher) {
+    HASHER = hasher;
+  }
 
   /**
    * AESで暗号化します。
@@ -29,103 +30,40 @@ public class CryptoUtil implements Serializable {
    * @return encrypted string
    */
   public static String encrypt(String src, String secretToken) {
-    byte[] key = secretToken.getBytes();
-    src = RandomUtil.randomAscii(key.length) + src;
-    byte[] bytes = getDefaultCipherPair(key).encrypt(src.getBytes(Charsets.UTF_8));
-    return Base64.getEncoder().encodeToString(bytes);
+    AESCryptor cryptor;
+    try {
+      cryptor = CryptoUtil.cryptors.get(secretToken);
+    } catch (ExecutionException e) {
+      throw new RuntimeException(e);
+    }
+    return cryptor.encrypt(src);
   }
 
   /**
    * AESで復号化します。
-   * @param src
+   * @param encrypted
    * @return decrypted string
    */
-  public static String decrypt(String src, String secretToken) {
-    byte[] key = secretToken.getBytes();
-    byte[] bytes = Base64.getDecoder().decode(src);
+  public static String decrypt(String encrypted, String secretToken) {
+    AESCryptor cryptor;
     try {
-      bytes = getDefaultCipherPair(key).decrypt(bytes);
-    } catch(Exception e) {
-      cipherPairs.invalidate(new KeyWrapper(key));
-      throw e;
+      cryptor = CryptoUtil.cryptors.get(secretToken);
+    } catch (ExecutionException e) {
+      throw new RuntimeException(e);
     }
-    return new String(bytes, Charsets.UTF_8).substring(key.length);
-  }
-
-  @SneakyThrows
-  private static CipherPair getDefaultCipherPair(byte[] key) {
-    return cipherPairs.get(new KeyWrapper(key));
+    return cryptor.decrypt(encrypted);
   }
 
   /**
-   * 暗号化、復号化するクラスです。
-   * 暗号化Cipherと復号化Cipherを保持します。
-   * Cipherはマルチスレッドでは使えないためsynchronizeしています。
+   * AESCryptorのキャッシュです。
    */
-  private static final class CipherPair {
-    public final Cipher encCipher;
-    public final Cipher decCipher;
-    public CipherPair(final byte[] keyData) {
-      final java.security.Key key = new SecretKeySpec(keyData, ALGORITHM);
-      try {
-        encCipher = Cipher.getInstance(TRANSFORM);
-        encCipher.init(Cipher.ENCRYPT_MODE, key, IV);
-        decCipher = Cipher.getInstance(TRANSFORM);
-        decCipher.init(Cipher.DECRYPT_MODE, key, IV);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-    }
-    /**
-     * 暗号化します。
-     * @param src
-     * @return
-     */
-
-    public byte[] encrypt(final byte[] src) {
-      synchronized (encCipher) {
-        try {
-          return encCipher.doFinal(src);
-        } catch (Exception e) {
-          throw new RuntimeException(e);
-        }
-      }
-    }
-    /**
-     * 復号化します。
-     * @param src
-     * @return
-     */
-
-    public byte[] decrypt(final byte[] src) {
-      synchronized (decCipher) {
-        try {
-          return decCipher.doFinal(src);
-        } catch (Exception e) {
-          throw new RuntimeException(e);
-        }
-      }
-    }
-  }
-
-  /**
-   * ChiperPairをキャッシュするためのキーです。
-   */
-  @Value private static final class KeyWrapper {
-    private final byte[] keyData;
-  }
-
-  /**
-   * CipherPairのキャッシュです。
-   */
-  private static final LoadingCache<KeyWrapper, CipherPair> cipherPairs = CacheBuilder.newBuilder()
+  private static final LoadingCache<String, AESCryptor> cryptors = CacheBuilder.newBuilder()
     .maximumSize(10)
     .softValues()
     .expireAfterWrite(10, TimeUnit.MINUTES)
-    .build(new CacheLoader<KeyWrapper, CipherPair>() {
-      @Override public CipherPair load(KeyWrapper keyWrapper) throws Exception {
-        return new CipherPair(keyWrapper.getKeyData());
+    .build(new CacheLoader<String, AESCryptor>() {
+      @Override public AESCryptor load(@Nonnull String secretToken) {
+        return new AESCryptor(secretToken, HASHER);
       }
     });
-
 }
