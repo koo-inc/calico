@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Strings;
@@ -36,7 +35,7 @@ import lombok.Value;
     );
   }
 
-  @Nonnull
+  @Nullable
   public static AuthToken of(@Nullable String value) throws IllegalArgumentException {
     try {
       String decrypted = CryptoUtil.decrypt(value, getSecretToken());
@@ -49,7 +48,7 @@ import lombok.Value;
       return new AuthToken(id, remoteAddress, csrfToken, createdAt);
     }
     catch (Exception e) {
-      throw new IllegalArgumentException("Invalid auth token \"" + String.valueOf(value) + "\"", e);
+      return null;
     }
   }
 
