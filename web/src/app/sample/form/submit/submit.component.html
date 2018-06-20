@@ -1,0 +1,9 @@
+<tabs></tabs>
+<ng-container *ngIf="forms">
+  <ng-container *ngFor="let form of forms; let i = index">
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="submit(i)">
+      <button type="submit" cBtn="default" [disabled]="form | submitting">{{form.value.time}}秒</button>
+    </form>
+  </ng-container>
+</ng-container>
+

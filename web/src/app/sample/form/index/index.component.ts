@@ -45,6 +45,7 @@ export class FormTabsComponent {
     { name: 'c-float', path: 'float', },
     { name: 'c-file', path: 'file', },
     { name: 'c-error-tip-container', path: 'container', },
+    { name: 'c-submit', path: 'submit', },
   ];
 
   select(tab: any): void {

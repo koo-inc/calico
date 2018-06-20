@@ -25,6 +25,7 @@ import { FloatComponent } from "./form/float/float.component";
 import { FileComponent } from "./form/file/file.component";
 import { ContainerComponent } from "./form/container/container.component";
 import { buildRoute } from "app/app.routing";
+import { SubmitComponent } from "./form/submit/submit.component";
 
 const routes: Routes = [
   buildRoute({
@@ -48,6 +49,7 @@ const routes: Routes = [
       {path: "form/float", component: FloatComponent},
       {path: "form/file", component: FileComponent},
       {path: "form/container", component: ContainerComponent},
+      {path: "form/submit", component: SubmitComponent},
     ],
     }),
 ];
@@ -79,6 +81,7 @@ const routes: Routes = [
     FloatComponent,
     FileComponent,
     ContainerComponent,
+    SubmitComponent,
   ],
   providers: [
     ValidationService,
