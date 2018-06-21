@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DefaultFormComponent } from "app/sample/form/index/index.component";
-import { Observable } from "rxjs/Observable";
-import { of } from "rxjs/observable/of";
+import { Observable ,  of } from "rxjs";
 import { AlertService, ExtEnumService, Api } from "calico";
 import { Media } from 'calico/type/media';
 import { download } from 'calico/util/file';

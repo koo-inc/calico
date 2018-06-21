@@ -1,7 +1,7 @@
 import { Component, Host, Input, OnInit, Optional, SkipSelf, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from "@angular/router";
 import { ControlContainer, FormGroup, FormGroupDirective } from "@angular/forms";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { AlertService, ExtEnumService } from "calico";
 
 @Component({
