@@ -18,6 +18,5 @@ dependencies {
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: rootProject.properties.jacksonVersion
   compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: rootProject.properties.jacksonVersion
   compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: rootProject.properties.jacksonVersion
-  compileOnly group: 'org.projectlombok', name: 'lombok', version: rootProject.properties.lombokVersion
   testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
 }

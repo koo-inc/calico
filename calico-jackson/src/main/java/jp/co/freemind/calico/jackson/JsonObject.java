@@ -1,33 +1,37 @@
 package jp.co.freemind.calico.jackson;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import jp.co.freemind.calico.jackson.ser.LocalDateSerializer;
-import jp.co.freemind.calico.jackson.ser.LocalDateTimeSerializer;
+
+import jp.co.freemind.calico.core.util.Throwables;
 import jp.co.freemind.calico.jackson.deser.LocalDateDeserializer;
 import jp.co.freemind.calico.jackson.deser.LocalDateTimeDeserializer;
 import jp.co.freemind.calico.jackson.deser.LocalTimeDeserializer;
+import jp.co.freemind.calico.jackson.ser.LocalDateSerializer;
+import jp.co.freemind.calico.jackson.ser.LocalDateTimeSerializer;
 import jp.co.freemind.calico.jackson.ser.LocalTimeSerializer;
-import lombok.EqualsAndHashCode;
-import lombok.SneakyThrows;
 
-@EqualsAndHashCode
 public class JsonObject<T> {
   private static final ObjectMapper mapper = buildMapper();
   private final T object;
 
-  @SneakyThrows
   public JsonObject(String json) {
     JavaType javaType = mapper.constructType(((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
-    this.object = mapper.readValue(String.valueOf(json), javaType);
+    try {
+      this.object = mapper.readValue(String.valueOf(json), javaType);
+    } catch (IOException e) {
+      throw Throwables.sneakyThrow(e);
+    }
   }
 
   public JsonObject(T object) {
@@ -42,9 +46,12 @@ public class JsonObject<T> {
     return toString();
   }
 
-  @SneakyThrows
   public String toString() {
-    return mapper.writeValueAsString(object);
+    try {
+      return mapper.writeValueAsString(object);
+    } catch (JsonProcessingException e) {
+      throw Throwables.sneakyThrow(e);
+    }
   }
 
   private static ObjectMapper buildMapper() {
@@ -60,5 +67,28 @@ public class JsonObject<T> {
     mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
 
     return mapper;
+  }
+
+  public boolean equals(Object o) {
+    if (o == this) return true;
+    if (!(o instanceof JsonObject)) return false;
+    final JsonObject other = (JsonObject) o;
+    if (!other.canEqual((Object) this)) return false;
+    final Object this$object = this.object;
+    final Object other$object = other.object;
+    if (this$object == null ? other$object != null : !this$object.equals(other$object)) return false;
+    return true;
+  }
+
+  public int hashCode() {
+    final int PRIME = 59;
+    int result = 1;
+    final Object $object = this.object;
+    result = result * PRIME + ($object == null ? 43 : $object.hashCode());
+    return result;
+  }
+
+  protected boolean canEqual(Object other) {
+    return other instanceof JsonObject;
   }
 }
