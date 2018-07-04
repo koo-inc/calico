@@ -10,16 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.inject.Inject;
-import jp.co.freemind.calico.core.media.Media;
-import jp.co.freemind.calico.core.util.StreamUtil;
-import jp.co.freemind.calico.core.util.Throwables;
-import jp.co.freemind.calico.core.zone.Zone;
-import lombok.SneakyThrows;
 import org.apache.http.Consts;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -30,9 +20,19 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-public class FmPostMan implements PostMan {
-  private final static DateTimeFormatter SEND_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 
+import jp.co.freemind.calico.core.media.Media;
+import jp.co.freemind.calico.core.util.StreamUtil;
+import jp.co.freemind.calico.core.util.Throwables;
+import jp.co.freemind.calico.core.zone.Zone;
+
+public class FmPostMan implements PostMan {
+  private static final DateTimeFormatter SEND_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
   private final FmMailSetting setting;
   private final ObjectMapper objectMapper;
   private List<MultipartEntityBuilder> builders = Lists.newArrayList();
@@ -49,34 +49,35 @@ public class FmPostMan implements PostMan {
   }
 
   @Override
-  @SneakyThrows
   public void accept(Mail.Envelope envelope, List<Media> mediaList) {
-    if (mediaList.size() > 5) {
-      throw new IllegalStateException("attachments attached too mach");
+    try {
+      if (mediaList.size() > 5) {
+        throw new IllegalStateException("attachments attached too mach");
+      }
+      MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+      builder.setMode(HttpMultipartMode.RFC6532);
+      builder.addTextBody("mailInfo", getMailInfo(envelope), ContentType.create("text/plain", Consts.UTF_8));
+      StreamUtil.forEachWithIndex(mediaList.stream(), (m,i)->builder.addBinaryBody("attached" + (i + 1), m.getPayload(), ContentType.APPLICATION_OCTET_STREAM, m.getMeta().getName()));
+      builders.add(builder);
+    } catch (final java.lang.Throwable $ex) {
+      throw Throwables.sneakyThrow($ex);
     }
-
-    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-    builder.setMode(HttpMultipartMode.RFC6532);
-    builder.addTextBody("mailInfo", getMailInfo(envelope), ContentType.create("text/plain", Consts.UTF_8));
-    StreamUtil.forEachWithIndex(mediaList.stream(), (m, i) ->
-      builder.addBinaryBody("attached" + (i + 1), m.getPayload(), ContentType.APPLICATION_OCTET_STREAM, m.getMeta().getName()));
-    builders.add(builder);
   }
 
   @Override
   public void deliver(Mail mail) {
     mail.visit(this);
-
-    builders.forEach(builder -> {
-      HttpPost post = new HttpPost(setting.getApiUrl());
-      post.setEntity(builder.build());
-
-      try (CloseableHttpClient client = HttpClients.createDefault(); CloseableHttpResponse res = client.execute(post)) {
-        validateResponse(res);
-      } catch (IOException e) {
-        throw new UncheckedIOException(e);
+    builders.forEach((builder)-> {
+        HttpPost post = new HttpPost(setting.getApiUrl());
+        post.setEntity(builder.build());
+        try (final CloseableHttpClient client = HttpClients.createDefault();
+             final CloseableHttpResponse res = client.execute(post)) {
+          validateResponse(res);
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
       }
-    });
+    );
     builders = Lists.newArrayList();
   }
 
@@ -89,9 +90,7 @@ public class FmPostMan implements PostMan {
     mailInfo.put("subject", envelope.getSubject());
     mailInfo.put("replayTo", envelope.getReplyTo());
     mailInfo.put("body", envelope.getBody());
-    mailInfo.put("recipients", envelope.getRecipients().stream()
-      .map(this::getRecipient)
-      .collect(Collectors.toList()));
+    mailInfo.put("recipients", envelope.getRecipients().stream().map(this::getRecipient).collect(Collectors.toList()));
     try {
       return objectMapper.writeValueAsString(mailInfo);
     } catch (JsonProcessingException e) {
@@ -112,8 +111,7 @@ public class FmPostMan implements PostMan {
     id = id.replaceAll("[^-_a-zA-Z0-9]", "-");
     if (id.length() > 20) {
       return id.substring(0, 20);
-    }
-    else {
+    } else {
       return id;
     }
   }
@@ -132,6 +130,6 @@ public class FmPostMan implements PostMan {
     } catch (IOException e) {
       throw Throwables.sneakyThrow(e);
     }
-    if(!content.startsWith("success")) throw new MailException(content);
+    if (!content.startsWith("success")) throw new MailException(content);
   }
 }
