@@ -4,16 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
-import jp.co.freemind.calico.core.exception.UnknownEndpointException;
 import jp.co.freemind.calico.core.exception.InvalidUserDataException;
-import lombok.extern.log4j.Log4j2;
+import jp.co.freemind.calico.core.exception.UnknownEndpointException;
 
-@Log4j2
 public class Dispatcher {
+  private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(Dispatcher.class);
   private static ObjectMapper mapper;
 
   private final EndpointResolver resolver;

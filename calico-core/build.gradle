@@ -30,8 +30,6 @@ dependencies {
   compile group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: rootProject.properties.log4j2Version
   compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: rootProject.properties.log4j2Version
 
-  compileOnly group: 'org.projectlombok', name: 'lombok', version: rootProject.properties.lombokVersion
-
   testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
 }
 

@@ -3,15 +3,14 @@ package jp.co.freemind.calico.core.media;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jp.co.freemind.calico.core.zone.Zone;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Created by tasuku on 15/04/28.
  */
 public class MediaProxy extends Media {
-  @Getter @Setter private String id;
+  private String id;
 
   private MediaStorage storage;
 
@@ -30,7 +29,7 @@ public class MediaProxy extends Media {
     getInstance().setPayload(content);
   }
 
-  @Setter private MediaMeta meta;
+  private MediaMeta meta;
   @Override
   public MediaMeta getMeta() {
     if (meta != null) return meta;
@@ -81,5 +80,17 @@ public class MediaProxy extends Media {
     proxy.setId(id);
     proxy.setMeta(meta);
     return proxy;
+  }
+
+  public String getId() {
+    return this.id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setMeta(MediaMeta meta) {
+    this.meta = meta;
   }
 }

@@ -1,13 +1,13 @@
 package jp.co.freemind.calico.core.endpoint.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access= AccessLevel.PRIVATE)
 @JsonSerialize
 public class EmptyOutput {
   private static EmptyOutput instance;
+
+  private EmptyOutput() {
+  }
 
   public static EmptyOutput getInstance() {
     if(instance == null){

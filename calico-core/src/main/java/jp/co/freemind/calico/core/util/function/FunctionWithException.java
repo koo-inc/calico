@@ -2,7 +2,7 @@ package jp.co.freemind.calico.core.util.function;
 
 import java.util.function.Function;
 
-import lombok.Lombok;
+import jp.co.freemind.calico.core.util.Throwables;
 
 /**
  * Created by kakusuke on 15/06/12.
@@ -16,7 +16,7 @@ public interface FunctionWithException<T, R, E extends Exception> {
       try {
         return apply(t);
       } catch (Exception e) {
-        throw Lombok.sneakyThrow(e);
+        throw Throwables.sneakyThrow(e);
       }
     };
   }
