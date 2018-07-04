@@ -3,9 +3,7 @@ package jp.co.freemind.calico.csv;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ObjectArrays;
-import lombok.Getter;
 
-@Getter
 public class CsvMetaInfo {
   private final String[] paths;
   private final String[] names;
@@ -46,5 +44,26 @@ public class CsvMetaInfo {
 
   public CsvMetaInfo format(Class<?> formatClass) {
     return new CsvMetaInfo(paths, names, type, withHeader, formatClass);
+  }
+
+  public String[] getPaths() {
+    return this.paths;
+  }
+
+  public String[] getNames() {
+    return this.names;
+  }
+
+  public CsvFormatType getType() {
+    return this.type;
+  }
+
+  public boolean isWithHeader() {
+    return this.withHeader;
+  }
+
+  @Nullable
+  public Class<?> getFormatClass() {
+    return this.formatClass;
   }
 }

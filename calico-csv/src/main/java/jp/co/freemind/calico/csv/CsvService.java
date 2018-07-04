@@ -1,7 +1,6 @@
 package jp.co.freemind.calico.csv;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,6 +16,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
+
 import jp.co.freemind.calico.core.endpoint.validation.Validator;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaMeta;
@@ -28,7 +28,6 @@ import jp.co.freemind.csv.CsvReader;
 import jp.co.freemind.csv.CsvWriter;
 import jp.co.freemind.csv.Location;
 import jp.co.freemind.csv.exception.ValidationException;
-import lombok.Value;
 
 public class CsvService {
   private final Validator validator;
@@ -157,16 +156,63 @@ public class CsvService {
     return metaInfo;
   }
 
-  @Value
   private static class Column {
     private final int order;
     private final String path;
     private final String name;
 
+    @java.beans.ConstructorProperties({"order", "path", "name"})
+    public Column(int order, String path, String name) {
+      this.order = order;
+      this.path = path;
+      this.name = name;
+    }
+
     static Column of(Field field) {
       CsvColumn csvColumn = field.getAnnotation(CsvColumn.class);
       if (csvColumn == null) return null;
       return new Column(csvColumn.order(), field.getName(), csvColumn.name());
+    }
+
+    public int getOrder() {
+      return this.order;
+    }
+
+    public String getPath() {
+      return this.path;
+    }
+
+    public String getName() {
+      return this.name;
+    }
+
+    public boolean equals(Object o) {
+      if (o == this) return true;
+      if (!(o instanceof Column)) return false;
+      final Column other = (Column) o;
+      if (this.getOrder() != other.getOrder()) return false;
+      final Object this$path = this.getPath();
+      final Object other$path = other.getPath();
+      if (this$path == null ? other$path != null : !this$path.equals(other$path)) return false;
+      final Object this$name = this.getName();
+      final Object other$name = other.getName();
+      if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
+      return true;
+    }
+
+    public int hashCode() {
+      final int PRIME = 59;
+      int result = 1;
+      result = result * PRIME + this.getOrder();
+      final Object $path = this.getPath();
+      result = result * PRIME + ($path == null ? 43 : $path.hashCode());
+      final Object $name = this.getName();
+      result = result * PRIME + ($name == null ? 43 : $name.hashCode());
+      return result;
+    }
+
+    public String toString() {
+      return "CsvService.Column(order=" + this.getOrder() + ", path=" + this.getPath() + ", name=" + this.getName() + ")";
     }
   }
 }

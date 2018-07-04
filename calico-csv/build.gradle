@@ -18,6 +18,5 @@ dependencies {
   compile project(':calico-core')
   compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.4.0'
 
-  compileOnly group: 'org.projectlombok', name: 'lombok', version: rootProject.properties.lombokVersion
   testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
 }
