@@ -38,7 +38,7 @@ public class AuthorizationInterceptor implements EndpointInterceptor {
       .flatMap(Arrays::stream)
       .map(c -> {
         try {
-          return c.newInstance();
+          return c.getConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
           throw Throwables.sneakyThrow(e);
         }

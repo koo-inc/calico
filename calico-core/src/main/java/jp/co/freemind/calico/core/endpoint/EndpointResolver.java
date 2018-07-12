@@ -56,7 +56,7 @@ public class EndpointResolver {
 
       StringBuilder builder = new StringBuilder(systemSetting.getRootPackage()).append(".").append(fragments[0]);
 
-      Package rootPackage = Package.getPackage(builder.toString());
+      Package rootPackage = getClass().getClassLoader().getDefinedPackage(builder.toString());
       if (rootPackage == null) return Optional.empty();
       if (!rootPackage.isAnnotationPresent(EndpointRoot.class)) return Optional.empty();
 

@@ -18,7 +18,7 @@ public final class Types {
       String[] fragments = type.getName().split("\\.");
       for (int n = fragments.length - 1; n > 0; n--) {
         String pkgName = stream(copyOf(fragments, n)).collect(joining("."));
-        Package pkg = Package.getPackage(pkgName);
+        Package pkg = Types.class.getClassLoader().getDefinedPackage(pkgName);
         if (pkg == null) continue;
 
         packages.add(pkg);
