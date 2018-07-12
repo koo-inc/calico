@@ -16,6 +16,7 @@ public abstract class ViolationException extends RuntimeException {
     this(new Violation(key, message));
   }
   public ViolationException(Violation violation) {
+    super(violation.toString());
     this.violation = violation;
   }
   public ViolationException(String message, Throwable e){

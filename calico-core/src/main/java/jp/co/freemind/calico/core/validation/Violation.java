@@ -84,4 +84,9 @@ public class Violation {
     errors.forEach((key, value) -> map.put(key, ImmutableList.copyOf(value)));
     return Collections.unmodifiableMap(map);
   }
+
+  @Override
+  public String toString() {
+    return "Violation{errors=" + errors + '}';
+  }
 }
