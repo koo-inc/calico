@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import javax.activation.FileTypeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.ServletContext;
@@ -63,7 +62,7 @@ public class AssetsFinder {
     try (FileChannel channel = FileChannel.open(path)) {
       return Optional.of(new Asset(
         channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size()),
-        FileTypeMap.getDefaultFileTypeMap().getContentType(path.toString()),
+        Files.probeContentType(path),
         channel.size(),
         Files.getLastModifiedTime(path).to(TimeUnit.SECONDS)
       ));

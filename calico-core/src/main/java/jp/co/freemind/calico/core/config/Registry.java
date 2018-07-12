@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collections;
@@ -82,21 +81,20 @@ public class Registry {
       .flatMap(Stream::of)
       .collect(Collectors.toMap(PropertyDescriptor::getReadMethod, desc -> desc));
 
-    final Constructor<MethodHandles.Lookup> constructor = getConstructor();
-
-
     return (I) Proxy.newProxyInstance(iface.getClassLoader(), new Class<?>[] { iface }, (proxy, method, args) -> {
       if (cache.containsKey(method)) return cache.get(method);
 
-      PropertyDescriptor descriptor = descriptorMap.get(method);
-      Object property = getValue(settingPath, descriptor, method);
-      if (property == null && method.isDefault()) {
+      Object property;
+      if (method.isDefault()) {
         // default メソッドの実行
         // https://rmannibucau.wordpress.com/2014/03/27/java-8-default-interface-methods-and-jdk-dynamic-proxies/
-        property = constructor.newInstance(iface, MethodHandles.Lookup.PRIVATE)
+        // http://mail.openjdk.java.net/pipermail/jigsaw-dev/2017-January/010741.html
+        property = MethodHandles.privateLookupIn(iface, MethodHandles.lookup())
           .unreflectSpecial(method, iface)
           .bindTo(proxy)
           .invokeWithArguments(args);
+      } else {
+        property = getValue(settingPath, descriptorMap.get(method), method);
       }
       cache.put(method, property);
       return property;
@@ -112,19 +110,6 @@ public class Registry {
     else {
       return Registry.this.getValue(settingPath + "." + descriptor.getName());
     }
-  }
-
-  private Constructor<MethodHandles.Lookup> getConstructor() {
-    final Constructor<MethodHandles.Lookup> constructor;
-    try {
-      constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
-    } catch (NoSuchMethodException e) {
-      throw new RuntimeException(e);
-    }
-    if (!constructor.isAccessible()) {
-      constructor.setAccessible(true);
-    }
-    return constructor;
   }
 
   private Function<Class<?>, BeanInfo> toBeanInfo() {
