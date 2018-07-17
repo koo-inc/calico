@@ -18,23 +18,20 @@ public class Dispatcher {
   private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(Dispatcher.class);
   private static ObjectMapper mapper;
 
-  private final EndpointResolver resolver;
+  private final EndpointInfo endpointInfo;
 
   public static void init(ObjectMapper mapper) {
     Dispatcher.mapper = mapper.copy().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
-  public Dispatcher(EndpointResolver resolver) {
-    this.resolver = resolver;
+  public Dispatcher(EndpointInfo endpointInfo) {
+    this.endpointInfo = endpointInfo;
   }
 
   @SuppressWarnings("unchecked")
-  public Object dispatch(String path, InputStream is, InterceptionHandler... handlers) throws UnknownEndpointException, Throwable {
-    Class<? extends Endpoint<?, ?>> endpointClass = resolver.getEndpointClass(path)
-      .orElseThrow(() -> new UnknownEndpointException(path));
-
-    Object input = resolver.getInputType(endpointClass).map(inputType -> getInput(inputType, is)).orElse(null);
-    return new EndpointInvocation(resolver, endpointClass, input, handlers).proceed();
+  public Object dispatch(InputStream is, InterceptionHandler... handlers) throws UnknownEndpointException, Throwable {
+    Object input = getInput(endpointInfo.getInputType(), is);
+    return new EndpointInvocation(endpointInfo, input, handlers).proceed();
   }
 
   private Object getInput(Class<?> inputType, InputStream input) {

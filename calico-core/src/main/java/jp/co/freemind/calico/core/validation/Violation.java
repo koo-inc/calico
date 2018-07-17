@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -38,12 +39,12 @@ public class Violation {
 
   public Violation mark(@Nonnull String key, @Nonnull String errorCode) {
     List<String> errors = this.errors.computeIfAbsent(getPath(key), path -> new ArrayList<>());
-    errors.add(errorCode);
+    errors.add(Objects.requireNonNull(errorCode));
     return this;
   }
   public Violation mark(@Nonnull String key, @Nonnull List<String> errorCodes) {
     List<String> errors = this.errors.computeIfAbsent(getPath(key), path -> new ArrayList<>());
-    errors.addAll(errorCodes);
+    errorCodes.forEach(errorCode -> errors.add(Objects.requireNonNull(errorCode)));
     return this;
   }
   public Violation mark(int key, @Nonnull String errorCode) {

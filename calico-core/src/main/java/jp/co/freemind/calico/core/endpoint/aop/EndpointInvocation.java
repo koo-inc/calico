@@ -6,25 +6,18 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import jp.co.freemind.calico.core.endpoint.Endpoint;
-import jp.co.freemind.calico.core.endpoint.EndpointResolver;
+import jp.co.freemind.calico.core.endpoint.EndpointInfo;
 import org.aopalliance.intercept.Invocation;
 
 public class EndpointInvocation implements Invocation {
-  private final EndpointResolver resolver;
-  private final Class<? extends Endpoint<?, ?>> endpointClass;
-  private final Method method;
+  private final EndpointInfo info;
   private final Object input;
   private final InterceptionHandler[] handlers;
 
-  public EndpointInvocation(EndpointResolver resolver, Class<? extends Endpoint<?, ?>> endpointClass, Object input, InterceptionHandler[] handlers) {
-    this(resolver, endpointClass, getExecuteMethod(endpointClass), input, getMatchesHandlers(endpointClass, handlers));
-  }
-  private EndpointInvocation(EndpointResolver resolver, Class<? extends Endpoint<?, ?>> endpointClass, Method method, Object input, InterceptionHandler[] handlers) {
-    this.resolver = resolver;
-    this.endpointClass = endpointClass;
+  public EndpointInvocation(EndpointInfo info, Object input, InterceptionHandler[] handlers) {
+    this.info = info;
     this.input = input;
-    this.method = method;
-    this.handlers = handlers;
+    this.handlers = getMatchesHandlers(info, handlers);
   }
 
   private static Method getExecuteMethod(Class<? extends Endpoint> endpointClass) {
@@ -35,9 +28,9 @@ public class EndpointInvocation implements Invocation {
     }
   }
 
-  private static InterceptionHandler[] getMatchesHandlers(Class<? extends Endpoint> endpointClass, InterceptionHandler[] handlers) {
+  private static InterceptionHandler[] getMatchesHandlers(EndpointInfo info, InterceptionHandler[] handlers) {
     return Arrays.stream(handlers)
-      .filter(h -> h.matches(endpointClass))
+      .filter(h -> h.matches(info.getEndpointClass()))
       .toArray(InterceptionHandler[]::new);
   }
 
@@ -55,26 +48,26 @@ public class EndpointInvocation implements Invocation {
   public Object proceed() throws Throwable {
     if (handlers.length == 0) {
       try {
-        return method.invoke(getThis(), input);
+        return info.getExecuteMethod().invoke(getThis(), input);
       } catch (InvocationTargetException t) {
         throw t.getCause();
       }
     }
-    EndpointInvocation next = new EndpointInvocation(resolver, endpointClass, method, input, Arrays.copyOfRange(handlers, 1, handlers.length));
+    EndpointInvocation next = new EndpointInvocation(info, input, Arrays.copyOfRange(handlers, 1, handlers.length));
     return handlers[0].invoke(next);
   }
 
   @Override
   public Object getThis() {
-    return resolver.getEndpoint(endpointClass);
+    return info.createInstance();
   }
 
   @Override
   public AccessibleObject getStaticPart() {
-    return method;
+    return info.getExecuteMethod();
   }
 
   public Class<? extends Endpoint<?, ?>> getEndpointClass() {
-    return endpointClass;
+    return info.getEndpointClass();
   }
 }

@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -13,15 +14,13 @@ import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.Logger;
-import org.seasar.doma.jdbc.Config;
-import org.seasar.doma.jdbc.tx.TransactionIsolationLevel;
-
 import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.endpoint.Dispatcher;
+import jp.co.freemind.calico.core.endpoint.EndpointInfo;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
+import jp.co.freemind.calico.core.exception.UnknownEndpointException;
 import jp.co.freemind.calico.core.exception.ViolationException;
 import jp.co.freemind.calico.core.log.LoggingSession;
 import jp.co.freemind.calico.core.log.LoggingSessionStarter;
@@ -31,14 +30,21 @@ import jp.co.freemind.calico.core.zone.UnhandledException;
 import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.util.CookieUtil;
 import jp.co.freemind.calico.servlet.util.NetworkUtil;
+import org.apache.logging.log4j.Logger;
+import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.tx.TransactionIsolationLevel;
 
 public class RequestSession {
   private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(RequestSession.class);
 
   public void execute(ServletConfig servletConfig, HttpServletRequest req, HttpServletResponse res) {
+    EndpointResolver resolver = getEndpointResolver();
+
     try {
-      doInTransaction(servletConfig, req, res, () -> {
-        RequestParam param = getRequestParam(servletConfig, req, res);
+      RequestParam param = getRequestParam(servletConfig, req, res);
+      Optional<EndpointInfo> endpointInfo = resolver.resolve(param.getPath());
+
+      doInTransaction(param, () -> {
         Context context = doGetContext(param);
 
         getTransactionScopedZone(context, param).run(() -> {
@@ -57,7 +63,8 @@ public class RequestSession {
             .onFinish(() -> loggingSession.finish(res.getStatus()))
           ).run(() -> {
             InputStream is = Zone.getCurrent().getInstance(Keys.INPUT);
-            Object output = new Dispatcher(getEndpointResolver()).dispatch(param.getPath(), is, getInterceptionHandlers(servletConfig));
+            Object output = new Dispatcher(endpointInfo.orElseThrow(() -> new UnknownEndpointException(param.path)))
+              .dispatch(is, getInterceptionHandlers(servletConfig));
             render(context, param, output);
           });
         });
@@ -75,8 +82,12 @@ public class RequestSession {
     }
   }
 
-  protected void doInTransaction(ServletConfig servletConfig, HttpServletRequest req, HttpServletResponse res, Runnable block) {
-    Zone.getCurrent().getInstance(Config.class).getTransactionManager()
+  protected Config getConfig() {
+    return Zone.getCurrent().getInstance(Config.class);
+  }
+
+  protected void doInTransaction(RequestParam param, Runnable block) {
+    getConfig().getTransactionManager()
       .requiresNew(TransactionIsolationLevel.READ_COMMITTED, block);
   }
 
