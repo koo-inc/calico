@@ -30,7 +30,7 @@ public class AESCryptor {
   public AESCryptor(String secretToken, Supplier<Hasher> hasher) {
     this.secretToken = secretToken;
     this.hasher = hasher;
-    this.cipherPair = new CipherPair(secretToken.getBytes());
+    this.cipherPair = new CipherPair(secretToken.getBytes(Charsets.UTF_8));
   }
 
   public AESCryptor(String secretToken) {
@@ -43,11 +43,11 @@ public class AESCryptor {
    * @return encrypted string
    */
   public String encrypt(String src) {
-    byte[] key = secretToken.getBytes();
+    byte[] key = secretToken.getBytes(Charsets.UTF_8);
     byte[] iv = getIV();
     byte[] bytes = cipherPair.encrypt(src.getBytes(Charsets.UTF_8), iv);
     Base64.Encoder encoder = Base64.getEncoder();
-    return encoder.encodeToString(iv) + "." + encoder.encodeToString(bytes) + "." + hashing(src.getBytes(), iv, key);
+    return encoder.encodeToString(iv) + "." + encoder.encodeToString(bytes) + "." + hashing(src.getBytes(Charsets.UTF_8), iv, key);
   }
 
   /**
@@ -56,7 +56,7 @@ public class AESCryptor {
    * @return decrypted string
    */
   public String decrypt(String encrypted) {
-    byte[] key = secretToken.getBytes();
+    byte[] key = secretToken.getBytes(Charsets.UTF_8);
     try {
       String[] parts = encrypted.split("[.]");
       if (parts.length != 3) return "";
@@ -65,7 +65,7 @@ public class AESCryptor {
       byte[] bytes = decoder.decode(parts[1]);
       String signature = parts[2];
       String decoded = new String(cipherPair.decrypt(bytes, iv), Charsets.UTF_8);
-      if (!signature.equals(hashing(decoded.getBytes(), iv, key))) return "";
+      if (!signature.equals(hashing(decoded.getBytes(Charsets.UTF_8), iv, key))) return "";
       return decoded;
     } catch(Exception e) {
       return "";

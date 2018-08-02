@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
+import com.google.common.base.Charsets;
 import jp.co.freemind.calico.core.config.SystemSetting;
 import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.zone.Zone;
@@ -121,7 +122,7 @@ public class CalicoServlet extends HttpServlet {
       }
     }
 
-    byte[] content = indexHtml.replace(BASE_HREF_PLACEHOLDER, getBaseHref(req)).getBytes();
+    byte[] content = indexHtml.replace(BASE_HREF_PLACEHOLDER, getBaseHref(req)).getBytes(Charsets.UTF_8);
     Asset asset = new Asset(ByteBuffer.wrap(content), index.getContentType(), content.length, index.getLastModified());
     sendAsset(res, asset);
   }
