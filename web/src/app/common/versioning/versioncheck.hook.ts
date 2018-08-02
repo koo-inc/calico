@@ -23,12 +23,10 @@ export class VersionCheckHook implements RequestHook {
     return tap((res: HttpResponse<any>) => {
       let version = res.headers.get(this.versionInfo.key);
       if (version == null || version == this.versionInfo.currentVersion) return;
-      let events = filter.call(this.router.events, (e: any) => e instanceof NavigationStart);
-      console.log(events);
-      events = map.call(events, (e: any) => e as NavigationStart);
-      console.log(events);
-      events.subscribe((loc: any) => location.href = loc.url);
-      console.log(events);
+      this.router.events.pipe(
+        filter(e => e instanceof NavigationStart),
+        map(e => e as NavigationStart),
+      ).subscribe(loc => location.href = loc.url);
     })(observable);
   }
 }
