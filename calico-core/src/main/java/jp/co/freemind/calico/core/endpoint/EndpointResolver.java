@@ -10,6 +10,7 @@ import com.google.common.base.CaseFormat;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import jp.co.freemind.calico.core.config.SystemSetting;
+import jp.co.freemind.calico.core.config.VersionSpecificMethods;
 
 @Singleton
 public class EndpointResolver {
@@ -37,7 +38,7 @@ public class EndpointResolver {
 
       StringBuilder builder = new StringBuilder(systemSetting.getRootPackage()).append(".").append(fragments[0]);
 
-      Package rootPackage = getClass().getClassLoader().getDefinedPackage(builder.toString());
+      Package rootPackage = VersionSpecificMethods.INSTANCE.getDefinedPackage(getClass().getClassLoader(), builder.toString());
       if (rootPackage == null) return Optional.empty();
       if (!rootPackage.isAnnotationPresent(EndpointRoot.class)) return Optional.empty();
 

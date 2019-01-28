@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collections;
@@ -86,19 +85,20 @@ public class Registry {
 
       Object property;
       if (method.isDefault()) {
-        // default メソッドの実行
-        // https://rmannibucau.wordpress.com/2014/03/27/java-8-default-interface-methods-and-jdk-dynamic-proxies/
-        // http://mail.openjdk.java.net/pipermail/jigsaw-dev/2017-January/010741.html
-        property = MethodHandles.privateLookupIn(iface, MethodHandles.lookup())
-          .unreflectSpecial(method, iface)
-          .bindTo(proxy)
-          .invokeWithArguments(args);
+        property = getDefaultProperty(iface, proxy, method, args);
       } else {
         property = getValue(settingPath, descriptorMap.get(method), method);
       }
       cache.put(method, property);
       return property;
     });
+  }
+
+  private <I> Object getDefaultProperty(Class<I> iface, Object proxy, Method method, Object[] args) throws Throwable {
+    return VersionSpecificMethods.INSTANCE.privateLookupIn(iface)
+      .unreflectSpecial(method, iface)
+      .bindTo(proxy)
+      .invokeWithArguments(args);
   }
 
   protected Object getValue(String settingPath, PropertyDescriptor descriptor, Method method) {

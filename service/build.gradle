@@ -17,7 +17,6 @@ idea.module {
 configurations {
   processResources.destinationDir = compileJava.destinationDir
   compileJava.dependsOn processResources
-  compileJava.options.compilerArgs = []
 }
 
 
