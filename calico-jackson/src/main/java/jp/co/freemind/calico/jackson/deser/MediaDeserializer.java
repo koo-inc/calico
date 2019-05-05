@@ -14,8 +14,8 @@ import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaMeta;
 import jp.co.freemind.calico.core.media.MediaProxy;
 import jp.co.freemind.calico.core.media.MediaStorage;
+import jp.co.freemind.calico.core.util.Throwables;
 import jp.co.freemind.calico.core.zone.Zone;
-import lombok.SneakyThrows;
 
 /**
  * Created by tasuku on 15/04/30.
@@ -65,9 +65,12 @@ public class MediaDeserializer extends JsonDeserializer<Media> {
     return Optional.ofNullable(node.longValue());
   }
 
-  @SneakyThrows
   private Optional<byte[]> getValueAsBinary(JsonNode node) {
     if (node == null) return Optional.empty();
-    return Optional.ofNullable(node.binaryValue());
+    try {
+      return Optional.ofNullable(node.binaryValue());
+    } catch (IOException e) {
+      throw Throwables.sneakyThrow(e);
+    }
   }
 }

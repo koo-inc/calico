@@ -4,21 +4,21 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Strings;
+
 import jp.co.freemind.calico.core.util.CryptoUtil;
 import jp.co.freemind.calico.core.util.RandomUtil;
 import jp.co.freemind.calico.core.zone.Zone;
-import lombok.NonNull;
-import lombok.Value;
 
-@Value public class AuthToken {
-  @NonNull private String value;
-  @NonNull private String id;
-  @NonNull private String remoteAddress;
-  @NonNull private String csrfToken;
-  @NonNull private LocalDateTime createdAt;
+public class AuthToken {
+  @Nonnull private String value;
+  @Nonnull private String id;
+  @Nonnull private String remoteAddress;
+  @Nonnull private String csrfToken;
+  @Nonnull private LocalDateTime createdAt;
 
   private static final ZoneOffset ZONE_OFFSET = ZoneOffset.UTC;
   private static final long TIME_OFFSET = LocalDateTime.MIN.toEpochSecond(ZONE_OFFSET);
@@ -85,5 +85,73 @@ import lombok.Value;
 
   private static String getSecretToken() {
     return Zone.getCurrent().getInstance(AuthSetting.class).getSecretToken();
+  }
+
+  @Nonnull
+  public String getValue() {
+    return this.value;
+  }
+
+  @Nonnull
+  public String getId() {
+    return this.id;
+  }
+
+  @Nonnull
+  public String getRemoteAddress() {
+    return this.remoteAddress;
+  }
+
+  @Nonnull
+  public String getCsrfToken() {
+    return this.csrfToken;
+  }
+
+  @Nonnull
+  public LocalDateTime getCreatedAt() {
+    return this.createdAt;
+  }
+
+  public boolean equals(Object o) {
+    if (o == this) return true;
+    if (!(o instanceof AuthToken)) return false;
+    final AuthToken other = (AuthToken) o;
+    final Object this$value = this.getValue();
+    final Object other$value = other.getValue();
+    if (this$value == null ? other$value != null : !this$value.equals(other$value)) return false;
+    final Object this$id = this.getId();
+    final Object other$id = other.getId();
+    if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
+    final Object this$remoteAddress = this.getRemoteAddress();
+    final Object other$remoteAddress = other.getRemoteAddress();
+    if (this$remoteAddress == null ? other$remoteAddress != null : !this$remoteAddress.equals(other$remoteAddress))
+      return false;
+    final Object this$csrfToken = this.getCsrfToken();
+    final Object other$csrfToken = other.getCsrfToken();
+    if (this$csrfToken == null ? other$csrfToken != null : !this$csrfToken.equals(other$csrfToken)) return false;
+    final Object this$createdAt = this.getCreatedAt();
+    final Object other$createdAt = other.getCreatedAt();
+    if (this$createdAt == null ? other$createdAt != null : !this$createdAt.equals(other$createdAt)) return false;
+    return true;
+  }
+
+  public int hashCode() {
+    final int PRIME = 59;
+    int result = 1;
+    final Object $value = this.getValue();
+    result = result * PRIME + ($value == null ? 43 : $value.hashCode());
+    final Object $id = this.getId();
+    result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+    final Object $remoteAddress = this.getRemoteAddress();
+    result = result * PRIME + ($remoteAddress == null ? 43 : $remoteAddress.hashCode());
+    final Object $csrfToken = this.getCsrfToken();
+    result = result * PRIME + ($csrfToken == null ? 43 : $csrfToken.hashCode());
+    final Object $createdAt = this.getCreatedAt();
+    result = result * PRIME + ($createdAt == null ? 43 : $createdAt.hashCode());
+    return result;
+  }
+
+  public String toString() {
+    return "AuthToken(value=" + this.getValue() + ", id=" + this.getId() + ", remoteAddress=" + this.getRemoteAddress() + ", csrfToken=" + this.getCsrfToken() + ", createdAt=" + this.getCreatedAt() + ")";
   }
 }

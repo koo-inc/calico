@@ -12,18 +12,16 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jp.co.freemind.calico.core.config.SystemSetting;
-import jp.co.freemind.calico.servlet.assets.AssetsSetting;
-import jp.co.freemind.calico.core.zone.Zone;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 
-@Log4j2
+import jp.co.freemind.calico.core.config.SystemSetting;
+import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.servlet.assets.AssetsSetting;
+
 @WebFilter(filterName="CacheControlFilter", urlPatterns = {"/*"}, asyncSupported = true)
 public class CacheControlFilter implements Filter {
 
-  @Getter(value = AccessLevel.PRIVATE, lazy = true)
+  private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(CacheControlFilter.class);
   private final AssetsSetting assetsSetting = buildAssetsSetting();
   private static AssetsSetting buildAssetsSetting() {
     return Zone.getCurrent().getInstance(AssetsSetting.class);
@@ -71,5 +69,9 @@ public class CacheControlFilter implements Filter {
     lastModified = time - (time % 1000);
     log.info("version: " + lastModified);
     return lastModified;
+  }
+
+  private AssetsSetting getAssetsSetting() {
+    return this.assetsSetting;
   }
 }

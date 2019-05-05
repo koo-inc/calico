@@ -1,6 +1,7 @@
 plugins {
   id 'java'
   id 'idea'
+  id 'io.franzbecker.gradle-lombok' version '1.14'
 }
 
 apply from: "eclipse.gradle"
@@ -16,13 +17,17 @@ idea.module {
 configurations {
   processResources.destinationDir = compileJava.destinationDir
   compileJava.dependsOn processResources
-  compileJava.options.compilerArgs = []
 }
+
 
 repositories {
   mavenLocal()
   mavenCentral()
   maven { url supportRepo }
+}
+
+lombok {
+  version = '1.18.4'
 }
 
 dependencies {
@@ -32,7 +37,6 @@ dependencies {
   compile project(':calico-csv')
   compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.1.4'
   compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
-  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.14.8'
   testCompile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
 }
 

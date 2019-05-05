@@ -30,7 +30,7 @@ public class ExceptionRenderer implements Renderer<Object> {
       }
     }
     else {
-      render(conf, res, error(JSON), new Violation("message", t.getMessage()));
+      render(conf, res, error(JSON), new Violation("message", t.getMessage() != null ? t.getMessage() : "UNKNOWN"));
     }
   }
 }

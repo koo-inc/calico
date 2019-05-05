@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 
 @Setting("system")
@@ -43,8 +43,8 @@ public interface SystemSetting {
     return Holder.proxies;
   }
 
-  @Log4j2
   final class Holder {
+    private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(Holder.class);
     private static Long version;
     private static List<String> proxies;
   }

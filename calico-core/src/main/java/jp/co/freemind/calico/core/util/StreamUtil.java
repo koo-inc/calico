@@ -12,7 +12,6 @@ import java.util.stream.StreamSupport;
 
 import jp.co.freemind.calico.core.util.type.Tuple;
 import jp.co.freemind.calico.core.util.type.Tuple2;
-import lombok.AllArgsConstructor;
 
 
 public class StreamUtil {
@@ -53,11 +52,17 @@ public class StreamUtil {
     return enumeration != null ? Collections.list(enumeration).stream() : Stream.empty();
   }
 
-  @AllArgsConstructor
   private static class ZipIterator<T, U> implements Iterator<Tuple2<T, U>> {
     private final Iterator<T> itr1;
     private final Iterator<U> itr2;
     private final BiFunction<T, U, Tuple2<T, U>> mapper;
+
+    @java.beans.ConstructorProperties({"itr1", "itr2", "mapper"})
+    public ZipIterator(Iterator<T> itr1, Iterator<U> itr2, BiFunction<T, U, Tuple2<T, U>> mapper) {
+      this.itr1 = itr1;
+      this.itr2 = itr2;
+      this.mapper = mapper;
+    }
 
     @Override
     public boolean hasNext() {

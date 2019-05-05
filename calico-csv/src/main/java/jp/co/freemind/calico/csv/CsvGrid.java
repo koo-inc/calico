@@ -8,17 +8,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import org.apache.logging.log4j.util.Strings;
+
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaMeta;
+import jp.co.freemind.calico.core.util.Throwables;
 import jp.co.freemind.csv.internal.CsvLineJoiner;
 import jp.co.freemind.csv.internal.CsvLineParser;
 import jp.co.freemind.csv.internal.CsvOutputStreamWriter;
 import jp.co.freemind.csv.internal.CsvScanner;
-import lombok.Cleanup;
-import lombok.SneakyThrows;
-import org.apache.logging.log4j.util.Strings;
 
 public class CsvGrid {
   private final Media media;
@@ -37,47 +38,45 @@ public class CsvGrid {
     this.cellMessages.put(lineIndex, columnIndex, message);
     return this;
   }
+
   public CsvGrid mark(int lineIndex, String message) {
     this.lineMessages.put(lineIndex, message);
     return this;
   }
 
-  @SneakyThrows
   public Media getMarkedMedia() {
-    CsvFormatType formatType = metaInfo.getType();
-    Charset charset = Charset.forName(formatType.charset());
-
-    @Cleanup InputStream is = new ByteArrayInputStream(media.getPayload());
-    @Cleanup
-    CsvScanner scanner = new CsvScanner(is, charset, formatType.quoteChar(), formatType.escapeChar());
-    CsvLineParser parser = new CsvLineParser(formatType.quoteChar(), formatType.escapeChar(), formatType.fieldSeparator());
-
-    @Cleanup
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
-    @Cleanup
-    CsvOutputStreamWriter writer = new CsvOutputStreamWriter(os, charset, formatType.lineBreak().getValue(), formatType.bomRequired());
-
-    int index = metaInfo.isWithHeader() ? -1 : 0;
-    int limit = metaInfo.getPaths().length;
-    while(true) {
-      String line = scanner.nextLine();
-      if (line == null) break;
-
-      CsvLineJoiner joiner = getJoiner(formatType);
-      parser.parse(line).stream().limit(limit).forEach(joiner::append);
-      joiner.append(getMessage(index));
-      writer.write(joiner.toString());
-      index++;
+    try {
+      CsvFormatType formatType = metaInfo.getType();
+      Charset charset = Charset.forName(formatType.charset());
+      try (InputStream is = new ByteArrayInputStream(media.getPayload());
+           CsvScanner scanner = new CsvScanner(is, charset, formatType.quoteChar(), formatType.escapeChar())) {
+        CsvLineParser parser = new CsvLineParser(formatType.quoteChar(), formatType.escapeChar(), formatType.fieldSeparator());
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream();
+             CsvOutputStreamWriter writer = new CsvOutputStreamWriter(os, charset, formatType.lineBreak().getValue(), formatType.bomRequired())) {
+          int index = metaInfo.isWithHeader() ? -1 : 0;
+          int limit = metaInfo.getPaths().length;
+          while (true) {
+            String line = scanner.nextLine();
+            if (line == null) break;
+            CsvLineJoiner joiner = getJoiner(formatType);
+            parser.parse(line).stream().limit(limit).forEach(joiner::append);
+            joiner.append(getMessage(index));
+            writer.write(joiner.toString());
+            index++;
+          }
+          MediaMeta meta = new MediaMeta();
+          meta.setType(formatType.mimeType());
+          meta.setSize((long) os.size());
+          meta.setName(media.getMeta().getName());
+          Media newMedia = new Media();
+          newMedia.setMeta(meta);
+          newMedia.setPayload(os.toByteArray());
+          return newMedia;
+        }
+      }
+    } catch (final java.lang.Throwable $ex) {
+      throw Throwables.sneakyThrow($ex);
     }
-
-    MediaMeta meta = new MediaMeta();
-    meta.setType(formatType.mimeType());
-    meta.setSize((long) os.size());
-    meta.setName(media.getMeta().getName());
-    Media newMedia = new Media();
-    newMedia.setMeta(meta);
-    newMedia.setPayload(os.toByteArray());
-    return newMedia;
   }
 
   private CsvLineJoiner getJoiner(CsvFormatType formatType) {
@@ -89,10 +88,7 @@ public class CsvGrid {
     if (lineMessages.containsKey(index)) {
       joiner.add(lineMessages.get(index));
     }
-
-    cellMessages.row(index).forEach((columnIndex, message) ->
-      joiner.add("[" + metaInfo.getNames()[columnIndex] + "] " + message));
-
+    cellMessages.row(index).forEach((columnIndex,message)->joiner.add("[" + metaInfo.getNames()[columnIndex] + "] " + message));
     return joiner.toString();
   }
 
