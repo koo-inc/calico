@@ -1,7 +1,7 @@
 package jp.co.freemind.calico.core.auth
 
 import com.google.inject.Binder
-import jp.co.freemind.calico.core.zone.Zone
+import jp.co.freemind.calico.core.di.InjectorRef
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -9,10 +9,10 @@ import java.time.temporal.ChronoUnit
 
 class AuthTokenTest extends Specification {
   def setupSpec() {
-    Zone.initialize() {s -> s.modules(new MockModule()) }
+    InjectorRef.initialize() { s -> s.modules(new MockModule()) }
   }
   def cleanupSpec() {
-    Zone.dispose()
+    InjectorRef.dispose()
   }
 
   def "復号できること"() {

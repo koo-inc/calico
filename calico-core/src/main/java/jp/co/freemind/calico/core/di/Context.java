@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.core.zone;
+package jp.co.freemind.calico.core.di;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.core.zone;
+package jp.co.freemind.calico.core.di;
 
 public class UnhandledException extends RuntimeException {
   private UnhandledException(Throwable e) {

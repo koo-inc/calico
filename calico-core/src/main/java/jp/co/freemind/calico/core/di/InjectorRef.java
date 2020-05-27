@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.core.zone;
+package jp.co.freemind.calico.core.di;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -15,17 +15,17 @@ import com.google.inject.util.Modules;
 import jp.co.freemind.calico.core.config.Registry;
 import jp.co.freemind.calico.core.util.Throwables;
 
-public class Zone {
+public class InjectorRef {
 
-  private static Zone root;
-  private static ThreadLocal<Zone> currentRef;
+  private static InjectorRef root;
+  private static ThreadLocal<InjectorRef> currentRef;
 
-  private final Zone parent;
-  private final ZoneSpec spec;
+  private final InjectorRef parent;
+  private final InjectorSpec spec;
   private final Map<Key<?>, Provider<?>> providers;
   private final Injector injector;
 
-  private Zone(Zone parent, ZoneSpec spec) {
+  private InjectorRef(InjectorRef parent, InjectorSpec spec) {
     this.parent = parent;
     this.spec = spec;
     this.providers = new ConcurrentHashMap<>(spec.getProviders());
@@ -40,23 +40,23 @@ public class Zone {
     }
   }
 
-  public static synchronized Zone initialize(Function<ZoneSpec, ZoneSpec> specFn) {
-    if (root != null) throw new IllegalStateException("Zone is already initialized.");
+  public static synchronized InjectorRef initialize(Function<InjectorSpec, InjectorSpec> specFn) {
+    if (root != null) throw new IllegalStateException("InjectorRef is already initialized.");
     currentRef = new ThreadLocal<>();
-    ZoneSpec spec = specFn.apply(new ZoneSpec());
-    root = new Zone(null, spec);
+    InjectorSpec spec = specFn.apply(new InjectorSpec());
+    root = new InjectorRef(null, spec);
     return root;
   }
 
   static synchronized void dispose() {
-    if (root == null) throw new IllegalStateException("Zone is not initialized yet.");
+    if (root == null) throw new IllegalStateException("InjectorRef is not initialized yet.");
     currentRef.remove();
     root = null;
   }
 
-  public static Zone getCurrent() {
-    if (root == null) throw new IllegalStateException("Zone is not yet initialized.");
-    Zone current = currentRef.get();
+  public static InjectorRef getCurrent() {
+    if (root == null) throw new IllegalStateException("InjectorRef is not yet initialized.");
+    InjectorRef current = currentRef.get();
     if (current != null) {
       return current;
     }
@@ -64,16 +64,16 @@ public class Zone {
   }
 
   public static Context getContext() {
-    return Zone.getCurrent().getInstance(Context.class);
+    return InjectorRef.getCurrent().getInstance(Context.class);
   }
 
   public static Registry getRegistry() {
-    return Zone.getCurrent().getInstance(Registry.class);
+    return InjectorRef.getCurrent().getInstance(Registry.class);
   }
 
-  public Zone fork(Function<ZoneSpec, ZoneSpec> specFn) {
-    ZoneSpec spec = specFn.apply(new ZoneSpec());
-    return new Zone(this, spec);
+  public InjectorRef fork(Function<InjectorSpec, InjectorSpec> specFn) {
+    InjectorSpec spec = specFn.apply(new InjectorSpec());
+    return new InjectorRef(this, spec);
   }
 
   public void run(Processable processable) {
@@ -82,7 +82,7 @@ public class Zone {
 
   @SuppressWarnings("ThrowFromFinallyBlock")
   public <T> Optional<T> call(Executable<T> executable) {
-    Zone context = Zone.getCurrent();
+    InjectorRef context = InjectorRef.getCurrent();
     try {
       return Optional.ofNullable(doInZone(executable));
     }
@@ -118,7 +118,7 @@ public class Zone {
     return parent != null ? parent.getProvider(scope, key, unscoped) : unscoped;
   }
 
-  private void propagateThrowable(Throwable t, Zone context) throws Throwable {
+  private void propagateThrowable(Throwable t, InjectorRef context) throws Throwable {
     try {
       Throwable target = t;
       if (doInZone(() -> spec.doOnError(target))) {
@@ -142,7 +142,7 @@ public class Zone {
   }
 
   private <T> T doInZone(Executable<T> executable) throws Throwable {
-    Zone prev = null;
+    InjectorRef prev = null;
     try {
       prev = getCurrent();
       currentRef.set(this);
@@ -159,11 +159,11 @@ public class Zone {
   }
 
   public Runnable bind(Processable processable) {
-    return new ZoneRunnable(this, processable);
+    return new RunnableBinder(this, processable);
   }
 
   public <V> Callable<Optional<V>> bindWithCallable(Executable<V> executable) {
-    return new ZoneCallable<>(this, executable);
+    return new CallableBinder<>(this, executable);
   }
 
   public Injector getInjector() {

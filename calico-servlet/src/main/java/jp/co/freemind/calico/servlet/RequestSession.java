@@ -14,7 +14,14 @@ import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.Logger;
+import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.tx.TransactionIsolationLevel;
+
 import jp.co.freemind.calico.core.auth.AuthToken;
+import jp.co.freemind.calico.core.di.Context;
+import jp.co.freemind.calico.core.di.InjectorRef;
+import jp.co.freemind.calico.core.di.UnhandledException;
 import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.endpoint.EndpointInfo;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
@@ -25,14 +32,8 @@ import jp.co.freemind.calico.core.exception.ViolationException;
 import jp.co.freemind.calico.core.log.LoggingSession;
 import jp.co.freemind.calico.core.log.LoggingSessionStarter;
 import jp.co.freemind.calico.core.util.FileBackedInputStream;
-import jp.co.freemind.calico.core.zone.Context;
-import jp.co.freemind.calico.core.zone.UnhandledException;
-import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.util.CookieUtil;
 import jp.co.freemind.calico.servlet.util.NetworkUtil;
-import org.apache.logging.log4j.Logger;
-import org.seasar.doma.jdbc.Config;
-import org.seasar.doma.jdbc.tx.TransactionIsolationLevel;
 
 public class RequestSession {
   private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(RequestSession.class);
@@ -47,9 +48,9 @@ public class RequestSession {
       doInTransaction(param, () -> {
         Context context = doGetContext(param);
 
-        getTransactionScopedZone(context, param).run(() -> {
+        getTransactionScopedInjectorRef(context, param).run(() -> {
           LoggingSession loggingSession = getLoggingSessionStarter().start();
-          Zone.getCurrent().fork(s -> s
+          InjectorRef.getCurrent().fork(s -> s
             .scope(TransactionScoped.class)
             .provide(Keys.LOGGING_SESSION, loggingSession)
             .onError(e -> {
@@ -62,7 +63,7 @@ public class RequestSession {
             })
             .onFinish(() -> loggingSession.finish(res.getStatus()))
           ).run(() -> {
-            InputStream is = Zone.getCurrent().getInstance(Keys.INPUT);
+            InputStream is = InjectorRef.getCurrent().getInstance(Keys.INPUT);
             Object output = new Dispatcher(endpointInfo.orElseThrow(() -> new UnknownEndpointException(param.path)))
               .dispatch(is, getInterceptionHandlers(servletConfig));
             render(context, param, output);
@@ -83,7 +84,7 @@ public class RequestSession {
   }
 
   protected Config getConfig() {
-    return Zone.getCurrent().getInstance(Config.class);
+    return InjectorRef.getCurrent().getInstance(Config.class);
   }
 
   protected void doInTransaction(RequestParam param, Runnable block) {
@@ -92,7 +93,7 @@ public class RequestSession {
   }
 
   protected Context getContext(RequestParam param) {
-    AuthenticationProcedure authority = Zone.getCurrent().getInstance(AuthenticationProcedure.class);
+    AuthenticationProcedure authority = InjectorRef.getCurrent().getInstance(AuthenticationProcedure.class);
     return new Context(s -> s
       .authInfo(authority.proceed(param.getAuthToken()))
       .processDateTime(param.getProcessDatetime())
@@ -119,8 +120,8 @@ public class RequestSession {
     return LocalDateTime.now();
   }
 
-  protected Zone getTransactionScopedZone(Context context, RequestParam param) {
-    return Zone.getCurrent().fork(s -> s
+  protected InjectorRef getTransactionScopedInjectorRef(Context context, RequestParam param) {
+    return InjectorRef.getCurrent().fork(s -> s
       .scope(TransactionScoped.class)
       .provide(Keys.CONTEXT, context)
       .provide(Keys.AUTH_TOKEN, param.getAuthToken())
@@ -134,7 +135,7 @@ public class RequestSession {
   }
 
   protected EndpointResolver getEndpointResolver() {
-    return Zone.getCurrent().getInstance(EndpointResolver.class);
+    return InjectorRef.getCurrent().getInstance(EndpointResolver.class);
   }
 
   protected InterceptionHandler[] getInterceptionHandlers(ServletConfig servletConfig) {
@@ -143,15 +144,15 @@ public class RequestSession {
   }
 
   protected LoggingSessionStarter getLoggingSessionStarter() {
-    return Zone.getCurrent().getInstance(LoggingSessionStarter.class);
+    return InjectorRef.getCurrent().getInstance(LoggingSessionStarter.class);
   }
 
   protected void render(@Nonnull Context context, RequestParam param, Object output) {
-    Zone.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(param.getConfig(), param.getResponse(), context, output);
+    InjectorRef.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(param.getConfig(), param.getResponse(), context, output);
   }
 
   protected void renderError(@Nullable Context context, RequestParam param, Throwable t) {
-    Zone.getCurrent().getInstance(Keys.EXCEPTION_RENDERER).render(param.getConfig(), param.getResponse(), t);
+    InjectorRef.getCurrent().getInstance(Keys.EXCEPTION_RENDERER).render(param.getConfig(), param.getResponse(), t);
   }
 
   protected boolean isDesignedException(Throwable t) {

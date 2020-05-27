@@ -23,7 +23,7 @@ import jp.co.freemind.calico.core.endpoint.validation.Validate;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.time.TimePoint;
 import jp.co.freemind.calico.core.validation.Violation;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -90,7 +90,7 @@ public abstract class CustomerEndpoint<INPUT, OUTPUT> implements Endpoint<INPUT,
     @Validate
     public void validateBirthday(Violation violation) {
       if (birthday == null) return;
-      if (birthday.compareTo(Zone.getContext().getProcessDate()) >= 0) {
+      if (birthday.compareTo(InjectorRef.getContext().getProcessDate()) >= 0) {
         violation.mark("birthday", Messages.PAST.value());
       }
     }
@@ -174,7 +174,7 @@ public abstract class CustomerEndpoint<INPUT, OUTPUT> implements Endpoint<INPUT,
       @Validate
       public void validateBirthday(Violation violation) {
         if (this.birthday == null) return;
-        if (this.birthday.compareTo(Zone.getContext().getProcessDate()) >= 0) {
+        if (this.birthday.compareTo(InjectorRef.getContext().getProcessDate()) >= 0) {
           violation.mark("birthday", Messages.PAST.value());
         }
       }

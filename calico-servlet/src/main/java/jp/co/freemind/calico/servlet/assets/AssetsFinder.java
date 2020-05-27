@@ -17,7 +17,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 @Singleton
 @SuppressWarnings("unchecked")
@@ -52,7 +52,7 @@ public class AssetsFinder {
     synchronized (cacheLock) {
       if (cache != null) return cache;
       cache = CacheBuilder.newBuilder()
-        .maximumSize(Zone.getCurrent().getInstance(AssetsSetting.class).cacheEnabled() ? 5000 : 0)
+        .maximumSize(InjectorRef.getCurrent().getInstance(AssetsSetting.class).cacheEnabled() ? 5000 : 0)
         .build(new AssetCacheLoader());
       return cache;
     }

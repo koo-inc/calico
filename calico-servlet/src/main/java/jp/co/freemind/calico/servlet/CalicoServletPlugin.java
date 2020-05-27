@@ -3,7 +3,7 @@ package jp.co.freemind.calico.servlet;
 import com.google.inject.Provider;
 import jp.co.freemind.calico.core.config.CalicoPlugin;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
-import jp.co.freemind.calico.core.zone.Context;
+import jp.co.freemind.calico.core.di.Context;
 
 public class CalicoServletPlugin extends CalicoPlugin {
 

@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
 import jp.co.freemind.calico.core.endpoint.dto.EmptyInput;
 import jp.co.freemind.calico.core.endpoint.result.Result;
-import jp.co.freemind.calico.core.zone.Context;
+import jp.co.freemind.calico.core.di.Context;
 
 public class LogoutEndpoint implements Endpoint<EmptyInput, Result> {
   @Inject private AuthService authService;

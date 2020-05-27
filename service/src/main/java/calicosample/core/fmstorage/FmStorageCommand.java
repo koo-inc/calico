@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -245,6 +246,6 @@ abstract class FmStorageCommand<T> {
 
 
   private FmStorageSetting getSetting() {
-    return Zone.getCurrent().getInstance(FmStorageSetting.class);
+    return InjectorRef.getCurrent().getInstance(FmStorageSetting.class);
   }
 }

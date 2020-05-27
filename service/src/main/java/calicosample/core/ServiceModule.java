@@ -43,7 +43,7 @@ import jp.co.freemind.calico.core.endpoint.validation.Validator;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaStorage;
 import jp.co.freemind.calico.core.util.ClassFinder;
-import jp.co.freemind.calico.core.zone.ZoneScope;
+import jp.co.freemind.calico.core.di.InjectScope;
 import jp.co.freemind.calico.jackson.ObjectMapperProvider;
 import jp.co.freemind.calico.mail.PostMan;
 import lombok.SneakyThrows;
@@ -64,7 +64,7 @@ public class ServiceModule extends AbstractModule {
     bind(MediaStorage.class).to(FmStorage.class);
     bind(PostMan.class).toProvider(PostManProvider.class);
 
-    bindScope(TransactionScoped.class, new ZoneScope(TransactionScoped.class));
+    bindScope(TransactionScoped.class, new InjectScope(TransactionScoped.class));
   }
 
   @SuppressWarnings("unchecked")

@@ -14,13 +14,13 @@ import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.util.Throwables;
 import jp.co.freemind.calico.core.util.Types;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 public class AuthorizationInterceptor implements EndpointInterceptor {
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
     ruleStream(invocation)
-      .forEach(rule -> rule.apply(Zone.getContext(), invocation.getEndpointClass(), invocation.getInput()));
+      .forEach(rule -> rule.apply(InjectorRef.getContext(), invocation.getEndpointClass(), invocation.getInput()));
 
     return invocation.proceed();
   }

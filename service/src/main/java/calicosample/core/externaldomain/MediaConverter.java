@@ -3,7 +3,7 @@ package calicosample.core.externaldomain;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaProxy;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import lombok.SneakyThrows;
 import org.seasar.doma.ExternalDomain;
 import org.seasar.doma.jdbc.domain.DomainConverter;
@@ -27,7 +27,7 @@ public class MediaConverter implements DomainConverter<Media, String>{
   public Media fromValueToDomain(String value) {
     if(value == null) return null;
     Media media = MAPPER.readValue(value, MediaProxy.class);
-    Zone.getCurrent().injectMembers(media);
+    InjectorRef.getCurrent().injectMembers(media);
     return media;
   }
 }

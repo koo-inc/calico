@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.core.zone
+package jp.co.freemind.calico.core.di
 
 import com.google.inject.*
 import com.google.inject.name.Names
@@ -11,10 +11,10 @@ import java.lang.annotation.RetentionPolicy
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
-class ZoneTest extends Specification {
-  static Zone root
+class InjectorRefTest extends Specification {
+  static InjectorRef root
   def setupSpec() {
-    root = Zone.initialize({spec ->
+    root = InjectorRef.initialize({ spec ->
       spec.modules(new Module() {
         @Override
         void configure(Binder binder) {
@@ -22,19 +22,19 @@ class ZoneTest extends Specification {
           binder.bind(Foo).toProvider(new Provider() {
             Object get() { return new Foo(name: 'root') }
           }).in(TransactionScoped)
-          binder.bindScope(TransactionScoped, new ZoneScope(TransactionScoped))
+          binder.bindScope(TransactionScoped, new InjectScope(TransactionScoped))
         }
       })
     })
   }
 
   def cleanupSpec() {
-    Zone.dispose()
+    InjectorRef.dispose()
   }
 
   def "forkしたとき新しいInjectorのスコープが生まれる"() {
     when:
-    def child = Zone.current.fork({spec -> spec.modules(new Module() {
+    def child = InjectorRef.current.fork({ spec -> spec.modules(new Module() {
       @Override
       void configure(Binder binder) {
         binder.bind(String).annotatedWith(Names.named("test2")).toInstance("child")
@@ -43,12 +43,12 @@ class ZoneTest extends Specification {
 
     then:
     assert root.getInstance(Key.get(String.class, Names.named("test1"))) == "root"
-    assert Zone.current.getInstance(Key.get(String.class, Names.named("test1"))) == "root"
+    assert InjectorRef.current.getInstance(Key.get(String.class, Names.named("test1"))) == "root"
     child.run {->
       assert child.getInstance(Key.get(String.class, Names.named("test1"))) == "root"
       assert child.getInstance(Key.get(String.class, Names.named("test2"))) == "child"
-      assert Zone.current.getInstance(Key.get(String.class, Names.named("test1"))) == "root"
-      assert Zone.current.getInstance(Key.get(String.class, Names.named("test2"))) == "child"
+      assert InjectorRef.current.getInstance(Key.get(String.class, Names.named("test1"))) == "root"
+      assert InjectorRef.current.getInstance(Key.get(String.class, Names.named("test2"))) == "child"
     }
 
     when:
@@ -57,7 +57,7 @@ class ZoneTest extends Specification {
     thrown(ConfigurationException)
 
     when:
-    Zone.current.getInstance(Key.get(String.class, Names.named("test2")))
+    InjectorRef.current.getInstance(Key.get(String.class, Names.named("test2")))
     then:
     thrown(ConfigurationException)
 
@@ -65,7 +65,7 @@ class ZoneTest extends Specification {
 
   def "forkしたときプロバイダが設定したものになる"() {
     when:
-    def child = Zone.current.fork({s -> s
+    def child = InjectorRef.current.fork({ s -> s
       .scope(TransactionScoped)
       .provide(new Foo(name: 'child'))
     })
@@ -75,55 +75,55 @@ class ZoneTest extends Specification {
     })
 
     then:
-    assert Zone.current.getInstance(Foo).name == "root"
+    assert InjectorRef.current.getInstance(Foo).name == "root"
     child.run {->
-      assert Zone.current.getInstance(Foo).name == "child"
+      assert InjectorRef.current.getInstance(Foo).name == "child"
       grandChild.run {->
-        assert Zone.current.getInstance(Foo).name == "grand child"
+        assert InjectorRef.current.getInstance(Foo).name == "grand child"
       }
-      assert Zone.current.getInstance(Foo).name == "child"
+      assert InjectorRef.current.getInstance(Foo).name == "child"
     }
-    assert Zone.current.getInstance(Foo).name == "root"
+    assert InjectorRef.current.getInstance(Foo).name == "root"
   }
 
   def "forkしたときスコープを設定していなければ親を見る"() {
     when:
-    def child = Zone.current.fork({s -> s
+    def child = InjectorRef.current.fork({ s -> s
       .scope(TransactionScoped)
       .provide(new Foo(name: 'child'))
     })
     def grandChild = child.fork({s -> s})
 
     then:
-    assert Zone.current.getInstance(Foo).name == "root"
+    assert InjectorRef.current.getInstance(Foo).name == "root"
     child.run {->
-      assert Zone.current.getInstance(Foo).name == "child"
+      assert InjectorRef.current.getInstance(Foo).name == "child"
       grandChild.run {->
-        assert Zone.current.getInstance(Foo).name == "child"
+        assert InjectorRef.current.getInstance(Foo).name == "child"
       }
-      assert Zone.current.getInstance(Foo).name == "child"
+      assert InjectorRef.current.getInstance(Foo).name == "child"
     }
-    assert Zone.current.getInstance(Foo).name == "root"
+    assert InjectorRef.current.getInstance(Foo).name == "root"
   }
 
   def "forkしたときスコープを設定していても子になければ親を見る"() {
     when:
-    def child = Zone.current.fork({s -> s
+    def child = InjectorRef.current.fork({ s -> s
       .scope(TransactionScoped)
       .provide(new Foo(name: 'child'))
     })
     def grandChild = child.fork({s -> s.scope(TransactionScoped)})
 
     then:
-    assert Zone.current.getInstance(Foo).name == "root"
+    assert InjectorRef.current.getInstance(Foo).name == "root"
     child.run {->
-      assert Zone.current.getInstance(Foo).name == "child"
+      assert InjectorRef.current.getInstance(Foo).name == "child"
       grandChild.run {->
-        assert Zone.current.getInstance(Foo).name == "child"
+        assert InjectorRef.current.getInstance(Foo).name == "child"
       }
-      assert Zone.current.getInstance(Foo).name == "child"
+      assert InjectorRef.current.getInstance(Foo).name == "child"
     }
-    assert Zone.current.getInstance(Foo).name == "root"
+    assert InjectorRef.current.getInstance(Foo).name == "root"
   }
 
   def "子で例外が起きたときは子で処理できる"() {
@@ -191,7 +191,7 @@ class ZoneTest extends Specification {
   def "例外処理中は該当の Zone が currentZone に"() {
     when:
     def contexts = []
-    def parent = root.fork({s -> s.onError({e -> contexts << Zone.current})})
+    def parent = root.fork({s -> s.onError({e -> contexts << InjectorRef.current})})
     parent.run() {
       throw new RuntimeException("parent")
     }
@@ -217,9 +217,9 @@ class ZoneTest extends Specification {
           throw e
         })
       }).run({->
-        Zone.current.fork({s -> s})
+        InjectorRef.current.fork({ s -> s})
           .run({->
-            Zone.current.fork({s -> s
+            InjectorRef.current.fork({ s -> s
               .onFinish({->
               process << 3
             })
@@ -241,7 +241,7 @@ class ZoneTest extends Specification {
     def zone = root.fork({s -> s})
     def exec = Executors.newFixedThreadPool(1)
     def actual
-    exec.submit(zone.bind({-> actual = Zone.current }))
+    exec.submit(zone.bind({-> actual = InjectorRef.current }))
     exec.awaitTermination(1, TimeUnit.SECONDS)
 
     then:

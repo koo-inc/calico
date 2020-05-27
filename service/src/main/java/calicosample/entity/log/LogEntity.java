@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import calicosample.core.doma.InjectLogConfig;
 import jp.co.freemind.calico.core.config.SystemSetting;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import lombok.Getter;
 import lombok.Setter;
 import org.seasar.doma.Entity;
@@ -32,7 +32,7 @@ public abstract class LogEntity implements Log {
 
   public LogEntity() {
     ts = LocalDateTime.now();
-    version = Zone.getCurrent().getInstance(SystemSetting.class).version();
+    version = InjectorRef.getCurrent().getInstance(SystemSetting.class).version();
   }
 
   public static class LogEntityListener<T extends LogEntity> implements EntityListener<T> {

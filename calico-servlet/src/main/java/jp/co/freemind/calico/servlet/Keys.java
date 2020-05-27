@@ -10,7 +10,7 @@ import com.google.inject.Key;
 import com.google.inject.name.Names;
 import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.log.LoggingSession;
-import jp.co.freemind.calico.core.zone.Context;
+import jp.co.freemind.calico.core.di.Context;
 import jp.co.freemind.calico.servlet.renderer.DefaultRenderer;
 import jp.co.freemind.calico.servlet.renderer.ExceptionRenderer;
 

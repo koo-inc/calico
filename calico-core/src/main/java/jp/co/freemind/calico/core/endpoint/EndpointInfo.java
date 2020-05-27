@@ -7,7 +7,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 @Immutable
 public class EndpointInfo {
@@ -32,7 +32,7 @@ public class EndpointInfo {
   public Class<?> getOutputType() { return outputType; }
 
   public Object createInstance() {
-    return Zone.getCurrent().getInstance(endpointClass);
+    return InjectorRef.getCurrent().getInstance(endpointClass);
   }
 
   public Method getExecuteMethod() {

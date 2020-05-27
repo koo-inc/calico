@@ -20,8 +20,8 @@ import com.google.inject.Singleton;
 import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.config.SystemSetting;
-import jp.co.freemind.calico.core.zone.Context;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.Context;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.mail.Mail;
 import jp.co.freemind.calico.mail.PostMan;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class LoggingService {
 
   public int insert(JsLogForm form) {
     if (!isLoggable()) return 0;
-    Context context = Zone.getContext();
+    Context context = InjectorRef.getContext();
     AuthInfo authInfo = context.getAuthInfo();
     AuthToken authToken = authInfo.getAuthToken();
 

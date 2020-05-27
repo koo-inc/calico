@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import com.google.common.base.Charsets;
 import jp.co.freemind.calico.core.config.SystemSetting;
 import jp.co.freemind.calico.core.endpoint.Dispatcher;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
@@ -49,7 +49,7 @@ public class CalicoServlet extends HttpServlet {
   @Override
   public void init(ServletConfig servletConfig) throws ServletException {
     super.init(servletConfig);
-    Zone root = Zone.getCurrent();
+    InjectorRef root = InjectorRef.getCurrent();
     this.assetsSetting = root.getInstance(AssetsSetting.class);
 
     ObjectMapper mapper = root.getInstance(ObjectMapper.class)
@@ -61,7 +61,7 @@ public class CalicoServlet extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    RequestSession requestSession = Zone.getCurrent().getInstance(RequestSession.class);
+    RequestSession requestSession = InjectorRef.getCurrent().getInstance(RequestSession.class);
     requestSession.execute(getServletConfig(), req, res);
   }
 
@@ -83,7 +83,7 @@ public class CalicoServlet extends HttpServlet {
   private static final String BASE_HREF_PLACEHOLDER = "{{{{ BASE HREF PLACEHOLDER }}}}";
   private void sendIndex(HttpServletRequest req, HttpServletResponse res) {
     if (index == null || !assetsSetting.cacheEnabled()) {
-      index = Zone.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), assetsSetting.getIndex())
+      index = InjectorRef.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), assetsSetting.getIndex())
         .orElseThrow(()-> new IllegalStateException("'assets.index' setting is invalid."));
 
       ByteBuffer content = index.getContent();
@@ -128,7 +128,7 @@ public class CalicoServlet extends HttpServlet {
   }
 
   private void sendAsset(HttpServletResponse res, String path) throws IOException {
-    Optional<Asset> asset = Zone.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), path);
+    Optional<Asset> asset = InjectorRef.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), path);
     if (asset.isPresent()) {
       sendAsset(res, asset.get());
     }

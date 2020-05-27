@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import jp.co.freemind.calico.core.endpoint.Endpoint;
 import jp.co.freemind.calico.core.exception.AuthorizationException;
-import jp.co.freemind.calico.core.zone.Context;
+import jp.co.freemind.calico.core.di.Context;
 
 public interface AuthorizationRule {
   void apply(Context context, Class<? extends Endpoint<?, ?>> endpointClass, Object input) throws AuthorizationException;

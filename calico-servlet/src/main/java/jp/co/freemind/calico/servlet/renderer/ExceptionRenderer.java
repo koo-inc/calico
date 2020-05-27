@@ -10,7 +10,7 @@ import jp.co.freemind.calico.core.exception.InvalidUserDataException;
 import jp.co.freemind.calico.core.exception.UnknownEndpointException;
 import jp.co.freemind.calico.core.exception.ViolationException;
 import jp.co.freemind.calico.core.validation.Violation;
-import jp.co.freemind.calico.core.zone.UnhandledException;
+import jp.co.freemind.calico.core.di.UnhandledException;
 
 public class ExceptionRenderer implements Renderer<Object> {
   public void render(ServletConfig conf, HttpServletResponse res, Throwable t) {

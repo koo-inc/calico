@@ -15,7 +15,7 @@ import jp.co.freemind.calico.core.media.MediaMeta;
 import jp.co.freemind.calico.core.media.MediaProxy;
 import jp.co.freemind.calico.core.media.MediaStorage;
 import jp.co.freemind.calico.core.util.Throwables;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 /**
  * Created by tasuku on 15/04/30.
@@ -31,7 +31,7 @@ public class MediaDeserializer extends JsonDeserializer<Media> {
 
     Optional<String> id = getValueAsText(node.get("id"));
     if (id.isPresent()) {
-      MediaStorage storage = Zone.getCurrent().getInstance(MediaStorage.class);
+      MediaStorage storage = InjectorRef.getCurrent().getInstance(MediaStorage.class);
       Media media = new MediaProxy(storage);
       media.setId(id.get());
       media.setMeta(deserializeMediaMeta(metaNode));
