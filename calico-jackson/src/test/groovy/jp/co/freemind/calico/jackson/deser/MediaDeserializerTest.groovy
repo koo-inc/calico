@@ -1,6 +1,11 @@
 package jp.co.freemind.calico.jackson.deser
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.inject.Binder
+import com.google.inject.Module
+import helper.media.MockStorage
+import jp.co.freemind.calico.core.media.MediaStorage
+import jp.co.freemind.calico.core.zone.Zone
 import jp.co.freemind.calico.jackson.MediaModule
 import jp.co.freemind.calico.core.media.Media
 import jp.co.freemind.calico.core.media.MediaProxy
@@ -15,9 +20,14 @@ class MediaDeserializerTest extends Specification {
 
   def setupSpec() {
     mapper.registerModule(new MediaModule())
-    Env.init([
-      injectorFactory: "helper.CalicoTestInjectorFactory"
-    ] as Properties)
+    Zone.initialize() { s ->
+      s.modules(new Module() {
+        @Override
+        void configure(Binder binder) {
+          binder.bind(MediaStorage).to(MockStorage)
+        }
+      })
+    }
   }
 
   def "定形オブジェクトのデシリアライズでは、適切な値で埋められているオブジェクトが返ること"() {
