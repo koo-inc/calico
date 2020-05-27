@@ -42,12 +42,12 @@ class AuthTokenTest extends Specification {
     token1.value != token2.value
   }
 
-  def "不正な文字列が渡された場合は IllegalArgumentsException が発生すること"() {
+  def "不正な文字列が渡された場合は nullを返すこと"() {
     when:
-    AuthToken.of('aaaaaa')
+    def token = AuthToken.of('aaaaaa')
 
     then:
-    thrown(IllegalArgumentException)
+    token == null
   }
 
   def "IPアドレスが復号化されること"() {
