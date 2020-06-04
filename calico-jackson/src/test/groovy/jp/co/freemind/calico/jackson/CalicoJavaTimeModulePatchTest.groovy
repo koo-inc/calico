@@ -15,32 +15,41 @@ import spock.lang.Specification
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-
 /**
  * Created by kakusuke on 15/07/22.
  */
 class CalicoJavaTimeModulePatchTest extends Specification {
 
   @Shared
-  ObjectMapper mapper = ObjectMapperProvider.createMapper()
+  ObjectMapper mapper
 
   @Shared
-  ObjectMapper prettyMapper = ObjectMapperProvider.createMapper(new SimpleModule() {{
-    TimeZone.setDefault(TimeZone.getTimeZone("GMT+09:00"))
-    addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("uuuu/M/d H:m:s")));
-    addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy/M/d H:m:s")));
+  ObjectMapper prettyMapper
 
-    addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy/M/d")));
-    addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy/M/d")));
+  def setup() {
+    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"))
+    mapper = ObjectMapperProvider.createMapper()
+    prettyMapper = ObjectMapperProvider.createMapper(new SimpleModule() {{
+      addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("uuuu/M/d H:m:s")));
+      addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy/M/d H:m:s")));
 
-    addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern("H:m:s")));
-    addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("H:m:s")));
-  }});
+      addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy/M/d")));
+      addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy/M/d")));
+
+      addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern("H:m:s")));
+      addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("H:m:s")));
+    }})
+  }
 
   def "check timezone"() {
     expect:
-    assert TimeZone.getDefault().getDisplayName() == "GMT+09:00"
+    assert TimeZone.getDefault().getDisplayName(Locale.JAPANESE) == "日本標準時"
+    and:
+    assert TimeZone.getDefault().toZoneId().getId() == "Asia/Tokyo"
+    and:
+    ZoneId.systemDefault().getId() == "Asia/Tokyo"
   }
 
   def "de/serialize LocalDateTime"() {

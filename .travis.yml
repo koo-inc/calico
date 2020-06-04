@@ -2,6 +2,9 @@ language: java
 jdk:
   - openjdk8
 install: true
+before_script:
+  - echo 'Asia/Tokyo' | sudo tee /etc/timezone
+  - sudo dpkg-reconfigure --frontend noninteractive tzdata
 script:
   - ./gradlew clean
   - ./gradlew calico-core:build calico-fmmail:build calico-jackson:build calico-servlet:build --info

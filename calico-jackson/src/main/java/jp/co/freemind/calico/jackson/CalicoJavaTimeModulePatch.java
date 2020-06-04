@@ -22,9 +22,12 @@ import jp.co.freemind.calico.jackson.ser.LocalTimeSerializer;
  * Created by tasuku on 15/03/23.
  */
 public class CalicoJavaTimeModulePatch extends SimpleModule {
-  private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.systemDefault());
-
   public CalicoJavaTimeModulePatch() {
+    this(ZoneId.systemDefault());
+  }
+  public CalicoJavaTimeModulePatch(ZoneId zoneId) {
+    DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT.withZone(zoneId);
+
     addDeserializer(LocalTime.class,     new LocalTimeDeserializer(formatter));
     addDeserializer(LocalDate.class,     new LocalDateDeserializer(formatter));
     addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(formatter));
