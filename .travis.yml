@@ -10,6 +10,6 @@ script:
   - ./gradlew calico-core:build calico-fmmail:build calico-jackson:build calico-servlet:build --info
 deploy:
   - provider: script
-    script: ./gradlew bintrayUpload
+    script: ./gradlew bintrayUpload --info
     on:
       tags: true
