@@ -39,11 +39,6 @@ public class InjectorRef {
     root = Guice.createInjector(spec.buildModule().orElse(Modules.EMPTY_MODULE));
   }
 
-  public static void dispose() {
-    if (injectorRef.get() == null) throw new IllegalStateException("InjectorRef is not initialized yet.");
-    injectorRef.remove();
-  }
-
   public static InjectorRef get() {
     if (injectorRef.get() == null) {
       injectorRef.remove();

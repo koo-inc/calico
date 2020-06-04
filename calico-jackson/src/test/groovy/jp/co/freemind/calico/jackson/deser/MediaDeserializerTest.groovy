@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Binder
 import com.google.inject.Module
 import helper.media.MockStorage
-import jp.co.freemind.calico.core.di.InjectorManager
+import jp.co.freemind.calico.core.di.InjectorRef
 import jp.co.freemind.calico.core.media.Media
 import jp.co.freemind.calico.core.media.MediaProxy
 import jp.co.freemind.calico.core.media.MediaStorage
@@ -20,7 +20,7 @@ class MediaDeserializerTest extends Specification {
 
   def setupSpec() {
     mapper.registerModule(new MediaModule())
-    InjectorManager.initialize() { s ->
+    InjectorRef.initialize() { s ->
       s.modules(new Module() {
         @Override
         void configure(Binder binder) {
