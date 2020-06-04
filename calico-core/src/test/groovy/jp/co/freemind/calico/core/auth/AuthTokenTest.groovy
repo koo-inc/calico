@@ -1,6 +1,7 @@
 package jp.co.freemind.calico.core.auth
 
 import com.google.inject.Binder
+import jp.co.freemind.calico.core.di.InjectorManager
 import jp.co.freemind.calico.core.di.InjectorRef
 import spock.lang.Specification
 
@@ -9,7 +10,7 @@ import java.time.temporal.ChronoUnit
 
 class AuthTokenTest extends Specification {
   def setupSpec() {
-    InjectorRef.initialize() { s -> s.modules(new MockModule()) }
+    InjectorManager.initialize() { s -> s.modules(new MockModule()) }
   }
   def cleanupSpec() {
     InjectorRef.dispose()

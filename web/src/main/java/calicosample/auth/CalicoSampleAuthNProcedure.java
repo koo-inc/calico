@@ -15,6 +15,6 @@ public class CalicoSampleAuthNProcedure implements AuthenticationProcedure {
   public CalicoSampleAuthInfo proceed(@Nonnull AuthToken authToken) {
     if (authToken.getId().isEmpty()) return CalicoSampleAuthInfo.ofNull(authToken.getRemoteAddress(), authToken.getCreatedAt());
     return CalicoSampleAuthInfo.of(authToken, token ->
-      InjectorRef.getCurrent().getInstance(UserInfoDao.class).findByLoginId(token.getId()));
+      InjectorRef.getInstance(UserInfoDao.class).findByLoginId(token.getId()));
   }
 }

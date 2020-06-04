@@ -53,7 +53,7 @@ public final class CookieUtil {
   }
 
   private static SessionSetting getSetting() {
-    return InjectorRef.getCurrent().getInstance(SessionSetting.class);
+    return InjectorRef.getInstance(SessionSetting.class);
   }
 
   private static String getContextPath(ServletContext context) {

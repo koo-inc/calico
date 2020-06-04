@@ -62,12 +62,12 @@ public class MediaProxy extends Media {
       return ((MediaProxy) media).clone();
     }
 
-    MediaStorage storage = InjectorRef.getCurrent().getInstance(MediaStorage.class);
+    MediaStorage storage = InjectorRef.getInstance(MediaStorage.class);
     MediaProxy proxy = new MediaProxy(storage);
     proxy.setId(media.getId());
     proxy.setMeta(media.getMeta());
     proxy.instance = media;
-    InjectorRef.getCurrent().injectMembers(proxy);
+    InjectorRef.injectMembers(proxy);
     return proxy;
   }
 
@@ -75,7 +75,7 @@ public class MediaProxy extends Media {
   private static MediaProxy create(
       @JsonProperty("id") String id,
       @JsonProperty("meta") MediaMeta meta) {
-    MediaStorage storage = InjectorRef.getCurrent().getInjector().getInstance(MediaStorage.class);
+    MediaStorage storage = InjectorRef.getInstance(MediaStorage.class);
     MediaProxy proxy = new MediaProxy(storage);
     proxy.setId(id);
     proxy.setMeta(meta);

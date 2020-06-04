@@ -1,185 +1,111 @@
 package jp.co.freemind.calico.core.di;
 
-import java.lang.annotation.Annotation;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.Provider;
+import com.google.inject.Module;
 import com.google.inject.util.Modules;
+
 import jp.co.freemind.calico.core.config.Registry;
-import jp.co.freemind.calico.core.util.Throwables;
 
 public class InjectorRef {
 
-  private static InjectorRef root;
-  private static ThreadLocal<InjectorRef> currentRef;
+  private static final ThreadLocal<InjectorRef> injectorRef = new ThreadLocal<>();
 
-  private final InjectorRef parent;
-  private final InjectorSpec spec;
-  private final Map<Key<?>, Provider<?>> providers;
+  private static Injector root;
   private final Injector injector;
 
-  private InjectorRef(InjectorRef parent, InjectorSpec spec) {
-    this.parent = parent;
-    this.spec = spec;
-    this.providers = new ConcurrentHashMap<>(spec.getProviders());
-    if (!spec.getModule().isPresent() && parent != null) {
-      this.injector = parent.injector;
+  InjectorRef(Injector parent, InjectorSpec spec) {
+    ensureInitialized();
+
+    if (parent == null) {
+      parent = root;
     }
-    else if (parent != null) {
-      this.injector = parent.injector.createChildInjector(spec.getModule().orElse(Modules.EMPTY_MODULE));
-    }
-    else {
-      this.injector = Guice.createInjector(spec.getModule().orElse(Modules.EMPTY_MODULE));
+
+    Optional<Module> module = spec.buildModule();
+    if (!module.isPresent() && parent != null) {
+      injector = parent;
+    } else {
+      injector = parent.createChildInjector(module.orElse(Modules.EMPTY_MODULE));
     }
   }
 
-  public static synchronized InjectorRef initialize(Function<InjectorSpec, InjectorSpec> specFn) {
-    if (root != null) throw new IllegalStateException("InjectorRef is already initialized.");
-    currentRef = new ThreadLocal<>();
+  public static synchronized void initialize(Function<InjectorSpec, InjectorSpec> specFn) {
+    if (root != null) throw new IllegalStateException("InjectorManager is already initialized.");
     InjectorSpec spec = specFn.apply(new InjectorSpec());
-    root = new InjectorRef(null, spec);
-    return root;
+    root = Guice.createInjector(spec.buildModule().orElse(Modules.EMPTY_MODULE));
   }
 
-  static synchronized void dispose() {
-    if (root == null) throw new IllegalStateException("InjectorRef is not initialized yet.");
-    currentRef.remove();
-    root = null;
+  public static void dispose() {
+    if (injectorRef.get() == null) throw new IllegalStateException("InjectorRef is not initialized yet.");
+    injectorRef.remove();
   }
 
-  public static InjectorRef getCurrent() {
-    if (root == null) throw new IllegalStateException("InjectorRef is not yet initialized.");
-    InjectorRef current = currentRef.get();
-    if (current != null) {
-      return current;
+  public static InjectorRef get() {
+    if (injectorRef.get() == null) {
+      injectorRef.remove();
+      return new InjectorRef(root, new InjectorSpec());
     }
-    return root;
+    return injectorRef.get();
   }
 
   public static Context getContext() {
-    return InjectorRef.getCurrent().getInstance(Context.class);
+    return get().injector.getInstance(Context.class);
   }
 
   public static Registry getRegistry() {
-    return InjectorRef.getCurrent().getInstance(Registry.class);
+    return get().injector.getInstance(Registry.class);
   }
 
-  public InjectorRef fork(Function<InjectorSpec, InjectorSpec> specFn) {
-    InjectorSpec spec = specFn.apply(new InjectorSpec());
-    return new InjectorRef(this, spec);
+  public static void injectMembers(Object instance) {
+    get().injector.injectMembers(instance);
   }
 
-  public void run(Processable processable) {
-    call(processable.toExecutable());
+  public static <T> T getInstance(Key<T> key) {
+    return get().injector.getInstance(key);
   }
 
-  @SuppressWarnings("ThrowFromFinallyBlock")
-  public <T> Optional<T> call(Executable<T> executable) {
-    InjectorRef context = InjectorRef.getCurrent();
+  public static <T> T getInstance(Class<T> type) {
+    return get().injector.getInstance(Key.get(type));
+  }
+
+  public static void doInNewInjector(RunnableWithThrowable runnable) {
+    doInNewInjector(s -> s, runnable);
+  }
+
+  public static void doInNewInjector(Function<InjectorSpec, InjectorSpec> fun, RunnableWithThrowable runnable) {
+    InjectorSpec spec = fun.apply(new InjectorSpec());
+    InjectorRef old = injectorRef.get();
+    if (old == null && root == null) {
+      throw new IllegalStateException("InjectorRef is not initialized yet.");
+    }
+
     try {
-      return Optional.ofNullable(doInZone(executable));
-    }
-    catch (Throwable t) {
-      try {
-        propagateThrowable(t, context);
-      }
-      catch (Throwable t2) {
-        throw Throwables.sneakyThrow(t2);
-      }
-    }
-    finally {
-      try {
-        doInZone(spec::doFinish);
-      } catch (Throwable t) {
-        // spec.onFinish は Runnable のため例外を発生しないはず
-        throw Throwables.sneakyThrow(t);
-      }
-    }
-    return Optional.empty();
-  }
-
-  Optional<Class<? extends Annotation>> getScope() {
-    return spec.getScope();
-  }
-
-  @SuppressWarnings("unchecked")
-  <T> Provider<T> getProvider(Class<? extends Annotation> scope, Key<T> key, Provider<T> unscoped) {
-    boolean isInScope = getScope().map(s -> s == scope).orElse(false);
-    if (isInScope && providers.containsKey(key)) {
-      return (Provider<T>) providers.get(key);
-    }
-    return parent != null ? parent.getProvider(scope, key, unscoped) : unscoped;
-  }
-
-  private void propagateThrowable(Throwable t, InjectorRef context) throws Throwable {
-    try {
-      Throwable target = t;
-      if (doInZone(() -> spec.doOnError(target))) {
-        return;
-      }
-    }
-    catch (Throwable t2) {
-      t = t2;
-    }
-    if (parent != null && parent != context) {
-      Throwable target = t;
-      parent.doInZone(() -> parent.propagateThrowable(target, context));
-    }
-    else {
-      throw UnhandledException.of(t);
-    }
-  }
-
-  private void doInZone(Processable processable) throws Throwable {
-    doInZone(processable.toExecutable());
-  }
-
-  private <T> T doInZone(Executable<T> executable) throws Throwable {
-    InjectorRef prev = null;
-    try {
-      prev = getCurrent();
-      currentRef.set(this);
-      return executable.execute();
-    }
-    finally {
-      if (prev != root) {
-        currentRef.set(prev);
-      }
-      else {
-        currentRef.remove();
+      InjectorRef ref = new InjectorRef(old != null ? old.injector : null, spec);
+      injectorRef.set(ref);
+      runnable.run();
+    } catch (Throwable e) {
+      throw UnhandledException.of(e);
+    } finally {
+      if (old != null) {
+        injectorRef.set(old);
+      } else {
+        injectorRef.remove();
       }
     }
   }
 
-  public Runnable bind(Processable processable) {
-    return new RunnableBinder(this, processable);
+  private static void ensureInitialized() {
+    if (root == null) {
+      throw new IllegalStateException("InjectorRef.root is not initialized yet.");
+    }
   }
 
-  public <V> Callable<Optional<V>> bindWithCallable(Executable<V> executable) {
-    return new CallableBinder<>(this, executable);
+  @FunctionalInterface
+  public interface RunnableWithThrowable {
+    void run() throws Throwable;
   }
-
-  public Injector getInjector() {
-    return injector;
-  }
-
-  public void injectMembers(Object instance) {
-    injector.injectMembers(instance);
-  }
-
-  public <T> T getInstance(Key<T> key) {
-    return injector.getInstance(key);
-  }
-
-  public <T> T getInstance(Class<T> type) {
-    return injector.getInstance(Key.get(type));
-  }
-
 }

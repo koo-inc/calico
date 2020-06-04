@@ -32,7 +32,7 @@ public class EndpointInfo {
   public Class<?> getOutputType() { return outputType; }
 
   public Object createInstance() {
-    return InjectorRef.getCurrent().getInstance(endpointClass);
+    return InjectorRef.getInstance(endpointClass);
   }
 
   public Method getExecuteMethod() {

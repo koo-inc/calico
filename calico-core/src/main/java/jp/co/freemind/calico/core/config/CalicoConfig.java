@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.google.inject.Module;
-import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
+
 import jp.co.freemind.calico.core.di.InjectorRef;
+import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
 
 public abstract class CalicoConfig {
   private final List<CalicoPlugin> plugins = new ArrayList<>();

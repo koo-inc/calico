@@ -7,6 +7,6 @@ import jp.co.freemind.calico.core.di.InjectorRef;
 public class AccessLoggingSessionStarter implements LoggingSessionStarter {
   @Override
   public LoggingSession start() {
-    return InjectorRef.getCurrent().getInstance(AccessLoggingSession.class);
+    return InjectorRef.getInstance(AccessLoggingSession.class);
   }
 }

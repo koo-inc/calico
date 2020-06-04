@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Binder
 import com.google.inject.Module
 import helper.media.MockStorage
-import jp.co.freemind.calico.core.media.MediaStorage
-import jp.co.freemind.calico.core.di.InjectorRef
-import jp.co.freemind.calico.jackson.MediaModule
+import jp.co.freemind.calico.core.di.InjectorManager
 import jp.co.freemind.calico.core.media.Media
 import jp.co.freemind.calico.core.media.MediaProxy
+import jp.co.freemind.calico.core.media.MediaStorage
+import jp.co.freemind.calico.jackson.MediaModule
 import spock.lang.Shared
 import spock.lang.Specification
 /**
@@ -20,7 +20,7 @@ class MediaDeserializerTest extends Specification {
 
   def setupSpec() {
     mapper.registerModule(new MediaModule())
-    InjectorRef.initialize() { s ->
+    InjectorManager.initialize() { s ->
       s.modules(new Module() {
         @Override
         void configure(Binder binder) {

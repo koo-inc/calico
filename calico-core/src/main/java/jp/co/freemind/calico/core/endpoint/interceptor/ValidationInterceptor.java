@@ -24,6 +24,6 @@ public class ValidationInterceptor implements EndpointInterceptor {
   }
 
   private Validator getValidator() {
-    return InjectorRef.getCurrent().getInstance(Validator.class);
+    return InjectorRef.getInstance(Validator.class);
   }
 }

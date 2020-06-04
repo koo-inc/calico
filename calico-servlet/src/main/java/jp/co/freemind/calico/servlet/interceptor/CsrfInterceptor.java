@@ -23,7 +23,7 @@ public class CsrfInterceptor implements EndpointInterceptor {
 
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
-    HttpServletRequest req = InjectorRef.getCurrent().getInstance(Keys.SERVLET_REQUEST);
+    HttpServletRequest req = InjectorRef.getInstance(Keys.SERVLET_REQUEST);
     AuthInfo authInfo = InjectorRef.getContext().getAuthInfo();
 
     if (authInfo.isUsedBySystem()) {
@@ -36,7 +36,7 @@ public class CsrfInterceptor implements EndpointInterceptor {
   }
 
   private void verifyCsrfToken(HttpServletRequest req) {
-    String headerCsrfToken = req.getHeader(InjectorRef.getCurrent().getInstance(SessionSetting.class).getCsrfTokenHeader());
+    String headerCsrfToken = req.getHeader(InjectorRef.getInstance(SessionSetting.class).getCsrfTokenHeader());
     String cookieCsrfToken = CookieUtil.getCsrfToken(req).orElse(null);
     if (headerCsrfToken != null && Objects.equals(headerCsrfToken, cookieCsrfToken)) {
       return;

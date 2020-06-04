@@ -12,8 +12,8 @@ import jp.co.freemind.calico.servlet.Keys;
 public class VersioningInterceptor implements EndpointInterceptor {
   @Override
   public Object invoke(EndpointInvocation invocation) throws Throwable {
-    HttpServletRequest req = InjectorRef.getCurrent().getInstance(Keys.SERVLET_REQUEST);
-    HttpServletResponse res = InjectorRef.getCurrent().getInstance(Keys.SERVLET_RESPONSE);
+    HttpServletRequest req = InjectorRef.getInstance(Keys.SERVLET_REQUEST);
+    HttpServletResponse res = InjectorRef.getInstance(Keys.SERVLET_RESPONSE);
     setVersionTag(req, res);
     return invocation.proceed();
   }
@@ -23,10 +23,10 @@ public class VersioningInterceptor implements EndpointInterceptor {
   }
 
   private String getVersion() {
-    return String.valueOf(InjectorRef.getCurrent().getInstance(SystemSetting.class).version());
+    return String.valueOf(InjectorRef.getInstance(SystemSetting.class).version());
   }
 
   private String getVersionTag() {
-    return InjectorRef.getCurrent().getInstance(SystemSetting.class).getVersionTag();
+    return InjectorRef.getInstance(SystemSetting.class).getVersionTag();
   }
 }

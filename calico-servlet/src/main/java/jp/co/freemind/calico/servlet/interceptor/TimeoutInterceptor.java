@@ -7,12 +7,11 @@ import javax.annotation.Nonnull;
 
 import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.auth.AuthToken;
-import jp.co.freemind.calico.core.endpoint.TransactionScoped;
+import jp.co.freemind.calico.core.di.Context;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.endpoint.result.Result;
-import jp.co.freemind.calico.core.di.Context;
-import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.servlet.Keys;
 import jp.co.freemind.calico.servlet.SessionSetting;
 
@@ -29,31 +28,22 @@ public class TimeoutInterceptor implements EndpointInterceptor {
       return invocation.proceed();
     }
 
-    long timeout = InjectorRef.getCurrent().getInstance(SessionSetting.class).timeoutSecond();
+    long timeout = InjectorRef.getInstance(SessionSetting.class).timeoutSecond();
 
     if (timeout > 0) {
-      AuthToken authToken = InjectorRef.getCurrent().getInstance(Keys.AUTH_TOKEN);
+      AuthToken authToken = InjectorRef.getInstance(Keys.AUTH_TOKEN);
       Context context = InjectorRef.getContext();
       if (context.getProcessDateTime().minus(timeout, ChronoUnit.SECONDS).compareTo(authToken.getCreatedAt()) > 0) {
 
         AuthInfo authInfo = this.nullAuthInfoSupplier.get();
-        Context newContext = context.extend(c -> c
-          .authInfo(authInfo)
-        );
-
-        Object result = InjectorRef.getCurrent()
-          .fork(s -> s
-            .scope(TransactionScoped.class)
-            .provide(newContext)
-          )
-          .call(invocation::proceed)
-          .orElse(null);
+        context.setAuthInfo(authInfo);
+        Object result = invocation.proceed();
 
         if (result instanceof Result) {
           return result;
         }
         else {
-          return new Result(newContext, result);
+          return new Result(context, result);
         }
       }
     }

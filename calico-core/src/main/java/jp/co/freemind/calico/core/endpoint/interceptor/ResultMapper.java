@@ -19,7 +19,7 @@ public class ResultMapper implements EndpointInterceptor {
       result = (Result) output;
     }
     else {
-      result = new Result(ResultType.JSON, InjectorRef.getCurrent().getInstance(Context.class), output);
+      result = new Result(ResultType.JSON, InjectorRef.getInstance(Context.class), output);
     }
 
     return result;

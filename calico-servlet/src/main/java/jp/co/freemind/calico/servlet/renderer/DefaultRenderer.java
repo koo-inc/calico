@@ -39,6 +39,6 @@ public class DefaultRenderer implements Renderer<Result> {
   @Override
   public void writeBody(PrintWriter writer, ServletConfig conf, HttpServletResponse res, ResultType resultType, @Nullable Result o) throws IOException {
     if (o == null) return;
-    InjectorRef.getCurrent().getInstance(ObjectMapper.class).writeValue(writer, ((Result) o).getOutput());
+    InjectorRef.getInstance(ObjectMapper.class).writeValue(writer, ((Result) o).getOutput());
   }
 }

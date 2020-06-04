@@ -22,13 +22,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import com.google.common.base.Charsets;
+
 import jp.co.freemind.calico.core.config.SystemSetting;
-import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.di.InjectorRef;
+import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.servlet.assets.Asset;
 import jp.co.freemind.calico.servlet.assets.AssetsFinder;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
@@ -36,10 +42,6 @@ import jp.co.freemind.calico.servlet.util.NetworkUtil;
 import nu.validator.htmlparser.dom.Dom2Sax;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import nu.validator.htmlparser.sax.HtmlSerializer;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 @WebServlet(name = "CalicoServlet", urlPatterns = "/*", asyncSupported = true)
 public class CalicoServlet extends HttpServlet {
@@ -49,23 +51,22 @@ public class CalicoServlet extends HttpServlet {
   @Override
   public void init(ServletConfig servletConfig) throws ServletException {
     super.init(servletConfig);
-    InjectorRef root = InjectorRef.getCurrent();
-    this.assetsSetting = root.getInstance(AssetsSetting.class);
+    this.assetsSetting = InjectorRef.getInstance(AssetsSetting.class);
 
-    ObjectMapper mapper = root.getInstance(ObjectMapper.class)
+    ObjectMapper mapper = InjectorRef.getInstance(ObjectMapper.class)
       .copy().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     Dispatcher.init(mapper);
 
-    root.getInstance(SystemSetting.class).proxies().forEach(NetworkUtil::addProxy);
+    InjectorRef.getInstance(SystemSetting.class).proxies().forEach(NetworkUtil::addProxy);
   }
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-    RequestSession requestSession = InjectorRef.getCurrent().getInstance(RequestSession.class);
+    RequestSession requestSession = InjectorRef.getInstance(RequestSession.class);
     requestSession.execute(getServletConfig(), req, res);
   }
 
-  private static Pattern INDEX_PATTERN = Pattern.compile("^(?:/[^./]*)+$");
+  private static final Pattern INDEX_PATTERN = Pattern.compile("^(?:/[^./]*)+$");
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -83,7 +84,7 @@ public class CalicoServlet extends HttpServlet {
   private static final String BASE_HREF_PLACEHOLDER = "{{{{ BASE HREF PLACEHOLDER }}}}";
   private void sendIndex(HttpServletRequest req, HttpServletResponse res) {
     if (index == null || !assetsSetting.cacheEnabled()) {
-      index = InjectorRef.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), assetsSetting.getIndex())
+      index = InjectorRef.getInstance(AssetsFinder.class).getAsset(getServletContext(), assetsSetting.getIndex())
         .orElseThrow(()-> new IllegalStateException("'assets.index' setting is invalid."));
 
       ByteBuffer content = index.getContent();
@@ -128,7 +129,7 @@ public class CalicoServlet extends HttpServlet {
   }
 
   private void sendAsset(HttpServletResponse res, String path) throws IOException {
-    Optional<Asset> asset = InjectorRef.getCurrent().getInstance(AssetsFinder.class).getAsset(getServletContext(), path);
+    Optional<Asset> asset = InjectorRef.getInstance(AssetsFinder.class).getAsset(getServletContext(), path);
     if (asset.isPresent()) {
       sendAsset(res, asset.get());
     }

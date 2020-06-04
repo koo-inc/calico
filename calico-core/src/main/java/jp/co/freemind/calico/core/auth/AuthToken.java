@@ -84,7 +84,7 @@ public class AuthToken {
   }
 
   private static String getSecretToken() {
-    return InjectorRef.getCurrent().getInstance(AuthSetting.class).getSecretToken();
+    return InjectorRef.getInstance(AuthSetting.class).getSecretToken();
   }
 
   @Nonnull

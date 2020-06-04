@@ -2,19 +2,16 @@ package jp.co.freemind.calico.core.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matcher;
-import jp.co.freemind.calico.core.endpoint.TransactionScoped;
+
 import jp.co.freemind.calico.core.endpoint.aop.EndpointInterceptor;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
 
@@ -29,16 +26,7 @@ public abstract class CalicoPlugin {
   private final List<InterceptionHandler> handlers = new ArrayList<>();
 
   Module getGuiceModule() {
-    List<Module> modules = new ArrayList<>(guiceModules);
-    modules.add(new Module() {
-      @Override
-      public void configure(Binder binder) {
-        binder.bind(new TypeLiteral<Supplier<Module>>() {})
-          .annotatedWith(TransactionScoped.class)
-          .toInstance(() -> new GuiceModule(instantConsumers, Collections.emptyList()));
-      }
-    });
-    return new GuiceModule(globalConsumers, modules);
+    return new GuiceModule(globalConsumers, new ArrayList<>(guiceModules));
   }
   InterceptionHandler[] getInterceptionHandlers() {
     return handlers.stream().toArray(InterceptionHandler[]::new);

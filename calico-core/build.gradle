@@ -1,6 +1,9 @@
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'idea'
+plugins {
+  id 'java'
+  id 'groovy'
+  id 'idea'
+  id 'org.seasar.doma.compile' version '1.0.0'
+}
 
 sourceCompatibility = rootProject.properties.javaVersion
 targetCompatibility = rootProject.properties.javaVersion
@@ -33,6 +36,8 @@ dependencies {
   compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: rootProject.properties.log4j2Version
 
   testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
+
+  annotationProcessor group: 'org.seasar.doma', name: 'doma', version:'2.19.2'
 }
 
 // for Doma

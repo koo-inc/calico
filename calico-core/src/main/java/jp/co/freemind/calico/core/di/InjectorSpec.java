@@ -13,41 +13,31 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
-import com.google.inject.util.Modules;
+import com.google.inject.binder.ScopedBindingBuilder;
 
 public class InjectorSpec {
   private final Class<? extends Annotation> scope;
-  private final Consumable<Throwable> onError;
-  private final Runnable onFinish;
   private final Module[] modules;
   private final Map<Key<?>, Provider<?>> providers;
 
   InjectorSpec() {
-    this(null, null, null, new Module[0], Collections.emptyMap());
+    this(null, new Module[0], Collections.emptyMap());
   }
-  private InjectorSpec(@Nullable Class<? extends Annotation> scope, @Nullable Consumable<Throwable> onError, @Nullable Runnable onFinish, @Nonnull Module[] modules, @Nonnull Map<Key<?>, Provider<?>> providers) {
+  private InjectorSpec(@Nullable Class<? extends Annotation> scope, @Nonnull Module[] modules, @Nonnull Map<Key<?>, Provider<?>> providers) {
     this.scope = scope;
-    this.onError = onError;
-    this.onFinish = onFinish;
     this.modules = modules;
     this.providers = providers;
   }
 
   public InjectorSpec scope(@Nonnull Class<? extends Annotation> scope) {
-    return new InjectorSpec(scope, onError, onFinish, modules, providers);
-  }
-  public InjectorSpec onError(@Nonnull Consumable<Throwable> onError) {
-    return new InjectorSpec(scope, onError, onFinish, modules, providers);
-  }
-  public InjectorSpec onFinish(@Nonnull Runnable onFinish) {
-    return new InjectorSpec(scope, onError, onFinish, modules, providers);
+    return new InjectorSpec(scope, modules, providers);
   }
   public InjectorSpec modules(@Nonnull Module... modules) {
-    return new InjectorSpec(scope, onError, onFinish, modules, providers);
+    return new InjectorSpec(scope, modules, providers);
   }
   public <T> InjectorSpec provide(Key<T> key, Provider<? extends T> provider) {
     Map<Key<?>, Provider<?>> newProviders = ImmutableMap.<Key<?>, Provider<?>>builder().putAll(providers).put(key, provider).build();
-    return new InjectorSpec(scope, onError, onFinish, modules, newProviders);
+    return new InjectorSpec(scope, modules, newProviders);
   }
   public <T> InjectorSpec provide(Class<T> type, Provider<? extends T> provider) {
     return provide(Key.get(type), provider);
@@ -65,31 +55,17 @@ public class InjectorSpec {
   }
 
 
-  Optional<Module> getModule() {
-    if (modules.length == 0) return Optional.empty();
-    return Optional.of(Arrays.stream(modules)
-      .reduce(Modules.EMPTY_MODULE, (m1, m2)-> Modules.override(m1).with(m2)));
-  }
-
-  Optional<Class<? extends Annotation>> getScope() {
-    return Optional.ofNullable(scope);
-  }
-
-  Map<Key<?>, Provider<?>> getProviders() {
-    return providers;
-  }
-
-  boolean doOnError(Throwable t) throws Throwable {
-    if(onError != null) {
-      onError.consume(t);
-      return true;
-    }
-    return false;
-  }
-
-  void doFinish() {
-    if (this.onFinish != null) {
-      this.onFinish.run();
-    }
+  @SuppressWarnings("rawtypes unchecked")
+  Optional<Module> buildModule() {
+    if (modules.length == 0 && providers.size() == 0) return Optional.empty();
+    return Optional.of(binder -> {
+      Arrays.stream(modules).forEach(binder::install);
+      providers.forEach((key, provider) -> {
+        ScopedBindingBuilder binding = binder.bind((Key) key).toProvider(provider);
+        if (scope != null) {
+          binding.in(scope);
+        }
+      });
+    });
   }
 }

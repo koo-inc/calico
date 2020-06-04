@@ -40,6 +40,6 @@ public interface Renderer<T> {
   }
 
   default void writeBody(PrintWriter writer, ServletConfig conf, HttpServletResponse res, ResultType resultType, @Nullable T t) throws IOException {
-    InjectorRef.getCurrent().getInstance(ObjectMapper.class).writeValue(writer, t);
+    InjectorRef.getInstance(ObjectMapper.class).writeValue(writer, t);
   }
 }

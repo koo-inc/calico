@@ -31,7 +31,7 @@ public class MediaDeserializer extends JsonDeserializer<Media> {
 
     Optional<String> id = getValueAsText(node.get("id"));
     if (id.isPresent()) {
-      MediaStorage storage = InjectorRef.getCurrent().getInstance(MediaStorage.class);
+      MediaStorage storage = InjectorRef.getInstance(MediaStorage.class);
       Media media = new MediaProxy(storage);
       media.setId(id.get());
       media.setMeta(deserializeMediaMeta(metaNode));
