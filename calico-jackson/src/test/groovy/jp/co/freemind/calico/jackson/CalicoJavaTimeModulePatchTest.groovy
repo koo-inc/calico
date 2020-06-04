@@ -27,6 +27,7 @@ class CalicoJavaTimeModulePatchTest extends Specification {
 
   @Shared
   ObjectMapper prettyMapper = ObjectMapperProvider.createMapper(new SimpleModule() {{
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT+09:00"))
     addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("uuuu/M/d H:m:s")));
     addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy/M/d H:m:s")));
 
@@ -36,6 +37,11 @@ class CalicoJavaTimeModulePatchTest extends Specification {
     addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern("H:m:s")));
     addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("H:m:s")));
   }});
+
+  def "check timezone"() {
+    expect:
+    assert TimeZone.getDefault().getDisplayName() == "GMT+09:00"
+  }
 
   def "de/serialize LocalDateTime"() {
     when:

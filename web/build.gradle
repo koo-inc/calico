@@ -63,8 +63,12 @@ node {
 //  packageJsonFile = project.file("./package.json")
 }
 
+task npmCacheVerify(type: NpmTask, group: 'node') {
+  args = ['cache', 'verify']
+}
+
 clean {
-  dependsOn npm_cache_clean
+  dependsOn npmCacheVerify
   delete 'dist'
 }
 
