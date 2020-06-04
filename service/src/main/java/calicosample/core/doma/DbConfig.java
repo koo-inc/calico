@@ -32,7 +32,6 @@ public class DbConfig implements Config {
   public DbConfig(LocalTransactionDataSource dataSource, Dialect dialect) {
     this.dialect = dialect;
     this.dataSource = dataSource;
-    //TODO 別スレッドでも同じコンテクストで実行できるようにしたい (ThreadLocalやめたい)
     this.transactionManager = new LocalTransactionManager(dataSource.getLocalTransaction(getJdbcLogger()));
   }
 

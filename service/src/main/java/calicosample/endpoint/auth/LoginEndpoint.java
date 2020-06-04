@@ -1,15 +1,15 @@
 package calicosample.endpoint.auth;
 
-import calicosample.core.auth.CalicoSampleAuthInfo;
-import calicosample.service.AuthService;
 import com.google.inject.Inject;
+
+import calicosample.service.AuthService;
+import jp.co.freemind.calico.core.auth.AuthInfo;
+import jp.co.freemind.calico.core.di.Context;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
-import jp.co.freemind.calico.core.endpoint.result.Result;
-import jp.co.freemind.calico.core.zone.Context;
 import lombok.Getter;
 import lombok.Setter;
 
-public class LoginEndpoint implements Endpoint<LoginEndpoint.Input, Result> {
+public class LoginEndpoint implements Endpoint<LoginEndpoint.Input, AuthInfo> {
   @Inject private AuthService authService;
   @Inject private Context context;
 
@@ -20,8 +20,9 @@ public class LoginEndpoint implements Endpoint<LoginEndpoint.Input, Result> {
   }
 
   @Override
-  public Result execute(Input input) {
-    CalicoSampleAuthInfo authInfo = authService.login(input.getLoginId(), input.getPassword());
-    return new Result(context.extend(s -> s.authInfo(authInfo)), authInfo);
+  public AuthInfo execute(Input input) {
+    AuthInfo authInfo = authService.login(input.getLoginId(), input.getPassword());
+    context.setAuthInfo(authInfo);
+    return authInfo;
   }
 }

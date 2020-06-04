@@ -15,6 +15,19 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.sql.DataSource;
 
+import org.postgresql.jdbc2.optional.SimpleDataSource;
+import org.seasar.doma.jdbc.dialect.Dialect;
+import org.seasar.doma.jdbc.tx.LocalTransactionDataSource;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+
 import calicosample.Messages;
 import calicosample.core.doma.DomaModule;
 import calicosample.core.doma.PgDialect;
@@ -27,31 +40,21 @@ import calicosample.core.validator.LetterCount;
 import calicosample.core.validator.LowerBound;
 import calicosample.core.validator.UpperBound;
 import calicosample.core.validator.Validations;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import jp.co.freemind.calico.core.config.Registry;
 import jp.co.freemind.calico.core.config.Setting;
+import jp.co.freemind.calico.core.di.SimpleScope;
 import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.validation.FieldAccessor;
 import jp.co.freemind.calico.core.endpoint.validation.Validator;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.media.MediaStorage;
 import jp.co.freemind.calico.core.util.ClassFinder;
-import jp.co.freemind.calico.core.zone.ZoneScope;
 import jp.co.freemind.calico.jackson.ObjectMapperProvider;
 import jp.co.freemind.calico.mail.PostMan;
 import lombok.SneakyThrows;
-import org.postgresql.jdbc2.optional.SimpleDataSource;
-import org.seasar.doma.jdbc.dialect.Dialect;
-import org.seasar.doma.jdbc.tx.LocalTransactionDataSource;
 
 public class ServiceModule extends AbstractModule {
+  private SimpleScope transactionScope;
   @Override
   protected void configure() {
     install(new DomaModule());
@@ -64,7 +67,8 @@ public class ServiceModule extends AbstractModule {
     bind(MediaStorage.class).to(FmStorage.class);
     bind(PostMan.class).toProvider(PostManProvider.class);
 
-    bindScope(TransactionScoped.class, new ZoneScope(TransactionScoped.class));
+    transactionScope = new SimpleScope();
+    bindScope(TransactionScoped.class, transactionScope);
   }
 
   @SuppressWarnings("unchecked")
@@ -88,6 +92,11 @@ public class ServiceModule extends AbstractModule {
   protected DataSource provideLogDbDataSource(LogDbSetting dbSetting) {
     if (dbSetting.getJdbcUrl() == null) return new SimpleDataSource();
     return getDataSource(dbSetting);
+  }
+
+  @Provides @Named("transactionScope")
+  protected SimpleScope provideTransactionScope() {
+    return transactionScope;
   }
 
   @SneakyThrows

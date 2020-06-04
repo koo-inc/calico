@@ -12,7 +12,7 @@ import jp.co.freemind.calico.core.auth.AuthorizationRule;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
 import jp.co.freemind.calico.core.exception.AuthorizationException;
 import jp.co.freemind.calico.core.util.Types;
-import jp.co.freemind.calico.core.zone.Context;
+import jp.co.freemind.calico.core.di.Context;
 
 public class BaseAuthZRule implements AuthorizationRule {
   @Override

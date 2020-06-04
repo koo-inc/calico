@@ -11,7 +11,7 @@ import java.time.LocalTime
  * Created by kakusuke on 15/08/05.
  */
 class JsonObjectTest extends Specification {
-  def "オブジェクトをデ/シリアライズできること"() {
+  def "オブジェクトをデ／シリアライズできること"() {
     when:
     def obj = new JsonObject<Hoge>('{"id":1,"text":"a","hoge_flg":true}') {}
 
@@ -20,7 +20,7 @@ class JsonObjectTest extends Specification {
     assert obj.toString() == '{"id":1,"text":"a","hoge_flg":true}'
   }
 
-  def "オブジェクトのリストをデ/シリアライズできること"() {
+  def "オブジェクトのリストをデ／シリアライズできること"() {
     when:
     def obj = new JsonObject<List<Hoge>>('[{"id":1,"text":"a","hoge_flg":true}]') {}
 
@@ -29,7 +29,7 @@ class JsonObjectTest extends Specification {
     assert obj.toString() == '[{"id":1,"text":"a","hoge_flg":true}]'
   }
 
-  def "Integerをデ/シリアライズできること"() {
+  def "Integerをデ／シリアライズできること"() {
     when:
     def obj = new JsonObject<Integer>('1') {}
 
@@ -38,7 +38,7 @@ class JsonObjectTest extends Specification {
     assert obj.toString() == '1'
   }
 
-  def "Integerのリストをデ/シリアライズできること"() {
+  def "Integerのリストをデ／シリアライズできること"() {
     when:
     def obj = new JsonObject<List<Integer>>('[1,2]') {}
 
@@ -47,7 +47,7 @@ class JsonObjectTest extends Specification {
     assert obj.toString() == '[1,2]'
   }
 
-  def "Java8のオブジェクトをデ/シリアライズできること"() {
+  def "Java8のオブジェクトをデ／シリアライズできること"() {
     when:
     def obj = new JsonObject<Fuga>(data) {}
 
@@ -65,16 +65,16 @@ class JsonObjectTest extends Specification {
     '{"id":null,"at":"2014-01-01T00:11:22.333","today":"2014-01-02","now":"13:12:12.112"}' | null | "2014-01-01T00:11:22.333" | "2014-01-02" | "13:12:12.112"
   }
 
-  def "Enum入りオブジェクトをデ/シリアライズできること"() {
+  def "Enum入りオブジェクトをデ／シリアライズできること"() {
     when:
     def obj = new JsonObject<Piyo>('{"family_type":1}') {}
 
     then:
     assert obj.get() == new Piyo(familyType: FamilyType.PARENT)
-    assert obj.toString() == '{"family_type":1}'
+    assert obj.toString() == '{"family_type":{"id":1,"name":"親","NAME":"PARENT"}}'
   }
 
-  def "拡張クラスをフィールドとしてデ/シリアライズできること"() {
+  def "拡張クラスをフィールドとしてデ／シリアライズできること"() {
     given:
     def mapper = ObjectMapperProvider.createMapper()
     when:

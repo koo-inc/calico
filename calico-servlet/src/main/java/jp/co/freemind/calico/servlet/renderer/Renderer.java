@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.endpoint.result.ResultType;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 public interface Renderer<T> {
   default void render(ServletConfig conf, HttpServletResponse res, ResultType resultType, @Nullable T output) {
@@ -40,6 +40,6 @@ public interface Renderer<T> {
   }
 
   default void writeBody(PrintWriter writer, ServletConfig conf, HttpServletResponse res, ResultType resultType, @Nullable T t) throws IOException {
-    Zone.getCurrent().getInstance(ObjectMapper.class).writeValue(writer, t);
+    InjectorRef.getInstance(ObjectMapper.class).writeValue(writer, t);
   }
 }

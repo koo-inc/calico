@@ -31,9 +31,9 @@
     "lz-string": "^1.4.4",
     "moment": "^2.18.1",
     "ngx-bootstrap": "^3.0.1",
-    "rxjs": "^6.2.1",
-    "sugar": "^2.0.4",
-    "sugar-language": "^2.0.4",
+    "rxjs": "6.3.3",
+    "sugar": "2.0.4",
+    "sugar-language": "2.0.4",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

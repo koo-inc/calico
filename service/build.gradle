@@ -2,6 +2,7 @@ plugins {
   id 'java'
   id 'idea'
   id 'io.franzbecker.gradle-lombok' version '1.14'
+  id 'org.seasar.doma.compile' version '1.0.0'
 }
 
 apply from: "eclipse.gradle"
@@ -38,6 +39,8 @@ dependencies {
   compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.1.4'
   compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
   testCompile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
+  compile group: 'org.seasar.doma', name: 'doma', version:'2.19.2'
+  annotationProcessor group: 'org.seasar.doma', name: 'doma', version:'2.19.2'
 }
 
 assemble.dependsOn << rootProject.expandConfig

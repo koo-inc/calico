@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import jp.co.freemind.calico.core.auth.AuthToken;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.servlet.SessionSetting;
 
 public final class CookieUtil {
@@ -53,7 +53,7 @@ public final class CookieUtil {
   }
 
   private static SessionSetting getSetting() {
-    return Zone.getCurrent().getInstance(SessionSetting.class);
+    return InjectorRef.getInstance(SessionSetting.class);
   }
 
   private static String getContextPath(ServletContext context) {

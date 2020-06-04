@@ -2,11 +2,6 @@ package calicosample.entity.log;
 
 import java.time.LocalDateTime;
 
-import calicosample.core.doma.InjectLogConfig;
-import jp.co.freemind.calico.core.config.SystemSetting;
-import jp.co.freemind.calico.core.zone.Zone;
-import lombok.Getter;
-import lombok.Setter;
 import org.seasar.doma.Entity;
 import org.seasar.doma.GeneratedValue;
 import org.seasar.doma.GenerationType;
@@ -14,6 +9,12 @@ import org.seasar.doma.Id;
 import org.seasar.doma.SequenceGenerator;
 import org.seasar.doma.jdbc.entity.EntityListener;
 import org.seasar.doma.jdbc.entity.PreInsertContext;
+
+import calicosample.core.doma.InjectLogConfig;
+import jp.co.freemind.calico.core.config.SystemSetting;
+import jp.co.freemind.calico.core.di.InjectorRef;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by tasuku on 15/03/10.
@@ -32,7 +33,7 @@ public abstract class LogEntity implements Log {
 
   public LogEntity() {
     ts = LocalDateTime.now();
-    version = Zone.getCurrent().getInstance(SystemSetting.class).version();
+    version = InjectorRef.getInstance(SystemSetting.class).version();
   }
 
   public static class LogEntityListener<T extends LogEntity> implements EntityListener<T> {

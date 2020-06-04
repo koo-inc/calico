@@ -7,7 +7,9 @@ buildscript {
 }
 
 plugins {
-  id "com.moowork.node" version "1.2.0"
+//  id "com.moowork.node" version "1.2.0"
+  id("com.github.node-gradle.node") version "2.2.4"
+  id "io.freefair.lombok" version "5.1.0"
   id 'java'
   id 'war'
   id 'eclipse'
@@ -30,8 +32,8 @@ repositories {
 dependencies {
   compile project(':calico-servlet')
   compile project(':service')
-  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.0'
-  annotationProcessor group: 'org.projectlombok', name: 'lombok', version:'1.18.0'
+//  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.0'
+//  annotationProcessor group: 'org.projectlombok', name: 'lombok', version:'1.18.0'
 }
 
 eclipse {
@@ -55,6 +57,10 @@ eclipse {
 node {
   version = '10.5.0'
   download = true
+//  nodeModulesDir = project.file("./node_modules")
+//  workDir = project.file("${project.buildDir}/nodejs")
+//  npmWorkDir = project.file("${project.buildDir}/npm")
+//  packageJsonFile = project.file("./package.json")
 }
 
 clean {
@@ -65,7 +71,7 @@ clean {
 task ngBuild(type: NpmTask, dependsOn: 'npmInstall') {
   args = ['run', 'build']
   inputs.dir 'src'
-  outputs.dir 'dist'
+  outputs.dir 'dist/assets'
 }
 
 task ngServer(type: NpmTask, dependsOn: 'npmInstall') {
@@ -74,6 +80,5 @@ task ngServer(type: NpmTask, dependsOn: 'npmInstall') {
 
 war {
   dependsOn << ngBuild
-  from 'dist'
-  into 'assets'
+  webAppDirName = 'dist'
 }

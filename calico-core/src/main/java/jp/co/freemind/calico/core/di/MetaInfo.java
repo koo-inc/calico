@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.core.zone;
+package jp.co.freemind.calico.core.di;
 
 import java.util.Collection;
 import java.util.Collections;

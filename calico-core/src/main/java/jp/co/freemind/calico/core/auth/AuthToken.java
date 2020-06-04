@@ -11,7 +11,7 @@ import com.google.common.base.Strings;
 
 import jp.co.freemind.calico.core.util.CryptoUtil;
 import jp.co.freemind.calico.core.util.RandomUtil;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 public class AuthToken {
   @Nonnull private String value;
@@ -84,7 +84,7 @@ public class AuthToken {
   }
 
   private static String getSecretToken() {
-    return Zone.getCurrent().getInstance(AuthSetting.class).getSecretToken();
+    return InjectorRef.getInstance(AuthSetting.class).getSecretToken();
   }
 
   @Nonnull

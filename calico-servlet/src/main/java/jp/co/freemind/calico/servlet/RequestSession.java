@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -14,7 +15,19 @@ import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.Logger;
+import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.tx.TransactionIsolationLevel;
+
+import com.google.inject.Key;
+import com.google.inject.name.Names;
+
 import jp.co.freemind.calico.core.auth.AuthToken;
+import jp.co.freemind.calico.core.di.Context;
+import jp.co.freemind.calico.core.di.InjectorRef;
+import jp.co.freemind.calico.core.di.InjectorSpec;
+import jp.co.freemind.calico.core.di.SimpleScope;
+import jp.co.freemind.calico.core.di.UnhandledException;
 import jp.co.freemind.calico.core.endpoint.Dispatcher;
 import jp.co.freemind.calico.core.endpoint.EndpointInfo;
 import jp.co.freemind.calico.core.endpoint.EndpointResolver;
@@ -23,16 +36,11 @@ import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
 import jp.co.freemind.calico.core.exception.UnknownEndpointException;
 import jp.co.freemind.calico.core.exception.ViolationException;
 import jp.co.freemind.calico.core.log.LoggingSession;
+import jp.co.freemind.calico.core.log.LoggingSessionRef;
 import jp.co.freemind.calico.core.log.LoggingSessionStarter;
 import jp.co.freemind.calico.core.util.FileBackedInputStream;
-import jp.co.freemind.calico.core.zone.Context;
-import jp.co.freemind.calico.core.zone.UnhandledException;
-import jp.co.freemind.calico.core.zone.Zone;
 import jp.co.freemind.calico.servlet.util.CookieUtil;
 import jp.co.freemind.calico.servlet.util.NetworkUtil;
-import org.apache.logging.log4j.Logger;
-import org.seasar.doma.jdbc.Config;
-import org.seasar.doma.jdbc.tx.TransactionIsolationLevel;
 
 public class RequestSession {
   private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(RequestSession.class);
@@ -46,28 +54,32 @@ public class RequestSession {
 
       doInTransaction(param, () -> {
         Context context = doGetContext(param);
+        SimpleScope transactionScope = InjectorRef.getInstance(Key.get(SimpleScope.class, Names.named("transactionScope")));
+        transactionScope.enter();
 
-        getTransactionScopedZone(context, param).run(() -> {
-          LoggingSession loggingSession = getLoggingSessionStarter().start();
-          Zone.getCurrent().fork(s -> s
-            .scope(TransactionScoped.class)
-            .provide(Keys.LOGGING_SESSION, loggingSession)
-            .onError(e -> {
-              Throwable t = UnhandledException.getPeeled(e);
+        try {
+          InjectorRef.doInNewInjector(getTransactionScopedSpec(context, param), () -> {
+
+            LoggingSessionRef<Object> loggingSessionRef = (LoggingSessionRef<Object>) InjectorRef.getInstance(Keys.LOGGING_SESSION);
+            LoggingSession loggingSession = getLoggingSessionStarter().start();
+            loggingSessionRef.set(loggingSession);
+            try {
+              InputStream is = InjectorRef.getInstance(Keys.INPUT);
+              Object output = new Dispatcher(endpointInfo.orElseThrow(() -> new UnknownEndpointException(param.path)))
+                .dispatch(is, getInterceptionHandlers(servletConfig));
+              render(context, param, output);
+              loggingSession.finish(res.getStatus());
+            } catch (Throwable t) {
               if (!isDesignedException(t)) {
                 loggingSession.error(t);
               }
               renderError(context, param, t);
               throw t;
-            })
-            .onFinish(() -> loggingSession.finish(res.getStatus()))
-          ).run(() -> {
-            InputStream is = Zone.getCurrent().getInstance(Keys.INPUT);
-            Object output = new Dispatcher(endpointInfo.orElseThrow(() -> new UnknownEndpointException(param.path)))
-              .dispatch(is, getInterceptionHandlers(servletConfig));
-            render(context, param, output);
+            }
           });
-        });
+        } finally {
+          transactionScope.exit();
+        }
       });
     }
     catch (Exception e) {
@@ -83,7 +95,7 @@ public class RequestSession {
   }
 
   protected Config getConfig() {
-    return Zone.getCurrent().getInstance(Config.class);
+    return InjectorRef.getInstance(Config.class);
   }
 
   protected void doInTransaction(RequestParam param, Runnable block) {
@@ -92,7 +104,7 @@ public class RequestSession {
   }
 
   protected Context getContext(RequestParam param) {
-    AuthenticationProcedure authority = Zone.getCurrent().getInstance(AuthenticationProcedure.class);
+    AuthenticationProcedure authority = InjectorRef.getInstance(AuthenticationProcedure.class);
     return new Context(s -> s
       .authInfo(authority.proceed(param.getAuthToken()))
       .processDateTime(param.getProcessDatetime())
@@ -119,8 +131,8 @@ public class RequestSession {
     return LocalDateTime.now();
   }
 
-  protected Zone getTransactionScopedZone(Context context, RequestParam param) {
-    return Zone.getCurrent().fork(s -> s
+  protected Function<InjectorSpec, InjectorSpec> getTransactionScopedSpec(Context context, RequestParam param) {
+    return s -> s
       .scope(TransactionScoped.class)
       .provide(Keys.CONTEXT, context)
       .provide(Keys.AUTH_TOKEN, param.getAuthToken())
@@ -130,11 +142,12 @@ public class RequestSession {
       .provide(Keys.SERVLET_REQUEST, param.getRequest())
       .provide(Keys.SERVLET_RESPONSE, param.getResponse())
       .provide(Keys.INPUT, param.getPayload())
-    );
+      .provide(Keys.LOGGING_SESSION, new LoggingSessionRef<Object>())
+    ;
   }
 
   protected EndpointResolver getEndpointResolver() {
-    return Zone.getCurrent().getInstance(EndpointResolver.class);
+    return InjectorRef.getInstance(EndpointResolver.class);
   }
 
   protected InterceptionHandler[] getInterceptionHandlers(ServletConfig servletConfig) {
@@ -143,15 +156,15 @@ public class RequestSession {
   }
 
   protected LoggingSessionStarter getLoggingSessionStarter() {
-    return Zone.getCurrent().getInstance(LoggingSessionStarter.class);
+    return InjectorRef.getInstance(LoggingSessionStarter.class);
   }
 
   protected void render(@Nonnull Context context, RequestParam param, Object output) {
-    Zone.getCurrent().getInstance(Keys.DEFAULT_RENDERER).render(param.getConfig(), param.getResponse(), context, output);
+    InjectorRef.getInstance(Keys.DEFAULT_RENDERER).render(param.getConfig(), param.getResponse(), context, output);
   }
 
   protected void renderError(@Nullable Context context, RequestParam param, Throwable t) {
-    Zone.getCurrent().getInstance(Keys.EXCEPTION_RENDERER).render(param.getConfig(), param.getResponse(), t);
+    InjectorRef.getInstance(Keys.EXCEPTION_RENDERER).render(param.getConfig(), param.getResponse(), t);
   }
 
   protected boolean isDesignedException(Throwable t) {

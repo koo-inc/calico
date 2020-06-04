@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.Logger;
 
 import jp.co.freemind.calico.core.config.SystemSetting;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.servlet.assets.AssetsSetting;
 
 @WebFilter(filterName="CacheControlFilter", urlPatterns = {"/*"}, asyncSupported = true)
@@ -24,7 +24,7 @@ public class CacheControlFilter implements Filter {
   private static final Logger log = org.apache.logging.log4j.LogManager.getLogger(CacheControlFilter.class);
   private final AssetsSetting assetsSetting = buildAssetsSetting();
   private static AssetsSetting buildAssetsSetting() {
-    return Zone.getCurrent().getInstance(AssetsSetting.class);
+    return InjectorRef.getInstance(AssetsSetting.class);
   }
 
   @Override
@@ -65,7 +65,7 @@ public class CacheControlFilter implements Filter {
   private static Long lastModified;
   private static long getLastModified() {
     if (lastModified != null) return lastModified;
-    long time = Zone.getCurrent().getInstance(SystemSetting.class).version();
+    long time = InjectorRef.getInstance(SystemSetting.class).version();
     lastModified = time - (time % 1000);
     log.info("version: " + lastModified);
     return lastModified;

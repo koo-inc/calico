@@ -29,7 +29,7 @@ import com.google.inject.Inject;
 import jp.co.freemind.calico.core.media.Media;
 import jp.co.freemind.calico.core.util.StreamUtil;
 import jp.co.freemind.calico.core.util.Throwables;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 public class FmPostMan implements PostMan {
   private static final DateTimeFormatter SEND_AT_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
@@ -117,7 +117,7 @@ public class FmPostMan implements PostMan {
   }
 
   private String getSendAt(LocalDateTime reservedAt) {
-    if (reservedAt == null || reservedAt.compareTo(Zone.getContext().getProcessDateTime()) <= 0) {
+    if (reservedAt == null || reservedAt.compareTo(InjectorRef.getContext().getProcessDateTime()) <= 0) {
       return "at once";
     }
     return reservedAt.format(SEND_AT_FORMATTER);

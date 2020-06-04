@@ -7,7 +7,7 @@ import calicosample.dao.UserInfoDao;
 import calicosample.entity.UserInfo;
 import com.google.inject.Inject;
 import jp.co.freemind.calico.core.exception.ApplicationException;
-import jp.co.freemind.calico.core.zone.Context;
+import jp.co.freemind.calico.core.di.Context;
 
 public class AuthService {
   @Inject private UserInfoDao userInfoDao;

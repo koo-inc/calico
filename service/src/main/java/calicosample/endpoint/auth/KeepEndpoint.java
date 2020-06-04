@@ -1,20 +1,22 @@
 package calicosample.endpoint.auth;
 
+import com.google.inject.Inject;
+
 import calicosample.core.auth.CalicoSampleAuthInfo;
 import calicosample.service.AuthService;
-import com.google.inject.Inject;
+import jp.co.freemind.calico.core.auth.AuthInfo;
+import jp.co.freemind.calico.core.di.Context;
 import jp.co.freemind.calico.core.endpoint.Endpoint;
 import jp.co.freemind.calico.core.endpoint.dto.EmptyInput;
-import jp.co.freemind.calico.core.endpoint.result.Result;
-import jp.co.freemind.calico.core.zone.Context;
 
-public class KeepEndpoint implements Endpoint<EmptyInput, Result> {
+public class KeepEndpoint implements Endpoint<EmptyInput, AuthInfo> {
   @Inject private AuthService authService;
   @Inject private Context context;
 
   @Override
-  public Result execute(EmptyInput input) {
+  public AuthInfo execute(EmptyInput input) {
     CalicoSampleAuthInfo authInfo = authService.keep(context.getAuthInfo());
-    return new Result(context.extend(s -> s.authInfo(authInfo)), authInfo);
+    context.setAuthInfo(authInfo);
+    return authInfo;
   }
 }

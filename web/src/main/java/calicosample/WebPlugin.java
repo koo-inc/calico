@@ -15,8 +15,8 @@ import jp.co.freemind.calico.core.endpoint.TransactionScoped;
 import jp.co.freemind.calico.core.endpoint.interceptor.ResultMapper;
 import jp.co.freemind.calico.core.log.LoggingSession;
 import jp.co.freemind.calico.core.log.LoggingSessionStarter;
-import jp.co.freemind.calico.core.zone.Context;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.Context;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.servlet.AuthenticationProcedure;
 import jp.co.freemind.calico.servlet.CalicoServletPlugin;
 import jp.co.freemind.calico.servlet.interceptor.CsrfInterceptor;
@@ -59,7 +59,7 @@ public class WebPlugin extends CalicoServletPlugin {
   }
 
   private static CalicoSampleAuthInfo getNullAuthInfo() {
-    Context context = Zone.getContext();
+    Context context = InjectorRef.getContext();
     return CalicoSampleAuthInfo.ofNull(context.getRemoteAddress(), context.getProcessDateTime());
   }
 

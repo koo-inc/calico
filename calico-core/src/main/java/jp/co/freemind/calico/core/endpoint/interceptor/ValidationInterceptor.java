@@ -5,7 +5,7 @@ import jp.co.freemind.calico.core.endpoint.aop.EndpointInvocation;
 import jp.co.freemind.calico.core.endpoint.validation.Validator;
 import jp.co.freemind.calico.core.exception.InvalidUserDataException;
 import jp.co.freemind.calico.core.validation.Violation;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 public class ValidationInterceptor implements EndpointInterceptor {
   @Override
@@ -24,6 +24,6 @@ public class ValidationInterceptor implements EndpointInterceptor {
   }
 
   private Validator getValidator() {
-    return Zone.getCurrent().getInstance(Validator.class);
+    return InjectorRef.getInstance(Validator.class);
   }
 }

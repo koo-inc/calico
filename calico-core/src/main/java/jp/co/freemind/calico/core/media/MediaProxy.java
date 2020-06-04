@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.InjectorRef;
 
 /**
  * Created by tasuku on 15/04/28.
@@ -62,12 +62,12 @@ public class MediaProxy extends Media {
       return ((MediaProxy) media).clone();
     }
 
-    MediaStorage storage = Zone.getCurrent().getInstance(MediaStorage.class);
+    MediaStorage storage = InjectorRef.getInstance(MediaStorage.class);
     MediaProxy proxy = new MediaProxy(storage);
     proxy.setId(media.getId());
     proxy.setMeta(media.getMeta());
     proxy.instance = media;
-    Zone.getCurrent().injectMembers(proxy);
+    InjectorRef.injectMembers(proxy);
     return proxy;
   }
 
@@ -75,7 +75,7 @@ public class MediaProxy extends Media {
   private static MediaProxy create(
       @JsonProperty("id") String id,
       @JsonProperty("meta") MediaMeta meta) {
-    MediaStorage storage = Zone.getCurrent().getInjector().getInstance(MediaStorage.class);
+    MediaStorage storage = InjectorRef.getInstance(MediaStorage.class);
     MediaProxy proxy = new MediaProxy(storage);
     proxy.setId(id);
     proxy.setMeta(meta);

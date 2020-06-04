@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.google.inject.Module;
+
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.core.endpoint.aop.InterceptionHandler;
-import jp.co.freemind.calico.core.zone.Zone;
 
 public abstract class CalicoConfig {
   private final List<CalicoPlugin> plugins = new ArrayList<>();
@@ -24,7 +25,7 @@ public abstract class CalicoConfig {
     registry = createRegistry();
     plugins.clear();
     configure(registry);
-    Zone.initialize(s -> s.modules(getModules()));
+    InjectorRef.initialize(s -> s.modules(getModules()));
   }
 
   protected InterceptionHandler[] getInterceptionHandlers() {

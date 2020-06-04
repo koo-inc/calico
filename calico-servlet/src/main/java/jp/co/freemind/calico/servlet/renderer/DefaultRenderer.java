@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.endpoint.result.Result;
 import jp.co.freemind.calico.core.endpoint.result.ResultType;
-import jp.co.freemind.calico.core.zone.Context;
-import jp.co.freemind.calico.core.zone.Zone;
+import jp.co.freemind.calico.core.di.Context;
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.servlet.util.CookieUtil;
 
 public class DefaultRenderer implements Renderer<Result> {
@@ -39,6 +39,6 @@ public class DefaultRenderer implements Renderer<Result> {
   @Override
   public void writeBody(PrintWriter writer, ServletConfig conf, HttpServletResponse res, ResultType resultType, @Nullable Result o) throws IOException {
     if (o == null) return;
-    Zone.getCurrent().getInstance(ObjectMapper.class).writeValue(writer, ((Result) o).getOutput());
+    InjectorRef.getInstance(ObjectMapper.class).writeValue(writer, ((Result) o).getOutput());
   }
 }

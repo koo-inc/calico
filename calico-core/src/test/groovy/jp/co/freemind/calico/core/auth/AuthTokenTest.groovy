@@ -1,7 +1,7 @@
 package jp.co.freemind.calico.core.auth
 
 import com.google.inject.Binder
-import jp.co.freemind.calico.core.zone.Zone
+import jp.co.freemind.calico.core.di.InjectorRef
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -9,10 +9,7 @@ import java.time.temporal.ChronoUnit
 
 class AuthTokenTest extends Specification {
   def setupSpec() {
-    Zone.initialize() {s -> s.modules(new MockModule()) }
-  }
-  def cleanupSpec() {
-    Zone.dispose()
+    InjectorRef.initialize() { s -> s.modules(new MockModule()) }
   }
 
   def "復号できること"() {
@@ -42,12 +39,12 @@ class AuthTokenTest extends Specification {
     token1.value != token2.value
   }
 
-  def "不正な文字列が渡された場合は IllegalArgumentsException が発生すること"() {
+  def "不正な文字列が渡された場合は nullを返すこと"() {
     when:
-    AuthToken.of('aaaaaa')
+    def token = AuthToken.of('aaaaaa')
 
     then:
-    thrown(IllegalArgumentException)
+    token == null
   }
 
   def "IPアドレスが復号化されること"() {

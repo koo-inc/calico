@@ -1,4 +1,4 @@
-package jp.co.freemind.calico.core.zone;
+package jp.co.freemind.calico.core.di;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,10 +17,10 @@ import jp.co.freemind.calico.core.auth.AuthInfo;
 public class Context {
   private final Spec spec;
   private final String path;
-  private final AuthInfo authInfo;
   private final LocalDateTime processDateTime;
   private final String remoteAddress;
   private final MetaInfo metaInfo;
+  private AuthInfo authInfo;
 
   public Context(Function<Spec, Spec> initializer) {
     this(initializer.apply(new Spec()));
@@ -53,6 +53,10 @@ public class Context {
   @Nonnull
   public <T extends AuthInfo> T getAuthInfo() {
     return (T) authInfo;
+  }
+
+  public <T extends AuthInfo> void setAuthInfo(@Nonnull T authInfo) {
+    this.authInfo = authInfo;
   }
 
   public LocalDateTime getProcessDateTime() {

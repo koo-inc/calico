@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import jp.co.freemind.calico.core.zone.Zone;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -24,9 +23,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
+
+import jp.co.freemind.calico.core.di.InjectorRef;
 import jp.co.freemind.calico.core.media.MediaMeta;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -245,6 +247,6 @@ abstract class FmStorageCommand<T> {
 
 
   private FmStorageSetting getSetting() {
-    return Zone.getCurrent().getInstance(FmStorageSetting.class);
+    return InjectorRef.getInstance(FmStorageSetting.class);
   }
 }
