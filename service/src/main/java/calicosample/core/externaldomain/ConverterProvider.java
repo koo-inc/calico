@@ -5,6 +5,6 @@ import org.seasar.doma.DomainConverters;
 /**
  * Created by tasuku on 15/05/08.
  */
-@DomainConverters({MediaConverter.class })
+@DomainConverters({MediaConverter.class, TimePointConverter.class})
 public class ConverterProvider {
 }

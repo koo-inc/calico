@@ -3,20 +3,16 @@ package calicosample.entity;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
-import calicosample.extenum.CalicoSampleAuthority;
-import jp.co.freemind.calico.core.auth.Authority;
-import jp.co.freemind.calico.jackson.JsonList;
-import jp.co.freemind.calico.jackson.JsonObject;
-import lombok.Getter;
-import lombok.Setter;
-import org.seasar.doma.Domain;
 import org.seasar.doma.Entity;
 import org.seasar.doma.GeneratedValue;
 import org.seasar.doma.GenerationType;
 import org.seasar.doma.Id;
+
+import jp.co.freemind.calico.core.auth.Authority;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter @Setter
@@ -52,10 +48,4 @@ public class UserInfo extends CalicoSampleEntity {
     }
   }
 
-  @Domain(valueType = String.class)
-  public static class AuthorityList extends JsonObject<List<CalicoSampleAuthority>> implements JsonList<CalicoSampleAuthority> {
-    public AuthorityList(String json) {
-      super(json);
-    }
-  }
 }

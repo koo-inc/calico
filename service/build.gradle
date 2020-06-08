@@ -11,14 +11,23 @@ apply from: "migration.gradle"
 description = 'service'
 
 // for Doma
-idea.module {
-  inheritOutputDirs = true
-  outputDir = compileJava.destinationDir
+task copyDomaResources(type: Sync) {
+  from sourceSets.main.resources.srcDirs
+  into compileJava.destinationDir
+  include 'doma.compile.config'
+  include 'META-INF/**/*.sql'
+  include 'META-INF/**/*.script'
 }
-configurations {
-  processResources.destinationDir = compileJava.destinationDir
-  compileJava.dependsOn processResources
-}
+compileJava.dependsOn << copyDomaResources
+
+//idea.module {
+//  inheritOutputDirs = true
+//  outputDir = compileJava.destinationDir
+//}
+//configurations {
+//  processResources.destinationDir = compileJava.destinationDir
+//  compileJava.dependsOn processResources
+//}
 
 
 repositories {
@@ -39,8 +48,8 @@ dependencies {
   compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.1.4'
   compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
   testCompile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
-  compile group: 'org.seasar.doma', name: 'doma', version:'2.19.2'
-  annotationProcessor group: 'org.seasar.doma', name: 'doma', version:'2.19.2'
+  compile group: 'org.seasar.doma', name: 'doma', version: rootProject.properties.domaVersion
+  annotationProcessor group: 'org.seasar.doma', name: 'doma', version: rootProject.properties.domaVersion
 }
 
 assemble.dependsOn << rootProject.expandConfig

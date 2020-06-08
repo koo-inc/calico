@@ -18,9 +18,7 @@ import javax.annotation.Nullable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Strings;
-import org.seasar.doma.Domain;
 
-@Domain(valueType = String.class, factoryMethod = "of", accessorMethod = "toString")
 public class TimePoint implements Comparable<TimePoint> {
   private final int minutesAmount;
 

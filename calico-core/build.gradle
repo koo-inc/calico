@@ -2,7 +2,6 @@ plugins {
   id 'java'
   id 'groovy'
   id 'idea'
-  id 'org.seasar.doma.compile' version '1.0.0'
 }
 
 sourceCompatibility = rootProject.properties.javaVersion
@@ -21,7 +20,7 @@ repositories {
 dependencies {
   compile group: 'com.google.guava', name: 'guava', version:'18.0'
   compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
-  compile group: 'org.seasar.doma', name: 'doma', version:'2.19.2'
+  compile group: 'org.seasar.doma', name: 'doma', version: rootProject.properties.domaVersion
   compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: rootProject.properties.jacksonVersion
@@ -36,16 +35,4 @@ dependencies {
   compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: rootProject.properties.log4j2Version
 
   testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
-
-  annotationProcessor group: 'org.seasar.doma', name: 'doma', version:'2.19.2'
-}
-
-// for Doma
-idea.module {
-  inheritOutputDirs = true
-  outputDir = compileJava.destinationDir
-}
-configurations {
-  processResources.destinationDir = compileJava.destinationDir
-  compileJava.dependsOn processResources
 }
