@@ -10,12 +10,12 @@ allprojects  {
       jcenter()
     }
     dependencies {
-      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+      classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
     }
   }
 
   group = 'jp.co.freemind.calico'
-  version = System.getenv("TRAVIS_TAG") ?: '1.0-SNAPSHOT'
+  version = System.getenv("TRAVIS_TAG") ?: '1.1-SNAPSHOT'
 
 //  sourceCompatibility = 1.8
 //  targetCompatibility = 1.8
