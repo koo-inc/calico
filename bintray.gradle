@@ -13,7 +13,7 @@ publishing {
       groupId "${project.group}"
       artifactId "${project.name}"
       version "${project.version}"
-      artifact(sourceJar) {
+      artifact sourceJar {
         classifier = 'sources'
         extension = 'jar'
       }
