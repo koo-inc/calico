@@ -52,6 +52,9 @@ public class FieldAccessor {
   public boolean is(Class<?> rawType) {
     return type.getErasedType() == rawType;
   }
+  public boolean isInheritedFrom(Class<?> rawType) {
+    return rawType.isAssignableFrom(type.getErasedType());
+  }
 
   @Override
   public String toString() {

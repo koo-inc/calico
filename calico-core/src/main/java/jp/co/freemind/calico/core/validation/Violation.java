@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -62,11 +63,22 @@ public class Violation {
     child.errors.forEach(this::mark);
     return this;
   }
+  public Violation referTo(@Nonnull String key, Supplier<Violation> supplier) {
+    Violation childViolation = supplier.get();
+    return referTo(key, violation -> childViolation.errors.forEach(violation::mark));
+  }
+
   public Violation referTo(@Nonnull String key, int index, Consumer<Violation> consumer) {
     return referTo(String.valueOf(key) + "." + index, consumer);
   }
+  public Violation referTo(@Nonnull String key, int index, Supplier<Violation> supplier) {
+    return referTo(String.valueOf(key) + "." + index, supplier);
+  }
   public Violation referTo(@Nonnull String key, @Nonnull String key2, Consumer<Violation> consumer) {
     return referTo(String.valueOf(key) + "." + key2, consumer);
+  }
+  public Violation referTo(@Nonnull String key, @Nonnull String key2, Supplier<Violation> supplier) {
+    return referTo(String.valueOf(key) + "." + key2, supplier);
   }
 
   public boolean isFound() {
