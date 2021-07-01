@@ -33,7 +33,16 @@ compileJava.dependsOn << copyDomaResources
 repositories {
   mavenLocal()
   mavenCentral()
-  maven { url supportRepo }
+  maven {
+    url System.getenv('CALICO_REPO_URL')
+    credentials {
+      username System.getenv('CALICO_REPO_USER')
+      password System.getenv('CALICO_REPO_PASSWORD')
+    }
+    authentication {
+      basic(BasicAuthentication)
+    }
+  }
 }
 
 lombok {

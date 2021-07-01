@@ -7,7 +7,7 @@ targetCompatibility = rootProject.properties.javaVersion
 
 description = 'Calico Framework Jackson Plugin'
 
-apply from: '../bintray.gradle'
+apply from: '../deploy.gradle'
 
 repositories {
   mavenLocal()

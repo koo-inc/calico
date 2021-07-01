@@ -6,12 +6,21 @@ targetCompatibility = rootProject.properties.javaVersion
 
 description = 'Calico Framework CSV Library'
 
-apply from: '../bintray.gradle'
+apply from: '../deploy.gradle'
 
 repositories {
   mavenLocal()
   mavenCentral()
-  maven { url supportRepo }
+  maven {
+    url System.getenv('CALICO_REPO_URL')
+    credentials {
+      username System.getenv('CALICO_REPO_USER')
+      password System.getenv('CALICO_REPO_PASSWORD')
+    }
+    authentication {
+      basic(BasicAuthentication)
+    }
+  }
 }
 
 dependencies {

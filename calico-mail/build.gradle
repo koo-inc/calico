@@ -6,7 +6,7 @@ targetCompatibility = rootProject.properties.javaVersion
 
 description = 'Calico Framework Mail Plugin'
 
-apply from: '../bintray.gradle'
+apply from: '../deploy.gradle'
 
 repositories {
   mavenLocal()
