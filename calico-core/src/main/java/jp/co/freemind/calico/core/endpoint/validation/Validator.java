@@ -21,13 +21,15 @@ import jp.co.freemind.calico.core.validation.Violation;
 
 public class Validator {
   private final Collection<? extends Validation<?>> validations;
+  private final Collection<? extends NestingValidation<?>> nestedValidations;
 
   public static ValidatorFactory factory() {
     return new ValidatorFactory();
   }
 
-  public Validator(Collection<? extends Validation<?>> validations) {
+  public Validator(Collection<? extends Validation<?>> validations, Collection<? extends NestingValidation<?>> nestedValidations) {
     this.validations = validations;
+    this.nestedValidations = nestedValidations;
   }
 
   public Violation validate(Class<?> type, Object input) {
@@ -59,22 +61,9 @@ public class Validator {
       }
     }
 
-    if (value instanceof Collection) {
-      int i = 0;
-      for (Object component : (Collection<Object>) value) {
-        int index = i++;
-        Class<?> type = component != null ? component.getClass() : Object.class;
-        violation.referTo(field.getName(), index, v ->
-          this.validate(v, type, component));
-      }
-    }
-    else if (value instanceof Map) {
-      for (Map.Entry<Object, Object> e : ((Map<Object, Object>) value).entrySet()) {
-        String key = String.valueOf(e.getKey() != null ? e.getKey() : "");
-        Class<?> type = e.getValue() != null ? e.getValue().getClass() : Object.class;
-        violation.referTo(field.getName(), key, v ->
-          this.validate(v, type, e.getValue()));
-      }
+    for (NestingValidation nestingValidation : nestedValidations) {
+      if (!nestingValidation.matches(field)) continue;
+      nestingValidation.validate(field, value, this, violation);
     }
   }
 
