@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
   implementation(project(":calico-util"))
+  compile(project(":calico-validator"))
   compile group: 'com.google.guava', name: 'guava', version:'18.0'
   compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
   compile group: 'org.seasar.doma', name: 'doma', version: rootProject.properties.domaVersion

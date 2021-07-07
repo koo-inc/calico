@@ -1,5 +1,6 @@
 rootProject.name = 'calico'
 include ':calico-util'
+include ':calico-validator'
 include ':calico-servlet'
 include ':calico-core'
 include 'calico-mail'
@@ -8,6 +9,7 @@ include 'calico-jackson'
 include 'calico-csv'
 
 project(':calico-util').projectDir = "$rootDir/calico-util" as File
+project(':calico-validator').projectDir = "$rootDir/calico-validator" as File
 project(':calico-servlet').projectDir = "$rootDir/calico-servlet" as File
 project(':calico-core').projectDir = "$rootDir/calico-core" as File
 project(':calico-jackson').projectDir = "$rootDir/calico-jackson" as File
