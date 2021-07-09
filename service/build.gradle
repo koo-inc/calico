@@ -1,11 +1,11 @@
 plugins {
   id 'java'
   id 'idea'
-  id 'io.franzbecker.gradle-lombok' version '1.14'
-  id 'org.seasar.doma.compile' version '1.0.0'
+  id "io.franzbecker.gradle-lombok" version "4.0.0"
+  id 'org.seasar.doma.compile' version '1.1.0'
 }
 
-apply from: "eclipse.gradle"
+//apply from: "eclipse.gradle"
 apply from: "migration.gradle"
 
 description = 'service'
@@ -44,21 +44,23 @@ repositories {
     }
   }
 }
-
-lombok {
-  version = '1.18.4'
-}
+//
+//lombok {
+//  version = '1.18.4'
+//}
 
 dependencies {
-  compile project(':calico-core')
-  compile project(':calico-jackson')
-  compile project(':calico-fmmail')
-  compile project(':calico-csv')
-  compile group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.1.4'
-  compile group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
-  testCompile group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
-  compile group: 'org.seasar.doma', name: 'doma', version: rootProject.properties.domaVersion
-  annotationProcessor group: 'org.seasar.doma', name: 'doma', version: rootProject.properties.domaVersion
+  implementation project(':calico-util')
+  implementation project(':calico-core')
+  implementation project(':calico-jackson')
+  implementation project(':calico-fmmail')
+  implementation project(':calico-csv')
+  implementation group: 'jp.co.freemind', name: 'fm-csv-mapper', version: '0.1.4'
+  implementation group: 'org.postgresql', name: 'postgresql', version:'9.4-1201-jdbc41'
+  testImplementation group: 'javax.el', name: 'javax.el-api', version: '2.2.4'
+  implementation group: 'org.seasar.doma', name: 'doma-core', version: rootProject.properties.domaVersion
+  implementation group: 'org.seasar.doma', name: 'doma-processor', version: rootProject.properties.domaVersion
+  annotationProcessor group: 'org.seasar.doma', name: 'doma-processor', version: rootProject.properties.domaVersion
 }
 
 assemble.dependsOn << rootProject.expandConfig

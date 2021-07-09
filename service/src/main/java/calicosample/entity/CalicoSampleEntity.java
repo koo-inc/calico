@@ -2,14 +2,15 @@ package calicosample.entity;
 
 import java.time.LocalDateTime;
 
-import calicosample.core.doma.InjectConfig;
-import jp.co.freemind.calico.core.di.InjectorRef;
-import lombok.Getter;
-import lombok.Setter;
 import org.seasar.doma.Entity;
 import org.seasar.doma.jdbc.entity.EntityListener;
 import org.seasar.doma.jdbc.entity.PreInsertContext;
 import org.seasar.doma.jdbc.entity.PreUpdateContext;
+
+import calicosample.core.doma.InjectConfig;
+import jp.co.freemind.calico.core.di.InjectorRef;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by tasuku on 15/03/10.

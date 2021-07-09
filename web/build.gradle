@@ -39,6 +39,7 @@ repositories {
   }
 }
 dependencies {
+  implementation(project(":calico-util"))
   compile project(':calico-servlet')
   compile project(':service')
 //  compileOnly group: 'org.projectlombok', name: 'lombok', version:'1.18.0'

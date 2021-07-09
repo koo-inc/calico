@@ -1,5 +1,8 @@
 package calicosample.core.doma;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
 import org.seasar.doma.AnnotateWith;
 import org.seasar.doma.Annotation;
 import org.seasar.doma.AnnotationTarget;
@@ -12,5 +15,6 @@ import org.seasar.doma.AnnotationTarget;
   // とりあえず複数コンフィグファイルが必要になるまで使わない
 //  @Annotation(target = AnnotationTarget.CONSTRUCTOR_PARAMETER, type = javax.inject.Named.class, elements = "\"config\"")
 })
+@Target(ElementType.TYPE)
 public @interface InjectConfig {
 }

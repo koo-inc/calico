@@ -14,7 +14,6 @@ import calicosample.entity.CustomerFamily;
 import calicosample.extenum.FamilyType;
 import calicosample.extenum.Sex;
 import jp.co.freemind.calico.core.media.Media;
-import jp.co.freemind.calico.core.time.TimePoint;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,7 +37,6 @@ public class RecordEndpoint extends CustomerEndpoint<CustomerEndpoint.IdInput, R
     private String email;
     private String homepageUrl;
     private String phoneNumber;
-    private TimePoint sleepTime;
     private Media photo;
     private AdditionalInfoList additionalInfoList;
 
@@ -74,7 +72,6 @@ public class RecordEndpoint extends CustomerEndpoint<CustomerEndpoint.IdInput, R
         setEmail(customer.getEmail());
         setHomepageUrl(customer.getHomepageUrl());
         setPhoneNumber(customer.getPhoneNumber());
-        setSleepTime(customer.getSleepTime());
         setPhoto(customer.getPhoto());
         setAdditionalInfoList(customer.getAdditionalInfoList());
       }};

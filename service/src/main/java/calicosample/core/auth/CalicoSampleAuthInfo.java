@@ -7,8 +7,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import calicosample.entity.UserInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import calicosample.entity.UserInfo;
 import jp.co.freemind.calico.core.auth.AuthInfo;
 import jp.co.freemind.calico.core.auth.AuthToken;
 import jp.co.freemind.calico.core.auth.Authority;
