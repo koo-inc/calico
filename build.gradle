@@ -6,7 +6,7 @@ apply from: 'config.gradle'
 
 allprojects  {
   group = 'jp.co.freemind.calico'
-  version = System.getenv("TRAVIS_TAG") ?: '1.1-SNAPSHOT'
+  version = rootProject.properties.version
 
 //  sourceCompatibility = 1.8
 //  targetCompatibility = 1.8

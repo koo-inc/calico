@@ -1,0 +1,24 @@
+plugins {
+  id 'java'
+  id 'groovy'
+  id 'idea'
+}
+
+sourceCompatibility = rootProject.properties.javaVersion
+targetCompatibility = rootProject.properties.javaVersion
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+description = 'Calico Framework Utility Library'
+
+apply from: '../deploy.gradle'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  compile group: 'com.google.guava', name: 'guava', version:'18.0'
+  compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+  testCompile group: 'org.spockframework', name: 'spock-core', version: rootProject.properties.spockVersion
+}

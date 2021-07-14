@@ -10,16 +10,25 @@ dependencies {
   deployerJars 'org.apache.maven.wagon:wagon-webdav:1.0-beta-2'
 }
 
-task sourceJar(type: Jar) {
+task sourcesJar(type: Jar, dependsOn: classes) {
+  archiveClassifier.set('sources')
   from sourceSets.main.allSource
+}
+
+artifacts {
+  archives sourcesJar
 }
 
 uploadArchives {
   repositories {
     mavenDeployer {
-      configuration = configurations.deployerJars
-      repository(url: 'dav:' + System.getenv('CALICO_REPO_URL')) {
-        authentication(userName: System.getenv('CALICO_REPO_USER'), password: System.getenv('CALICO_REPO_PASSWORD'))
+      if (System.getenv("CALICO_DEPLOY") == "repository") {
+        configuration = configurations.deployerJars
+        repository(url: 'dav:' + System.getenv('CALICO_REPO_URL')) {
+          authentication(userName: System.getenv('CALICO_REPO_USER'), password: System.getenv('CALICO_REPO_PASSWORD'))
+        }
+      } else {
+        repository(url: mavenLocal().url)
       }
     }
   }
