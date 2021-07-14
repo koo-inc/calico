@@ -1,0 +1,28 @@
+plugins {
+  id("java")
+  id("java-library")
+  id("groovy")
+  id("idea")
+}
+
+sourceCompatibility = rootProject.properties.javaVersion
+targetCompatibility = rootProject.properties.javaVersion
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+description = 'Calico Framework Form Value Plugin'
+
+apply from: '../deploy.gradle'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  api(project(":calico-validator"))
+  implementation(project(":calico-util"))
+  implementation(group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1')
+  implementation(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: rootProject.properties.jacksonVersion)
+  implementation(group: "org.seasar.doma", name: "doma-core", version: rootProject.properties.domaVersion)
+  annotationProcessor(group: "org.seasar.doma", name: "doma-processor", version: rootProject.properties.domaVersion)
+}
